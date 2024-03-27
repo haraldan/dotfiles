@@ -20,6 +20,8 @@ vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>")
 vim.keymap.set("n", "<leader>cd", ":lcd %:h<CR>") -- change cwd to current file
 vim.keymap.set("n", "<leader>pw", ":pwd<CR>") -- check cwd
 vim.keymap.set("n", "<C-s>", ":w<CR>") -- save file
+vim.keymap.set("n", "m", "x")
+vim.keymap.set("n", "M", "X")
 
 -- Insert mode shortcuts
 vim.keymap.set("i", "<C-h>", "<Left>")
