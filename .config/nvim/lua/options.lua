@@ -7,8 +7,8 @@ vim.opt.number = true -- shows absolute line number on cursor line (when relativ
 
 -- tabs & indentation
 vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2 -- spaces for indent width
-vim.opt.expandtab = true -- expand tab to spaces
+vim.opt.shiftwidth = 2    -- spaces for indent width
+vim.opt.expandtab = true  -- expand tab to spaces
 vim.opt.autoindent = true -- copy indent from current line when starting new one
 
 -- ignore case when searching
@@ -16,10 +16,13 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Normal mode shortcuts
-vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>")
-vim.keymap.set("n", "<leader>cd", ":lcd %:h<CR>") -- change cwd to current file
-vim.keymap.set("n", "<leader>pw", ":pwd<CR>") -- check cwd
-vim.keymap.set("n", "<C-s>", ":w<CR>") -- save file
+vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", { desc = "Reset highlights" })
+vim.keymap.set("n", "<leader>cd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
+vim.keymap.set("n", "<leader>pw", ":pwd<CR>", { desc = "Check cwd" })
+vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
+vim.keymap.set("n", "<A-p>", ":bp<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<A-n>", ":bn<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>=", "gg0vG=<C-o>", { desc = "Auto-indent file" })
 vim.keymap.set("n", "m", "x")
 vim.keymap.set("n", "M", "X")
 
