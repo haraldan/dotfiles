@@ -23,8 +23,8 @@ vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", { desc = "Reset highlights" 
 vim.keymap.set("n", "<leader>cd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
 vim.keymap.set("n", "<leader>pw", ":pwd<CR>", { desc = "Check cwd" })
 vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
-vim.keymap.set("n", "<A-p>", ":bp<CR>", { desc = "Previous buffer" })
-vim.keymap.set("n", "<A-n>", ":bn<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<C-p>", ":bp<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<C-n>", ":bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>=", "gg0vG=<C-o>", { desc = "Auto-indent file" })
 
 -- Insert mode shortcuts
