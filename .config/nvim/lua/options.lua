@@ -23,8 +23,6 @@ vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
 vim.keymap.set("n", "<A-p>", ":bp<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "<A-n>", ":bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>=", "gg0vG=<C-o>", { desc = "Auto-indent file" })
-vim.keymap.set("n", "m", "x")
-vim.keymap.set("n", "M", "X")
 
 -- Insert mode shortcuts
 vim.keymap.set("i", "<C-h>", "<Left>")
