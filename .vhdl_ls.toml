@@ -1,0 +1,6 @@
+[libraries]
+
+UNISIM.files = [
+    '/mnt/c/Xilinx/Vivado/2021.1/data/vhdl/src/unisims/unisim_VCOMP.vhd'
+]
+UNISIM.is_third_party = true
