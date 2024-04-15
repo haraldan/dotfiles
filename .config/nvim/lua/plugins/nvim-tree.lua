@@ -13,6 +13,9 @@ return {
 				enable = true,
 				-- update_root = true,
 			},
+			filters = {
+				git_ignored = false,
+			},
 			respect_buf_cwd = true,
 		})
 
