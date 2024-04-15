@@ -7,8 +7,8 @@ vim.opt.number = true -- shows absolute line number on cursor line (when relativ
 
 -- tabs & indentation
 vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2    -- spaces for indent width
-vim.opt.expandtab = true  -- expand tab to spaces
+vim.opt.shiftwidth = 2 -- spaces for indent width
+vim.opt.expandtab = true -- expand tab to spaces
 vim.opt.autoindent = true -- copy indent from current line when starting new one
 
 -- don't wrap text
@@ -26,6 +26,8 @@ vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
 vim.keymap.set("n", "<C-p>", ":bp<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "<C-n>", ":bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>=", "gg0vG=<C-o>", { desc = "Auto-indent file" })
+vim.keymap.set("n", "<C-q>", "2<C-y>")
+vim.keymap.set("n", "<C-e>", "2<C-e>")
 
 -- Insert mode shortcuts
 vim.keymap.set("i", "<C-h>", "<Left>")
