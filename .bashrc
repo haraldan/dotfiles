@@ -128,3 +128,6 @@ export NVM_DIR="$HOME/.nvm"
 # shopt -s histappend
 # # After each command, save and reload history
 # export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+# Set up fzf key bindings and fuzzy completion
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
