@@ -28,8 +28,8 @@ vim.keymap.set("n", "<C-n>", ":bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<C-x>", ":bd<CR>", { desc = "Close buffer" })
 vim.keymap.set("n", "<C-z>", "<C-x>", { desc = "Decrement next number" })
 vim.keymap.set("n", "<leader>=", "gg0vG=<C-o>", { desc = "Auto-indent file" })
-vim.keymap.set("n", "<C-q>", "2<C-y>")
-vim.keymap.set("n", "<C-e>", "2<C-e>")
+vim.keymap.set("n", "<C-q>", "3<C-y>")
+vim.keymap.set("n", "<C-e>", "3<C-e>")
 
 -- Insert mode shortcuts
 vim.keymap.set("i", "<C-h>", "<Left>")
