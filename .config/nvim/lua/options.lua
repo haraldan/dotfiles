@@ -49,3 +49,18 @@ vim.opt.updatetime = 2000
 -- stop annoying TODO highlights
 -- vim.api.nvim_set_hl(0, "Todo", { link = "Comment" })
 vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
+
+
+-- auto-save and restore buffer views
+vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
+  pattern = "*.*",
+  callback = function()
+    vim.cmd([[mkview]])
+  end,
+})
+vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+  pattern = "*.*",
+  callback = function()
+    vim.cmd([[silent! loadview]])
+  end,
+})
