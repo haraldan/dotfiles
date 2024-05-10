@@ -14,6 +14,11 @@ vim.opt.autoindent = true -- copy indent from current line when starting new one
 -- don't wrap text
 vim.wo.wrap = false
 
+-- turn on textwidth, turn off automatic folding
+vim.opt.textwidth = 150
+vim.opt.colorcolumn ="+1";
+vim.opt.formatoptions:remove("t")
+
 -- ignore case when searching
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
