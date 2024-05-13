@@ -16,7 +16,7 @@ vim.wo.wrap = false
 
 -- turn on textwidth, turn off automatic folding
 vim.opt.textwidth = 150
-vim.opt.colorcolumn ="+1";
+vim.opt.colorcolumn = "+1"
 vim.opt.formatoptions:remove("t")
 
 -- ignore case when searching
@@ -50,17 +50,34 @@ vim.opt.updatetime = 2000
 -- vim.api.nvim_set_hl(0, "Todo", { link = "Comment" })
 vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
 
-
 -- auto-save and restore buffer views
 vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
-  pattern = "*.*",
-  callback = function()
-    vim.cmd([[mkview]])
-  end,
+	pattern = "*.*",
+	callback = function()
+		vim.cmd([[mkview]])
+	end,
 })
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-  pattern = "*.*",
-  callback = function()
-    vim.cmd([[silent! loadview]])
-  end,
+	pattern = "*.*",
+	callback = function()
+		vim.cmd([[silent! loadview]])
+	end,
 })
+
+-- close pop-up windows with ESC
+local hover_close = function(base_win_id)
+	local windows = vim.api.nvim_tabpage_list_wins(0)
+	for _, win_id in ipairs(windows) do
+		if win_id ~= base_win_id then
+			local win_cfg = vim.api.nvim_win_get_config(win_id)
+			if win_cfg.relative == "win" and win_cfg.win == base_win_id then
+				vim.api.nvim_win_close(win_id, {})
+				break
+			end
+		end
+	end
+end
+
+vim.keymap.set("n", "<ESC>", function()
+	hover_close(vim.api.nvim_get_current_win())
+end)
