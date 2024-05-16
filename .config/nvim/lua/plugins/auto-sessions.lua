@@ -13,7 +13,7 @@ return {
 				previewer = false,
 			},
 		})
-    vim.o.sessionoptions="buffers,curdir,help,tabpages,winsize,winpos,terminal"
+    vim.o.sessionoptions="buffers,curdir,help,tabpages,folds,winsize,winpos,terminal"
 		vim.keymap.set("n", "<leader>fs", require("auto-session.session-lens").search_session, {
 			noremap = true,
 			desc = "[F]ind [S]essions",
