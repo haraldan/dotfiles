@@ -1,5 +1,5 @@
-alias vim="nvim --listen /tmp/nvimsocket"
-alias nvim="nvim --listen /tmp/nvimsocket"
+alias vim="nvim"
+alias nvim="nvim"
 alias lg=lazygit
 
 eval $(thefuck --alias fk)
