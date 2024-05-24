@@ -16,19 +16,13 @@ return {
 
 					-- Navigation
 					map("n", "gh", function()
-						if vim.wo.diff then
-							vim.cmd.normal({ "]c", bang = true })
-						else
-							gitsigns.nav_hunk("next")
-						end
+						gitsigns.nav_hunk("next")
+            vim.cmd.normal("zz")
 					end, "Next hunk")
 
 					map("n", "gH", function()
-						if vim.wo.diff then
-							vim.cmd.normal({ "[c", bang = true })
-						else
 							gitsigns.nav_hunk("prev")
-						end
+            vim.cmd.normal("zz")
 					end, "Previous hunk")
 
 					-- Actions
