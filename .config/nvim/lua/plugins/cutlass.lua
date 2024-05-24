@@ -1,5 +1,6 @@
 return {
   "gbprod/cutlass.nvim",
+  enabled = false,
   -- opts = {
   --   cut_key = "m",
   --   override_del = true,
