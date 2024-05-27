@@ -35,8 +35,4 @@ fi
 if [ -d "$HOME/.local/share/nvim/mason/bin/" ] ; then
   PATH="$PATH:$HOME/.local/share/nvim/mason/bin/"
 fi
-# Cross-compiler path ENV variable
-export ARMGCC_DIR=/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/
-export XTENSA_TOOLCHAIN_DIR=/opt/hifi4-toolchain/2023_11/RI-2023.11-linux
-export XTENSA_LICENSE_FILE=/opt/hifi4-toolchain/iMXRT600SDK.lic
 
