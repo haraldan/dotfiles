@@ -4,3 +4,7 @@ UNISIM.files = [
     '/mnt/c/Xilinx/Vivado/2021.1/data/vhdl/src/unisims/unisim_VCOMP.vhd'
 ]
 UNISIM.is_third_party = true
+
+modelsim_lib.files = [
+  '/mnt/c/MentorGraphics/modelsim_dlx64_2023.4/vhdl_src/modelsim_lib/*.vhd' ,
+]
