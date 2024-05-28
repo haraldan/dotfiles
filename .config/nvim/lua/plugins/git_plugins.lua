@@ -2,6 +2,13 @@ return {
 	{
 		"tpope/vim-fugitive",
 	},
+  {
+    "radyz/telescope-gitsigns",
+    dependencies = {
+      "lewis6991/gitsigns.nvim",
+      "nvim-telescope/telescope.nvim",
+    }
+  },
 	{
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPre", "BufNewFile" },
@@ -21,7 +28,7 @@ return {
 					end, "Next hunk")
 
 					map("n", "gH", function()
-							gitsigns.nav_hunk("prev")
+						gitsigns.nav_hunk("prev")
             vim.cmd.normal("zz")
 					end, "Previous hunk")
 
@@ -52,7 +59,6 @@ return {
 					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Select text in hunk")
 				end,
 			})
-
 		end,
 	},
 }
