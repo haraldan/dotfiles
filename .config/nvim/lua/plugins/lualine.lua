@@ -7,7 +7,7 @@ return {
 		},
 		sections = {
 			lualine_c = { require("auto-session.lib").current_session_name, "filename" },
-			lualine_x = { "filetype" },
+			lualine_x = { "filetype", "%{&fo}" },
 		},
 	},
 }

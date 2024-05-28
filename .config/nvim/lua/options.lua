@@ -17,7 +17,15 @@ vim.wo.wrap = false
 -- turn on textwidth, turn off automatic folding
 vim.opt.textwidth = 150
 vim.opt.colorcolumn = "+1"
-vim.opt.formatoptions:remove("t")
+
+-- set formatoptions
+vim.api.nvim_create_autocmd("Filetype", {
+  pattern = '*',
+  callback = function ()
+    vim.opt.formatoptions:remove({ 'o' })
+    vim.opt.formatoptions:remove({ 't' })
+  end
+})
 
 -- ignore case when searching
 vim.opt.ignorecase = true
