@@ -80,5 +80,5 @@ vim.keymap.set("n", "<ESC>", function()
 end)
 
 -- persistent undo
-vim.opt.undodir = '~/.config/nvim/.undo/'
-vim.opt.undofile = true
+-- vim.opt.undodir = '~/.config/nvim/.undo/'
+-- vim.opt.undofile = true
