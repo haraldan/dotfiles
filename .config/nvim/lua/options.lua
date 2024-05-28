@@ -60,19 +60,6 @@ vim.opt.updatetime = 2000
 -- vim.api.nvim_set_hl(0, "Todo", { link = "Comment" })
 vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
 
--- auto-save and restore buffer views
--- vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
--- 	pattern = "*.*",
--- 	callback = function()
--- 		vim.cmd([[mkview]])
--- 	end,
--- })
--- vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
--- 	pattern = "*.*",
--- 	callback = function()
--- 		vim.cmd([[silent! loadview]])
--- 	end,
--- })
 
 -- close pop-up windows with ESC
 local hover_close = function(base_win_id)
@@ -91,3 +78,7 @@ end
 vim.keymap.set("n", "<ESC>", function()
 	hover_close(vim.api.nvim_get_current_win())
 end)
+
+-- persistent undo
+vim.opt.undodir = '~/.config/nvim/.undo/'
+vim.opt.undofile = true
