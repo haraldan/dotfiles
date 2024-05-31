@@ -43,8 +43,8 @@ vim.keymap.set("n", "<C-z>", "<C-x>", { desc = "Decrement next number" })
 vim.keymap.set("n", "<leader>=", "gg0vG=<C-o>", { desc = "Auto-indent file" })
 vim.keymap.set("n", "<C-q>", "3<C-y>")
 vim.keymap.set("n", "<C-e>", "3<C-e>")
-vim.keymap.set("n", "<M-j>", ":m+1<CR>")
-vim.keymap.set("n", "<M-k>", ":m-2<CR>")
+vim.keymap.set("n", "<C-j>", ":m+1<CR>")
+vim.keymap.set("n", "<C-k>", ":m-2<CR>")
 
 -- Insert mode shortcuts
 vim.keymap.set("i", "<C-h>", "<Left>")
