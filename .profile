@@ -36,3 +36,5 @@ if [ -d "$HOME/.local/share/nvim/mason/bin/" ] ; then
   PATH="$PATH:$HOME/.local/share/nvim/mason/bin/"
 fi
 
+# add Matlab root dir
+export Matlab_ROOT_DIR=/usr/local/MATLAB/R2024a/
