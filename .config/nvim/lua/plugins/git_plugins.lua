@@ -48,12 +48,12 @@ return {
 					map("n", "<leader>gb", function()
 						gitsigns.blame_line({ full = true })
 					end, "Line blame")
-					map("n", "<leader>tb", gitsigns.toggle_current_line_blame, "Toggle current line blame")
+					map("n", "<leader>gtb", gitsigns.toggle_current_line_blame, "Toggle current line blame")
 					map("n", "<leader>gd", gitsigns.diffthis, "Diff buffer against the index")
 					map("n", "<leader>gD", function()
 						gitsigns.diffthis("~")
 					end, "Diff buffer against last commit")
-					map("n", "<leader>td", gitsigns.toggle_deleted, "Toggle deleted")
+					map("n", "<leader>gtd", gitsigns.toggle_deleted, "Toggle deleted")
 
 					-- Text object
 					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Select text in hunk")
