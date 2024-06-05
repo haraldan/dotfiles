@@ -52,16 +52,19 @@ return {
           map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
           map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
           map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+          map("ge", function ()
+            vim.diagnostic.goto_next({float=false})
+          end, "[G]oto next [E]rror")
+          map("gE", function ()
+            vim.diagnostic.goto_prev({float=false})
+          end, "[G]oto prev [E]rror")
+
           map("<leader>td", require("telescope.builtin").lsp_type_definitions, "[T]ype [D]efinition")
           map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-          map(
-            "<leader>ws",
-            require("telescope.builtin").lsp_dynamic_workspace_symbols,
-            "[W]orkspace [S]ymbols"
-          )
+          map("<leader>ws",require("telescope.builtin").lsp_dynamic_workspace_symbols,"[W]orkspace [S]ymbols")
           map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
           map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
