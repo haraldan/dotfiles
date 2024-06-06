@@ -31,6 +31,8 @@ return {
           n = {
             ["<C-s>"] = actions.select_horizontal,
             ["<C-x>"] = false,
+            ["<C-k>"] = actions.move_selection_previous, -- move to prev result
+            ["<C-j>"] = actions.move_selection_next,     -- move to next result
           },
         },
       },
