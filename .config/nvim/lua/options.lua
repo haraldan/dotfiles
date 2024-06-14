@@ -1,3 +1,5 @@
+-- vim.opt.mouse = ""
+
 -- Leader key
 vim.g.mapleader = " "
 
@@ -14,9 +16,12 @@ vim.opt.autoindent = true -- copy indent from current line when starting new one
 -- don't wrap text
 vim.wo.wrap = false
 
--- turn on textwidth, turn off automatic folding
+-- turn on textwidth, turn off automatic wrapping
 vim.opt.textwidth = 150
 vim.opt.colorcolumn = "+1"
+
+-- sync clipboard with system
+vim.opt.clipboard = "unnamedplus"
 
 -- set formatoptions
 vim.api.nvim_create_autocmd("Filetype", {
