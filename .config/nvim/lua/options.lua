@@ -1,4 +1,4 @@
--- vim.opt.mouse = ""
+vim.opt.mouse = ""
 
 -- Leader key
 vim.g.mapleader = " "
