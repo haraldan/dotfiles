@@ -73,10 +73,10 @@ return {
 					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 					map("ge", function()
-						vim.diagnostic.goto_next({ float = false })
+						vim.diagnostic.goto_next({ float = false, severity = { min = vim.diagnostic.severity.WARN } })
 					end, "[G]oto next [E]rror")
 					map("gE", function()
-						vim.diagnostic.goto_prev({ float = false })
+						vim.diagnostic.goto_prev({ float = false, severity = { min = vim.diagnostic.severity.WARN } })
 					end, "[G]oto prev [E]rror")
 
 					map("<leader>td", require("telescope.builtin").lsp_type_definitions, "[T]ype [D]efinition")
