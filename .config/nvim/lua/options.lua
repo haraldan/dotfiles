@@ -21,7 +21,7 @@ vim.opt.textwidth = 150
 vim.opt.colorcolumn = "+1"
 
 -- sync clipboard with system
-vim.opt.clipboard = "unnamedplus"
+-- vim.opt.clipboard = "unnamedplus"
 
 -- set formatoptions
 vim.api.nvim_create_autocmd("Filetype", {
