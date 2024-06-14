@@ -10,4 +10,7 @@ return {
 			count = false,
 		},
 	},
+  config = function(_, opts)
+    require("which-key").setup(opts)
+  end
 }
