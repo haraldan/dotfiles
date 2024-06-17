@@ -38,8 +38,8 @@ vim.opt.smartcase = true
 
 -- Normal mode shortcuts
 vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", { desc = "Reset highlights" })
-vim.keymap.set("n", "<leader>cd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
-vim.keymap.set("n", "<leader>pw", ":pwd<CR>", { desc = "Check cwd" })
+vim.keymap.set("n", "<leader>pcd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
+vim.keymap.set("n", "<leader>pwd", ":pwd<CR>", { desc = "Check cwd" })
 vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
 vim.keymap.set("n", "[b", ":bp<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "]b", ":bn<CR>", { desc = "Next buffer" })
@@ -52,6 +52,8 @@ vim.keymap.set("n", "<C-j>", ":m+1<CR>")
 vim.keymap.set("n", "<C-k>", ":m-2<CR>")
 vim.keymap.set("n", "E", "$")
 vim.keymap.set("n", "B", "^")
+vim.keymap.set("n", "<leader>y", "\"+y")
+vim.keymap.set("n", "<C-t>", "gt")
 
 -- Insert mode shortcuts
 vim.keymap.set("i", "<C-h>", "<Left>")
