@@ -131,6 +131,3 @@ export NVM_DIR="$HOME/.nvm"
 
 # Set up fzf key bindings and fuzzy completion
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-# vi-mode in shell
-set -o vi
