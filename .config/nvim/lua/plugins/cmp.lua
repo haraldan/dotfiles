@@ -43,8 +43,8 @@ return {
           ["<S-Tab>"] = cmp.mapping.select_prev_item(),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-c>"] = cmp.mapping.complete(),
-          ["<C-a>"] = cmp.mapping.abort(),
+          -- ["<C-c>"] = cmp.mapping.complete(),
+          ["<C-c>"] = cmp.mapping.abort(),
           ["<CR>"] = cmp.mapping.confirm({ select = false }),
 
           ["<C-n>"] = cmp.mapping(function()
