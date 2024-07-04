@@ -3,7 +3,7 @@ return {
   -- enabled = false,
   config = function()
     require("cutlass").setup({
-      cut_key = "<leader>d",
+      cut_key = "d",
       override_del = true,
     })
 
