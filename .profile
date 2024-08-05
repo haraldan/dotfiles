@@ -36,5 +36,5 @@ if [ -d "$HOME/.local/share/nvim/mason/bin/" ] ; then
   PATH="$PATH:$HOME/.local/share/nvim/mason/bin/"
 fi
 # Cross-compiler path ENV variable
-export ARMGCC_DIR=~/.local/bin/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi
+export ARMGCC_DIR=/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/
 
