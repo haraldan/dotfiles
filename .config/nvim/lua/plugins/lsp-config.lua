@@ -43,11 +43,9 @@ return {
 
 			lspconfig.clangd.setup({
 				capabilities = capabilities,
-				-- cmd = {"clangd-12", '--query-driver=/opt/arm-gnu-toolchain-13_2/bin/arm-none-eabi-gcc', "--pretty", "--clang-tidy"},
-				-- cmd = {"clangd-12", '--query-driver=/usr/bin/arm-none-eabi-gcc'},
 				cmd = {
 					"clangd",
-					"--query-driver=/home/ds/.local/bin/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin/*gcc",
+					"--query-driver=/opt/**/*gcc",
 					"--clang-tidy",
 				},
 				single_file_support = false,
