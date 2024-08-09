@@ -25,6 +25,9 @@ return {
 		end
 		require("nvim-tree").setup({
 			on_attach = my_on_attach,
+      view = {
+        preserve_window_proportions = true,
+      },
 			update_focused_file = {
 				enable = true,
 				-- update_root = true,
