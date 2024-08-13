@@ -40,7 +40,7 @@ vim.opt.smartcase = true
 
 -- Normal mode shortcuts
 vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", { desc = "Reset highlights" })
-vim.keymap.set("n", "<leader>cd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
+vim.keymap.set("n", "<leader>pcd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
 vim.keymap.set("n", "<leader>pw", ":pwd<CR>", { desc = "Check cwd" })
 vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
 vim.keymap.set("n", "[b", ":bp<CR>", { desc = "Previous buffer" })
