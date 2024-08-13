@@ -29,7 +29,7 @@ return {
         send_motion = "<space>sc",
 
         visual_send = "<space>s",
-        send_file = "<F5>",
+        send_file = "<F6>",
         send_line = "<space>sl",
         send_paragraph = "<space>sp",
         send_until_cursor = "<space>su",
