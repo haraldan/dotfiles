@@ -32,7 +32,7 @@ return {
       }
       dap.configurations.cpp = {
         {
-          name = "Launch file",
+          name = "Launch file (gdb)",
           type = "cppdbg",
           request = "launch",
           program = function()
@@ -52,11 +52,16 @@ return {
 
       -- DapUI setup
       require("dapui").setup()
-      dap.listeners.before.attach.dapui_config = function()
+      local function dapui_open()
+        vim.opt.splitright = false
         dapui.open()
+        vim.opt.splitright = true
+      end
+      dap.listeners.before.attach.dapui_config = function()
+        dapui_open()
       end
       dap.listeners.before.launch.dapui_config = function()
-        dapui.open()
+        dapui_open()
       end
       dap.listeners.before.event_terminated.dapui_config = function()
         dapui.close()
@@ -74,15 +79,20 @@ return {
       vim.keymap.set("n", "<Leader>dx", dap.terminate, { desc = "DAP: Terminate Session" })
       vim.keymap.set("n", "<Leader>dl", dap.run_last, { desc = "DAP: Run Last" })
       vim.keymap.set("n", "<Leader>dr", dap.restart, { desc = "DAP: Restart Session" })
-      vim.keymap.set("n", "<F6>", dap.continue)
       vim.keymap.set("n", "<F10>", dap.step_over)
       vim.keymap.set("n", "<F11>", dap.step_into)
       vim.keymap.set("n", "<F12>", dap.step_out)
+      vim.keymap.set("n", "<F5>", function()
+        if vim.fn.filereadable(".vscode/launch.json") then
+          require("dap.ext.vscode").load_launchjs(".dap/launch.json", { cppdbg = { "c", "cpp" } })
+        end
+        require("dap").continue()
+      end)
       vim.keymap.set({ "n", "v" }, "<Leader>dh", function()
         require("dap.ui.widgets").hover()
       end, { desc = "DAP: Hover" })
 
-      vim.keymap.set("n", "<Leader>dc", dapui.close, { desc = "DAP UI: Close" })
+      vim.keymap.set("n", "<Leader>dc", dapui.toggle, { desc = "DAP UI: Toggle UI" })
       vim.keymap.set(
         { "n", "v" },
         "<Leader>dw",
