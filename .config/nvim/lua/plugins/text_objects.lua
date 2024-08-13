@@ -1,6 +1,12 @@
 return {
 	{
 		"wellle/targets.vim",
+    config = function ()
+      -- add {} lua tables to the argument text object
+      vim.cmd([[autocmd User targets#mappings#user call targets#mappings#extend({
+      \ 'a': {'argument': [{'o': '[([{]', 'c': '[])}]', 's': ','}]},
+    \ }) ]])
+    end
 	},
 	{
 		"chrisgrieser/nvim-various-textobjs",
