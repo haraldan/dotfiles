@@ -13,6 +13,8 @@ vim.opt.shiftwidth = 2 -- spaces for indent width
 vim.opt.expandtab = true -- expand tab to spaces
 vim.opt.autoindent = true -- copy indent from current line when starting new one
 
+-- split on the right
+vim.opt.splitright = true
 -- don't wrap text
 vim.wo.wrap = false
 
@@ -58,10 +60,10 @@ vim.keymap.set("n", "<C-w>\\", ":vs<CR>")
 vim.keymap.set("n", "<C-w>-", ":sp<CR>")
 
 -- Insert mode shortcuts
-vim.keymap.set("i", "<C-h>", "<Left>")
+vim.keymap.set({"i","n"}, "<C-h>", "<Left>")
+vim.keymap.set({"i","n"}, "<C-l>", "<Right>")
 vim.keymap.set("i", "<C-j>", "<Down>")
 vim.keymap.set("i", "<C-k>", "<Up>")
-vim.keymap.set("i", "<C-l>", "<Right>")
 vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
 
 -- change update time for CursorHold events
