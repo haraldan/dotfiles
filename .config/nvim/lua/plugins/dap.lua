@@ -66,6 +66,11 @@ return {
 				dapui.open()
 				vim.opt.splitright = true
 			end
+			local function dapui_toggle()
+				vim.opt.splitright = false
+				dapui.toggle()
+				vim.opt.splitright = true
+			end
 			dap.listeners.before.attach.dapui_config = function()
 				dapui_open()
 			end
@@ -104,7 +109,7 @@ return {
 				require("dap.ui.widgets").hover()
 			end, { desc = "DAP: Hover" })
 
-			vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "DAP UI: Toggle UI" })
+			vim.keymap.set("n", "<Leader>du", dapui_toggle, { desc = "DAP UI: Toggle UI" })
 			vim.keymap.set(
 				{ "n", "v" },
 				"<Leader>dw",
