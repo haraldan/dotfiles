@@ -104,43 +104,31 @@ return {
 				require("dap.ui.widgets").hover()
 			end, { desc = "DAP: Hover" })
 
-			vim.keymap.set("n", "<Leader>dt", dapui.toggle, { desc = "DAP UI: Toggle UI" })
+			vim.keymap.set("n", "<Leader>du", dapui.toggle, { desc = "DAP UI: Toggle UI" })
 			vim.keymap.set(
 				{ "n", "v" },
 				"<Leader>dw",
 				dapui.elements.watches.add,
 				{ desc = "DAP UI: Add to Watch Expressions" }
 			)
-			vim.keymap.set({ "n", "v" }, "<Leader>de", function()
-				dapui.eval()
-				dapui.eval()
-			end, { desc = "DAP UI: Evaluate" })
 
 			-- vim.keymap.set("n", "<Leader>dm", require('dap-python').test_method)
 			-- vim.keymap.set("v", "<Leader>ds", require('dap-python').debug_selection)
 
-			-- close floats with q or esc
-			vim.api.nvim_create_autocmd("FileType", {
-				pattern = "dap-float",
-				callback = function()
-					vim.api.nvim_buf_set_keymap(0, "n", "q", "<cmd>close!<CR>", { noremap = true, silent = true })
-					vim.api.nvim_buf_set_keymap(0, "n", "<ESC>", "<cmd>close!<CR>", { noremap = true, silent = true })
-				end,
-			})
-
 			-- hover functionality, depending on the environment
-			vim.keymap.set("n", "K", function()
+			vim.keymap.set({"n", "v"}, "K", function()
 				local winid = require("ufo").peekFoldedLinesUnderCursor()
 				local session = require("dap").session()
 				if not winid then
 					if session ~= nil then
-						require("dapui").eval()
 						require("dapui").eval()
 					else
 						vim.lsp.buf.hover()
 					end
 				end
 			end)
+			vim.keymap.set("n", "<M-K>", vim.lsp.buf.hover)
+
 		end,
 	},
 }
