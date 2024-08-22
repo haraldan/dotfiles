@@ -26,6 +26,7 @@ return {
             ["<C-j>"] = actions.move_selection_next,     -- move to next result
             ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
             ["<C-s>"] = actions.select_horizontal,
+            ["<C-\\>"] = actions.select_vertical,
             ["<C-x>"] = false,
           },
           n = {
@@ -33,6 +34,7 @@ return {
             ["<C-x>"] = false,
             ["<C-k>"] = actions.move_selection_previous, -- move to prev result
             ["<C-j>"] = actions.move_selection_next,     -- move to next result
+            ["<C-\\>"] = actions.select_vertical,
             ["q"] = actions.close,
           },
         },
