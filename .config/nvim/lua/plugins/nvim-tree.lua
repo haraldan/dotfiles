@@ -25,9 +25,9 @@ return {
 		end
 		require("nvim-tree").setup({
 			on_attach = my_on_attach,
-      view = {
-        preserve_window_proportions = true,
-      },
+			view = {
+				preserve_window_proportions = true,
+			},
 			update_focused_file = {
 				enable = true,
 				-- update_root = true,
@@ -36,11 +36,10 @@ return {
 				git_ignored = false,
 			},
 			respect_buf_cwd = true,
+			sync_root_with_cwd = true,
 		})
 
 		-- set keymaps
-		local keymap = vim.keymap -- for conciseness
-
-		keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" }) -- toggle file explorer
+		vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" }) -- toggle file explorer
 	end,
 }
