@@ -58,6 +58,8 @@ vim.keymap.set({ "n", "v" }, "<leader>y", '"+y')
 vim.keymap.set("n", "<C-t>", "gt")
 vim.keymap.set("n", "<C-w>\\", ":vs<CR>")
 vim.keymap.set("n", "<C-w>-", ":sp<CR>")
+vim.keymap.set("n", "ZZ", ":wqa<CR>")
+vim.keymap.set("n", "ZQ", ":qa!<CR>")
 
 -- Insert mode shortcuts
 vim.keymap.set({ "i", "n" }, "<C-h>", "<Left>")
