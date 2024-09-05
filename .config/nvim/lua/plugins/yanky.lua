@@ -13,7 +13,7 @@ return {
         update_register_on_cycle = false,
       },
       system_clipboard = {
-        sync_with_ring = true,
+        sync_with_ring = false,
       },
       preserve_cursor_position = {
         enabled = true,
