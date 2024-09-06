@@ -26,6 +26,6 @@ return {
   },
   config = function(_, opts)
     require("cmake-tools").setup(opts)
-    vim.keymap.set("n", "<F6>", ":CMakeBuild<CR>", { desc = "CMake: Build" })
+    vim.keymap.set("n", "<F6>", ":w<CR>:CMakeBuild<CR>", { desc = "CMake: Build" })
   end,
 }
