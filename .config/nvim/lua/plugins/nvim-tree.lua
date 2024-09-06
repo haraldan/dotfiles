@@ -27,6 +27,7 @@ return {
 			on_attach = my_on_attach,
 			view = {
 				preserve_window_proportions = true,
+				adaptive_size = true,
 			},
 			update_focused_file = {
 				enable = true,
