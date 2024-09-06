@@ -76,7 +76,10 @@ vim.opt.updatetime = 2000
 vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
 
 -- close pop-up windows with ESC
-vim.keymap.set("n", "<ESC>", vim.cmd.fclose)
+vim.keymap.set("n", "<ESC>", function ()
+  vim.cmd.fclose()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<ESC>',true,true,true),'n',false)
+end)
 
 -- persistent undo
 -- vim.opt.undodir = '~/.config/nvim/.undo/'
