@@ -1,9 +1,5 @@
 return {
 	{
-		"mfussenegger/nvim-dap",
-		commit = "f2e96ba3e86d31c6672a715da98717b634c66bd5",
-	},
-	{
 		"jay-babu/mason-nvim-dap.nvim",
 		dependencies = {
 			"williamboman/mason.nvim",
