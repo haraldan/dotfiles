@@ -144,12 +144,10 @@ return {
 			vim.keymap.set("n", "<F11>", dap.step_into)
 			vim.keymap.set("n", "<F12>", dap.step_out)
 			vim.keymap.set("n", "<F5>", function()
-				if require("dap").status() ~= "Running" then
 					if vim.fn.filereadable(".vscode/launch.json") then
 						require("dap.ext.vscode").load_launchjs(".dap/launch.json", { cppdbg = { "c", "cpp" } })
 					end
 					require("dap").continue()
-				end
 			end)
 
 			vim.keymap.set("n", "<Leader>du", dapui_toggle, { desc = "DAP UI: Toggle UI" })
