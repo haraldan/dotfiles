@@ -57,5 +57,6 @@ return {
 
     vim.keymap.set("n", "<c-p>", "<Plug>(YankyPreviousEntry)")
     vim.keymap.set("n", "<c-n>", "<Plug>(YankyNextEntry)")
+    vim.keymap.set("i", "<c-r>", "<ESC><Plug>(YankyPutAfter)i")
   end,
 }
