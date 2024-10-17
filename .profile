@@ -35,3 +35,7 @@ fi
 if [ -d "$HOME/.local/share/nvim/mason/bin/" ] ; then
   PATH="$PATH:$HOME/.local/share/nvim/mason/bin/"
 fi
+# add Miktex executables to PATH
+if [ -d "$HOME/.miktex/bin/" ] ; then
+  PATH="$PATH:$HOME/.miktex/bin/"
+fi
