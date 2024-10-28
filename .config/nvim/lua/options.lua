@@ -85,6 +85,9 @@ vim.keymap.set("n", "<ESC>", function()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
 end)
 
+-- recognize .h files as C headers, not C++
+vim.g.c_syntax_for_h = 1
+
 -- persistent undo
 -- vim.opt.undodir = '~/.config/nvim/.undo/'
 -- vim.opt.undofile = true
