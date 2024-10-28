@@ -86,6 +86,7 @@ return {
 					)
 					map("<leader>lr", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>lc", vim.lsp.buf.code_action, "[C]ode [A]ction")
+					vim.keymap.set("n","<leader>lh" , ":ClangdSwitchSourceHeader<CR>", { desc = "LSP: Switch header/source", silent=true })
 
 					-- The following two autocommands are used to highlight references of the
 					-- word under your cursor when your cursor rests there for a little while.
