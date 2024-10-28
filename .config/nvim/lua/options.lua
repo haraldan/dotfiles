@@ -58,7 +58,8 @@ vim.keymap.set("n", "<C-k>", ":m-2<CR>")
 vim.keymap.set({ "n", "v" }, "E", "$")
 vim.keymap.set({ "n", "v" }, "B", "^")
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y')
-vim.keymap.set("n", "<C-t>", "gt")
+vim.keymap.set("n", "]t", "gt", { desc = "Next tab" })
+vim.keymap.set("n", "[t", "gT", { desc = "Previous tab" })
 vim.keymap.set("n", "<C-w>\\", ":vs<CR>")
 vim.keymap.set("n", "<C-w>-", ":sp<CR>")
 vim.keymap.set("n", "ZZ", ":wqa<CR>")
@@ -79,9 +80,9 @@ vim.opt.updatetime = 2000
 vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
 
 -- close pop-up windows with ESC
-vim.keymap.set("n", "<ESC>", function ()
+vim.keymap.set("n", "<ESC>", function()
   vim.cmd.fclose()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<ESC>',true,true,true),'n',false)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
 end)
 
 -- persistent undo
