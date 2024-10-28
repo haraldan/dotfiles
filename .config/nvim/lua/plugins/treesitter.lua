@@ -10,7 +10,7 @@ return {
           enable = true,
           disable = {"tmux"},
         },
-        indent = { enable = true },
+        -- indent = { enable = true },
         ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
       })
     end
