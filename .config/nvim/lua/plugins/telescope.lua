@@ -91,6 +91,7 @@ return {
       builtin.buffers({ sort_mru = true })
     end, { desc = "List open [B]uffers" })
 
+    vim.keymap.set("n", "<leader>fD", builtin.diagnostics , { desc = "[F]ind [D]iagnostics in workspace / open buffers" })
     vim.keymap.set("n", "<leader>fd", function()
       builtin.diagnostics({ bufnr = 0 })
     end, { desc = "[F]ind [D]iagnostics in current buffer" })
