@@ -121,13 +121,25 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# # Shared history between bash sessions
-# # avoid duplicates..
-# export HISTCONTROL=ignoredups:erasedups
-# # append history entries..
-# shopt -s histappend
-# # After each command, save and reload history
-# export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # Set up fzf key bindings and fuzzy completion
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# Save history for each directory
+# avoid duplicates..
+export HISTCONTROL=ignoredups:erasedups
+# append history entries..
+shopt -s histappend
+
+# Create history directory if it doesn't exist
+HISTS_DIR=$HOME/.bash_history.d
+mkdir -p "${HISTS_DIR}"
+
+function ch () {
+    cd "$@"
+    export HISTFILE="${HISTS_DIR}/${PWD////$'_'}"
+}
+export HISTFILE="${HISTS_DIR}/${PWD////$'_'}"
+alias cd=ch
+# # After each command, save and reload history
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
