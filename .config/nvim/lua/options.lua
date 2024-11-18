@@ -84,6 +84,8 @@ vim.keymap.set("n", "<ESC>", function()
   vim.cmd.fclose()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
 end)
+-- exit insert mode with <ESC> in terminal
+vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 
 -- recognize .h files as C headers, not C++
 vim.g.c_syntax_for_h = 1
