@@ -143,3 +143,8 @@ export HISTFILE="${HISTS_DIR}/${PWD////$'_'}"
 alias cd=ch
 # # After each command, save and reload history
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+#virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/source/python
+source $HOME/.local/bin/virtualenvwrapper.sh
