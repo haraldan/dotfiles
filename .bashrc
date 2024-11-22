@@ -122,8 +122,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-# Set up fzf key bindings and fuzzy completion
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# Set up fzf 
+if [[ ! "$PATH" == */home/ds/.fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/ds/.fzf/bin"
+fi
+[ -f ~/.fzf/shell/completion.bash ] && source ~/.fzf/shell/completion.bash
+[ -f ~/.fzf/shell/key-bindings.bash ] && source ~/.fzf/shell/key-bindings.bash
 
 # Save history for each directory
 # avoid duplicates..
