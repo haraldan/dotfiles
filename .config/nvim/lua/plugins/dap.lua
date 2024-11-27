@@ -33,6 +33,12 @@ return {
 			-- Set up cursor behaviour
 			dap.defaults.fallback.switchbuf = "usevisible,usetab,uselast"
 
+			dap.defaults.fallback.external_terminal = {
+				command = vim.fn.expand("~/.tmux/tmux_dap_split.sh"),
+				-- command = "tmux",
+				-- args = { "split-window", "-d", "-l", "20%" },
+			}
+
 			-- Python setup
 			require("dap-python").setup("python")
 
@@ -51,6 +57,7 @@ return {
 						return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
 					end,
 					cwd = "${workspaceFolder}",
+					externalConsole = true,
 					setupCommands = {
 						{
 							text = "-enable-pretty-printing",
@@ -63,7 +70,38 @@ return {
 			dap.configurations.c = dap.configurations.cpp
 
 			-- DapUI setup
-			require("dapui").setup()
+			require("dapui").setup({
+				layouts = {
+					{
+						elements = {
+							{
+								id = "scopes",
+								size = 0.6,
+							},
+							{
+								id = "watches",
+								size = 0.2,
+							},
+							{
+								id = "breakpoints",
+								size = 0.2,
+							},
+						},
+						position = "left",
+						size = 40,
+					},
+					-- {
+					-- 	elements = {
+					-- 		{
+					-- 			id = "console",
+					-- 			size = 1,
+					-- 		},
+					-- 	},
+					-- 	position = "bottom",
+					-- 	size = 10,
+					-- },
+				},
+			})
 			local function dapui_open()
 				vim.opt.splitright = false
 				dapui.open()
@@ -75,12 +113,12 @@ return {
 				vim.opt.splitright = true
 			end
 			-- Open Dap UI on DAP session start
-			dap.listeners.before.attach.dapui_config = function()
-				dapui_open()
-			end
-			dap.listeners.before.launch.dapui_config = function()
-				dapui_open()
-			end
+			-- dap.listeners.before.attach.dapui_config = function()
+			-- 	dapui_open()
+			-- end
+			-- dap.listeners.before.launch.dapui_config = function()
+			-- 	dapui_open()
+			-- end
 
 			-- Close Dap UI on DAP session termination
 			-- dap.listeners.before.event_terminated.dapui_config = function()
@@ -108,7 +146,10 @@ return {
 			vim.api.nvim_set_hl(0, "DapBreakpointCondition", { ctermbg = 0, fg = "#2749f2" })
 			vim.api.nvim_set_hl(0, "DapStopped", { ctermbg = 0, fg = "#98c379" })
 			vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
-			vim.fn.sign_define( "DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
+			vim.fn.sign_define(
+				"DapBreakpointCondition",
+				{ text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" }
+			)
 			vim.fn.sign_define("DapStopped", { text = "→", texthl = "DapStopped", linehl = "", numhl = "" })
 
 			-- Mappings
@@ -116,10 +157,12 @@ return {
 			vim.keymap.set("n", "<Leader>dx", dap.clear_breakpoints, { desc = "DAP: Clear Breakpoints" })
 			vim.keymap.set("n", "<Leader>dl", dap.run_last, { desc = "DAP: Run Last" })
 			vim.keymap.set("n", "<Leader>dr", dap.restart, { desc = "DAP: Restart Session" })
+			vim.keymap.set("n", "<Leader>dt", dap.terminate, { desc = "DAP: Terminate Session" })
 			vim.keymap.set("n", "<Leader>dq", function()
 				dap.terminate()
 				dapui.close()
-			end, { desc = "DAP: Terminate Session" })
+				vim.cmd("silent !~/.tmux/tmux_dap_close.sh")
+			end, { desc = "DAP: Quit Session" })
 			vim.keymap.set({ "n", "v" }, "<Leader>dh", function()
 				require("dap.ui.widgets").hover()
 			end, { desc = "DAP: Hover" })
@@ -147,7 +190,7 @@ return {
 			vim.keymap.set("n", "<F11>", dap.step_into)
 			vim.keymap.set("n", "<F12>", dap.step_out)
 			vim.keymap.set("n", "<F5>", function()
-				if vim.fn.filereadable(".vscode/launch.json") then
+				if vim.fn.filereadable(".dap/launch.json") then
 					require("dap.ext.vscode").load_launchjs(".dap/launch.json", { cppdbg = { "c", "cpp" } })
 				end
 				require("dap").continue()
