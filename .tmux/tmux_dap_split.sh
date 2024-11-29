@@ -12,7 +12,10 @@ if [[ -z "$dap_pane_exists"  ]]; then
   dap_pane_id=$(tmux split-window -d -l "20%" -P -F "#{pane_id}")
   tmux set -g @dap_pane_id "$dap_pane_id"
   tmux send-keys -t $dap_pane_id "export PROMPT_COMMAND= ; set +o history" ENTER
+else
+  tmux send-keys -t $dap_pane_id  C-c 
+  tmux send-keys -t $dap_pane_id  C-c
 fi
 
-tmux send-keys -t $dap_pane_id  "$command" ENTER
+tmux send-keys -t $dap_pane_id "$command" ENTER
 
