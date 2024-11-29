@@ -5,8 +5,8 @@ return {
       default_mappings = true,
       signs = true,
       mappings = {
-        next = "gm",
-        prev = "gM",
+        next = "]m",
+        prev = "[m",
       },
     })
   end,

@@ -22,12 +22,12 @@ return {
 					end
 
 					-- Navigation
-					map("n", "gh", function()
+					map("n", "]h", function()
 						gitsigns.nav_hunk("next")
             vim.cmd.normal("zz")
 					end, "Next hunk")
 
-					map("n", "gH", function()
+					map("n", "[h", function()
 						gitsigns.nav_hunk("prev")
             vim.cmd.normal("zz")
 					end, "Previous hunk")

@@ -15,8 +15,8 @@ return {
 		"ofirgall/goto-breakpoints.nvim",
 		config = function()
 			local map = vim.keymap.set
-			map("n", "gb", require("goto-breakpoints").next, { desc = "Go to next breakpoint" })
-			map("n", "gB", require("goto-breakpoints").prev, { desc = "Go to previous breakpoint" })
+			map("n", "]b", require("goto-breakpoints").next, { desc = "Go to next breakpoint" })
+			map("n", "[b", require("goto-breakpoints").prev, { desc = "Go to previous breakpoint" })
 			map("n", "gs", require("goto-breakpoints").stopped, { desc = "Go to stopped position (debugger)" })
 		end,
 	},
