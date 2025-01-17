@@ -97,6 +97,7 @@ return {
 					executable = "${workspaceFolder}/mt/build/arm-none-eabi/debug/sek",
 					postLaunchCommands = { "source utils/gdbsettings.gdbinit", "source utils/sekconfigure.gdbinit" },
 					rtos = "FreeRTOS",
+          jlinkscript = "utils/disable-flash-cache.JLinkScript"
 				},
 			}
 
@@ -227,7 +228,9 @@ return {
 			vim.keymap.set("n", "<F11>", dap.step_into)
 			vim.keymap.set("n", "<F12>", dap.step_out)
 			vim.keymap.set("n", "<F5>", function()
-				if vim.fn.filereadable(".dap/launch.json") then
+				if (vim.fn.filereadable(".dap/launch.json") == 1) then
+          print(vim.fn.getcwd())
+          print(".dap/launch.json found")
           dap.configurations.c = {}
           dap.configurations.cpp = {}
 					require("dap.ext.vscode").load_launchjs(".dap/launch.json", { cppdbg = { "c", "cpp" } })
