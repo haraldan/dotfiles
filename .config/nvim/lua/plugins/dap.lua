@@ -39,7 +39,20 @@ return {
 			}
 
 			-- Python setup
-			require("dap-python").setup("python")
+      local python_path = vim.fn.expand("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
+			require("dap-python").setup(python_path, {
+				include_configs = false,
+			})
+
+			dap.configurations.python = {
+        {
+				name = "file",
+				type = "python",
+				request = "launch",
+				program = "${file}",
+				console = "externalTerminal",
+      }
+			}
 
 			-- Cpptools setup
 			dap.adapters.cppdbg = {
@@ -97,7 +110,7 @@ return {
 					executable = "${workspaceFolder}/mt/build/arm-none-eabi/debug/sek",
 					postLaunchCommands = { "source utils/gdbsettings.gdbinit", "source utils/sekconfigure.gdbinit" },
 					rtos = "FreeRTOS",
-          jlinkscript = "utils/disable-flash-cache.JLinkScript"
+					jlinkscript = "utils/disable-flash-cache.JLinkScript",
 				},
 			}
 
@@ -228,11 +241,11 @@ return {
 			vim.keymap.set("n", "<F11>", dap.step_into)
 			vim.keymap.set("n", "<F12>", dap.step_out)
 			vim.keymap.set("n", "<F5>", function()
-				if (vim.fn.filereadable(".dap/launch.json") == 1) then
-          print(vim.fn.getcwd())
-          print(".dap/launch.json found")
-          dap.configurations.c = {}
-          dap.configurations.cpp = {}
+				if vim.fn.filereadable(".dap/launch.json") == 1 then
+					print(vim.fn.getcwd())
+					print(".dap/launch.json found")
+					dap.configurations.c = {}
+					dap.configurations.cpp = {}
 					require("dap.ext.vscode").load_launchjs(".dap/launch.json", { cppdbg = { "c", "cpp" } })
 				end
 				require("dap").continue()
@@ -245,9 +258,6 @@ return {
 				dapui.elements.watches.add,
 				{ desc = "DAP UI: Add to Watch Expressions" }
 			)
-
-			-- vim.keymap.set("n", "<Leader>dm", require('dap-python').test_method)
-			-- vim.keymap.set("v", "<Leader>ds", require('dap-python').debug_selection)
 
 			-- hover functionality, depending on the environment
 			vim.keymap.set({ "n", "v" }, "K", function()
