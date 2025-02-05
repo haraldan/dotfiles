@@ -151,4 +151,5 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 #virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/source/python
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source $HOME/.local/bin/virtualenvwrapper.sh
