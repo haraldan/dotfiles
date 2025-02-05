@@ -26,6 +26,57 @@ return {
 		},
 	},
 	{
+		"jpalardy/vim-slime",
+		dependencies = {
+			"linux-cultist/venv-selector.nvim",
+		},
+		init = function()
+			vim.g.slime_no_mappings = 1
+			vim.g.slime_target = "tmux"
+			vim.g.slime_dont_ask_default = 1
+			vim.g.slime_bracketed_paste = 1
+			vim.cmd([[let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}]])
+		end,
+		config = function()
+
+			local function update_tmux_pane()
+				local pane_id = vim.fn.system("~/.tmux/tmux_get_ipython_pane_id.sh")
+				local slime_config = '{"socket_name": "default", "target_pane": "' .. pane_id:sub(1, -2) .. '"}'
+				vim.cmd([[let g:slime_default_config =]] .. slime_config)
+				vim.cmd([[let b:slime_config =]] .. slime_config)
+			end
+
+			local function open_ipython_split()
+				local venv = require("venv-selector").venv()
+				vim.cmd("silent !~/.tmux/tmux_ipython_split.sh " .. venv .. "/bin/ipython --no-autoindent")
+        update_tmux_pane()
+			end
+
+
+			vim.keymap.set("n", "<leader>ii", open_ipython_split, { desc = "Open Ipython REPL", silent = true })
+			vim.keymap.set("n", "<F7>", function()
+        open_ipython_split()
+        vim.cmd("%SlimeSend")
+			end, { desc = "Send buffer to iPython",silent=true})
+			vim.keymap.set("v", "<F7>", function()
+        open_ipython_split()
+				vim.api.nvim_feedkeys( vim.api.nvim_replace_termcodes("<Plug>SlimeRegionSend", true, true, true), "m", true)
+			end, { desc = "Send selection to iPython" })
+
+			vim.keymap.set("n", "<leader>il", function()
+        open_ipython_split()
+				vim.api.nvim_feedkeys( vim.api.nvim_replace_termcodes("<Plug>SlimeLineSend", true, true, true), "m", true)
+			end, { desc = "Send selection to iPython" })
+
+			vim.keymap.set(
+				"n",
+				"<leader>iq",
+				":silent !~/.tmux/tmux_ipython_close.sh<CR>",
+				{ desc = "Close Ipython REPL", silent = true }
+			)
+		end,
+	},
+	{
 		"Vigemus/iron.nvim",
 		ft = "python",
 		enabled = false,
