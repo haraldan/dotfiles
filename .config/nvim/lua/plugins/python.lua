@@ -10,7 +10,14 @@ return {
 		config = function()
 			require("venv-selector").setup({
 				settings = {
-					options = {},
+					options = {
+						enable_default_searches = false,
+					},
+					search = {
+						virtualenv = {
+							command = "$FD '/bin/python$' ~/.virtualenvs --full-path --color never ",
+						},
+					},
 				},
 			})
 		end,
