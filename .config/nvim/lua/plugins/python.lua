@@ -102,7 +102,9 @@ return {
       end, { desc = "Send cell to ipython" })
 
       vim.keymap.set("n", "<leader>iw", function()
-        vim.cmd("SlimeSend1 " .. vim.fn.expand("<cword>"))
+        if vim.fn.expand("<cword>") ~= "" then
+          vim.cmd("SlimeSend1 " .. vim.fn.expand("<cword>"))
+        end
       end, { desc = "Send word under cursor to ipython", silent = true })
 
       vim.keymap.set("n", "<leader>iv", function()
