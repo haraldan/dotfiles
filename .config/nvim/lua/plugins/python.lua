@@ -38,7 +38,7 @@ return {
       vim.g.slime_dont_ask_default = 1
       vim.g.slime_bracketed_paste = 1
       vim.cmd([[let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}]])
-      vim.g.slime_cell_delimiter = "## "
+      vim.g.slime_cell_delimiter = "##"
     end,
     config = function()
       local function update_tmux_pane_id()
@@ -73,7 +73,7 @@ return {
         vim.cmd("SlimeSend1 clear")
       end, { desc = "Clear ipython REPL", silent = true })
 
-      vim.keymap.set("n", "<F7>", function()
+      vim.keymap.set("n", "<F8>", function()
         open_ipython_split()
         vim.cmd("%SlimeSend")
       end, { desc = "Send buffer to ipython", silent = true })
@@ -95,11 +95,23 @@ return {
           vim.api.nvim_replace_termcodes("<Plug>SlimeParagraphSend", true, true, true), "m", true)
       end, { desc = "Send paragraph to ipython" })
 
-      vim.keymap.set("n", "<leader>ic", function()
+      vim.keymap.set("n", "<leader>ie", function()
         open_ipython_split()
         vim.api.nvim_feedkeys(
           vim.api.nvim_replace_termcodes("<Plug>SlimeSendCell", true, true, true), "m", true)
       end, { desc = "Send cell to ipython" })
+
+      vim.keymap.set("n", "<F9>", function()
+        open_ipython_split()
+        vim.api.nvim_feedkeys(
+          vim.api.nvim_replace_termcodes("<Plug>SlimeSendCell", true, true, true), "m", true)
+      end, { desc = "Send cell to ipython" })
+
+      vim.keymap.set("n", "<leader>in", function()
+        open_ipython_split()
+        vim.api.nvim_feedkeys(
+          vim.api.nvim_replace_termcodes("<Plug>SlimeCellsSendAndGoToNext", true, true, true), "m", true)
+      end, { desc = "Send cell to ipython and go to next" })
 
       vim.keymap.set("n", "<leader>iw", function()
         if vim.fn.expand("<cword>") ~= "" then
@@ -110,11 +122,6 @@ return {
       vim.keymap.set("n", "<leader>iv", function()
         vim.cmd("SlimeSend1 %whos")
       end, { desc = "List variables in ipython", silent = true })
-
-      vim.keymap.set("n", "<leader>in", function()
-        vim.api.nvim_feedkeys(
-          vim.api.nvim_replace_termcodes("<Plug>SlimeCellsSendAndGoToNext", true, true, true), "m", true)
-      end, { desc = "Send cell to ipython go to next" })
 
       vim.keymap.set("n", "]c", function()
         vim.api.nvim_feedkeys(
