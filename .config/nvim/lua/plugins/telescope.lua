@@ -40,6 +40,16 @@ return {
 				},
 			},
 			pickers = {
+				help_tags = {
+					mappings = {
+						i = {
+							["<CR>"] = "select_vertical",
+						},
+						n = {
+							["<CR>"] = "select_vertical",
+						},
+					},
+				},
 				buffers = {
 					mappings = {
 						i = {
@@ -111,7 +121,6 @@ return {
 			builtin.find_files({ cwd = vim.fn.stdpath("config") })
 		end, { desc = "[F]ind [N]eovim files" })
 
-
 		-- live grep shortcuts
 		vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
 
@@ -124,7 +133,6 @@ return {
 				search = "",
 			})
 		end, { desc = "[F]ind in [O]pen Files" })
-
 
 		-- find word under cursor
 		vim.keymap.set("n", "<leader>fw", function()
