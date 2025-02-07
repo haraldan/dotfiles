@@ -119,6 +119,12 @@ return {
         end
       end, { desc = "Send word under cursor to ipython", silent = true })
 
+      vim.keymap.set("n", "<leader>it", function()
+        if vim.fn.expand("<cword>") ~= "" then
+          vim.cmd("SlimeSend1 type(" .. vim.fn.expand("<cword>") .. ")")
+        end
+      end, { desc = "Get type for word under cursor", silent = true })
+
       vim.keymap.set("n", "<leader>iv", function()
         vim.cmd("SlimeSend1 %whos")
       end, { desc = "List variables in ipython", silent = true })
