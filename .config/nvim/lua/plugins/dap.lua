@@ -212,7 +212,7 @@ return {
 			vim.keymap.set("n", "<Leader>dq", function()
 				dap.terminate()
 				dapui.close()
-				vim.cmd("silent !~/.tmux/tmux_dap_close.sh")
+				vim.cmd("silent !~/.tmux/tmux_split_close.sh -n dap")
 			end, { desc = "DAP: Quit Session" })
 			vim.keymap.set({ "n", "v" }, "<Leader>dh", function()
 				require("dap.ui.widgets").hover()
