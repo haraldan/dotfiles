@@ -12,10 +12,10 @@ handle_options() {
         shift
         ;;
       -h | --horizontal)
-        split_flag="-h"
+        split_flag="$split_flag -h"
         ;;
-      -v | --vertical)
-        split_flag=""
+      -b)  
+        split_flag="$split_flag -b"
         ;;
       -l)
         split_size=$2
