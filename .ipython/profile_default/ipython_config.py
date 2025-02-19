@@ -539,7 +539,7 @@ c = get_config()  # noqa
 #------------------------------------------------------------------------------
 ## 
 #  See also: InteractiveShell.ast_node_interactivity
-# c.TerminalInteractiveShell.ast_node_interactivity = 'last_expr'
+c.TerminalInteractiveShell.ast_node_interactivity = 'last_expr_or_assign'
 
 ## 
 #  See also: InteractiveShell.ast_transformers
