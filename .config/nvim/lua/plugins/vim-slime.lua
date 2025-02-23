@@ -36,7 +36,7 @@ return {
 				local venv = require("venv-selector").venv()
 				vim.cmd( 'silent !~/.tmux/tmux_split_open.sh -n ipython -h -l 40\\% -c "' .. venv .. '/bin/ipython --no-autoindent"')
 			elseif vim.bo.filetype == "matlab" then
-				vim.cmd('silent !~/.tmux/tmux_split_open.sh -n matlab -h -l 40\\% -c "matlab -nodesktop -nosplash"')
+				vim.cmd([[silent !~/.tmux/tmux_split_open.sh -n matlab -h -l 40\\% -c "matlab -nodesktop -nosplash 2> >(sed $'s,.*,\e[31m&\e[m,'>&2)"]])
 			end
 			update_tmux_pane_id()
 		end
