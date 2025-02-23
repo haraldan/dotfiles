@@ -59,6 +59,16 @@ return {
 			lspconfig.pyright.setup({
 				capabilities = capabilities,
 			})
+			lspconfig.matlab_ls.setup({
+				capabilities = capabilities,
+				filetypes = { "matlab" },
+				settings = {
+					matlab = {
+						installPath = "/usr/local/MATLAB/R2024b/",
+					},
+				},
+				single_file_support = true,
+			})
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("custom-lsp-attach", { clear = true }),
 				callback = function(event)
