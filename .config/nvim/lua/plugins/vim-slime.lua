@@ -61,6 +61,7 @@ return {
 
 		local function send_buffer()
 			open_tmux_split()
+      vim.cmd("w")
 			if vim.bo.filetype == "python" then
 				vim.cmd("SlimeSend1 %run " .. vim.fn.expand("%"))
 			elseif vim.bo.filetype == "matlab" then
