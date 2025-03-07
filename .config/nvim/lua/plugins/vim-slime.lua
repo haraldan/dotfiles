@@ -175,11 +175,11 @@ return {
 			end
 		end, { desc = "Get help for current word", silent = true })
 
-		vim.keymap.set("n", "]c", function()
+		vim.keymap.set("n", "]o", function()
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Plug>SlimeCellsNext", true, true, true), "m", true)
 		end, { desc = "Next cell" })
 
-		vim.keymap.set("n", "[c", function()
+		vim.keymap.set("n", "[o", function()
 			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Plug>SlimeCellsPrev", true, true, true), "m", true)
 		end, { desc = "Previous cell" })
 
