@@ -1,30 +1,9 @@
 return {
 	{
-		"nvimtools/none-ls.nvim",
-		dependencies = {
-			{ "williamboman/mason.nvim", config = true },
-			"jay-babu/mason-null-ls.nvim",
-		},
-		config = function()
-			local null_ls = require("null-ls")
-			null_ls.setup({
-				sources = {
-					null_ls.builtins.formatting.stylua,
-					null_ls.builtins.formatting.isort,
-					null_ls.builtins.formatting.black,
-				},
-			})
-			require("mason-null-ls").setup({
-				automatic_installation = true,
-			})
-
-			vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "Auto-format using LSP/null-ls" })
-		end,
-	},
-	{
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		dependencies = {
+			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig",
 		},
 		config = function()
@@ -58,6 +37,11 @@ return {
 			})
 			lspconfig.pyright.setup({
 				capabilities = capabilities,
+			})
+			lspconfig.bashls.setup({
+				cmd = { "bash-language-server", "start" },
+				capabilities = capabilities,
+				single_file_support = true,
 			})
 			lspconfig.matlab_ls.setup({
 				capabilities = capabilities,
@@ -96,7 +80,12 @@ return {
 					)
 					map("<leader>lr", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>lc", vim.lsp.buf.code_action, "[C]ode [A]ction")
-					vim.keymap.set("n","<leader>lh" , ":ClangdSwitchSourceHeader<CR>", { desc = "LSP: Switch header/source", silent=true })
+					vim.keymap.set(
+						"n",
+						"<leader>lh",
+						":ClangdSwitchSourceHeader<CR>",
+						{ desc = "LSP: Switch header/source", silent = true }
+					)
 
 					-- The following two autocommands are used to highlight references of the
 					-- word under your cursor when your cursor rests there for a little while.
