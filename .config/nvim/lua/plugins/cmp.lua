@@ -23,6 +23,7 @@ return {
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
 			"chrisgrieser/cmp_yanky",
+			"dmitmel/cmp-cmdline-history",
 		},
 		config = function()
 			local cmp = require("cmp")
@@ -91,6 +92,7 @@ return {
 				mapping = cmp.mapping.preset.cmdline(),
 				sources = {
 					{ name = "buffer" },
+					{ name = "cmdline_history" },
 				},
 			})
 
@@ -101,6 +103,8 @@ return {
 					{ name = "path" },
 				}, {
 					{ name = "cmdline" },
+				}, {
+					{ name = "cmdline_history" },
 				}),
 				matching = { disallow_symbol_nonprefix_matching = false },
 			})
