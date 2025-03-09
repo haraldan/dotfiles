@@ -17,6 +17,8 @@ return {
 			"saadparwaiz1/cmp_luasnip",
 			"rafamadriz/friendly-snippets",
 			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lsp-signature-help",
+			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
@@ -44,9 +46,20 @@ return {
 					["<C-u>"] = cmp.mapping.scroll_docs(-4),
 					["<C-d>"] = cmp.mapping.scroll_docs(4),
 					["<C-c>"] = cmp.mapping.complete(),
-					["<ESC>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = false }),
-
+					["<ESC>"] = cmp.mapping(function(fallback)
+						if cmp.visible() and cmp.get_active_entry() then
+							cmp.abort()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+					["<CR>"] = cmp.mapping(function(fallback)
+						if cmp.visible() and cmp.get_active_entry() then
+							cmp.confirm({ select = false })
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
 					["<C-n>"] = cmp.mapping(function()
 						if luasnip.expand_or_locally_jumpable() then
 							luasnip.expand_or_jump()
@@ -66,6 +79,8 @@ return {
 				sources = cmp.config.sources({
 					{ name = "luasnip" }, -- For luasnip users.
 					{ name = "nvim_lsp" },
+					{ name = "nvim_lsp_signature_help" },
+					{ name = "nvim_lua" },
 					{ name = "buffer" },
 					{ name = "path" },
 					{ name = "cmp_yanky" },
