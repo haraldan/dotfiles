@@ -21,11 +21,11 @@ return {
 			elseif vim.bo.filetype == "matlab" then
 				pane_id = vim.fn.system("~/.tmux/tmux_split_get_pane_id.sh -n matlab")
 			end
-      return pane_id:sub(1, -2)
+			return pane_id:sub(1, -2)
 		end
 
 		local function update_tmux_pane_id()
-      local pane_id = get_tmux_pane_id()
+			local pane_id = get_tmux_pane_id()
 			local slime_config = '{"socket_name": "default", "target_pane": "' .. pane_id .. '"}'
 			vim.cmd([[let g:slime_default_config =]] .. slime_config)
 			vim.cmd([[let b:slime_config =]] .. slime_config)
@@ -34,9 +34,12 @@ return {
 		local function open_tmux_split()
 			if vim.bo.filetype == "python" then
 				local venv = require("venv-selector").venv()
-				vim.cmd( 'silent !~/.tmux/tmux_split_open.sh -n ipython -h -l 40\\% -c "' .. venv .. '/bin/ipython --no-autoindent"')
+				vim.cmd(
+					'silent !~/.tmux/tmux_split_open.sh -n ipython -h -l 40\\% -c "' .. venv .. '/bin/ipython --no-autoindent"')
 			elseif vim.bo.filetype == "matlab" then
-				vim.cmd([[silent !~/.tmux/tmux_split_open.sh -n matlab -h -l 40\\% -c "matlab -nodesktop -nosplash 2> >(sed $'s,.*,\e[31m&\e[m,'>&2)"]])
+				vim.cmd(
+					[[silent !~/.tmux/tmux_split_open.sh -n matlab -h -l 40\\% -c "matlab -nodesktop -nosplash 2> >(sed $'s,.*,\e[31m&\e[m,'>&2)"]]
+				)
 			end
 			update_tmux_pane_id()
 		end
@@ -61,7 +64,7 @@ return {
 
 		local function send_buffer()
 			open_tmux_split()
-      vim.cmd("w")
+			vim.cmd("w")
 			if vim.bo.filetype == "python" then
 				vim.cmd("SlimeSend1 %run " .. vim.fn.expand("%"))
 			elseif vim.bo.filetype == "matlab" then
@@ -86,8 +89,8 @@ return {
 		end, { desc = "Restart REPL", silent = true })
 
 		vim.keymap.set("n", "<leader>iz", function()
-      local pane_id = get_tmux_pane_id()
-      vim.cmd("silent !tmux send-keys -t \"\\".. pane_id .. "\" C-c")
+			local pane_id = get_tmux_pane_id()
+			vim.cmd('silent !tmux send-keys -t "\\' .. pane_id .. '" C-c')
 		end, { desc = "Send keyboard interrupt", silent = true })
 
 		vim.keymap.set("n", "<leader>ic", function()
@@ -100,10 +103,11 @@ return {
 
 		vim.keymap.set("n", "<F8>", function()
 			send_buffer()
-		end, { desc = "Send buffer to REPL", silent = true })
+		end, { desc = "Run buffer in REPL", silent = true })
 
 		vim.keymap.set("n", "<leader>ib", function()
-			send_buffer()
+			open_tmux_split()
+			vim.cmd("%SlimeSend")
 		end, { desc = "Send buffer to REPL", silent = true })
 
 		vim.keymap.set("n", "<leader>il", function()
@@ -132,7 +136,11 @@ return {
 
 		vim.keymap.set("n", "<leader>in", function()
 			open_tmux_split()
-			vim.api.nvim_feedkeys( vim.api.nvim_replace_termcodes("<Plug>SlimeCellsSendAndGoToNext", true, true, true), "m", true)
+			vim.api.nvim_feedkeys(
+				vim.api.nvim_replace_termcodes("<Plug>SlimeCellsSendAndGoToNext", true, true, true),
+				"m",
+				true
+			)
 		end, { desc = "Send cell to REPL and go to next" })
 
 		vim.keymap.set("n", "<leader>iw", function()
@@ -170,7 +178,7 @@ return {
 				end
 			elseif vim.bo.filetype == "matlab" then
 				if vim.fn.expand("<cword>") ~= "" then
-					vim.cmd("SlimeSend1 help(\"" .. vim.fn.expand("<cword>") .. "\")")
+					vim.cmd('SlimeSend1 help("' .. vim.fn.expand("<cword>") .. '")')
 				end
 			end
 		end, { desc = "Get help for current word", silent = true })
@@ -185,9 +193,9 @@ return {
 
 		vim.keymap.set("v", "<leader>ih", function()
 			if vim.bo.filetype == "python" then
-					vim.cmd("SlimeSend1 help(" .. Get_visual_selection_text()[1] .. ")")
+				vim.cmd("SlimeSend1 help(" .. Get_visual_selection_text()[1] .. ")")
 			elseif vim.bo.filetype == "matlab" then
-					vim.cmd("SlimeSend1 help(\"" .. Get_visual_selection_text()[1] .. "\")")
+				vim.cmd('SlimeSend1 help("' .. Get_visual_selection_text()[1] .. '")')
 			end
 		end, { desc = "Get help for selection", silent = true })
 
