@@ -167,7 +167,7 @@ return {
 			if vim.bo.filetype == "python" then
 				vim.cmd("SlimeSend1 %whos")
 			elseif vim.bo.filetype == "matlab" then
-				vim.cmd("SlimeSend1 workspace")
+				vim.cmd("SlimeSend1 whos")
 			end
 		end, { desc = "List variables in REPL", silent = true })
 
