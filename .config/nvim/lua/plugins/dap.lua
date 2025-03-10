@@ -50,7 +50,7 @@ return {
 				type = "python",
 				request = "launch",
 				program = "${file}",
-				console = "externalTerminal",
+				-- console = "externalTerminal",
       }
 			}
 
