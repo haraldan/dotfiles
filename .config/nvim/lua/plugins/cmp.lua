@@ -46,21 +46,10 @@ return {
 					["<S-Tab>"] = cmp.mapping.select_prev_item(),
 					["<C-u>"] = cmp.mapping.scroll_docs(-4),
 					["<C-d>"] = cmp.mapping.scroll_docs(4),
-					["<C-c>"] = cmp.mapping.complete(),
-					["<ESC>"] = cmp.mapping(function(fallback)
-						if cmp.visible() and cmp.get_active_entry() then
-							cmp.abort()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					["<CR>"] = cmp.mapping(function(fallback)
-						if cmp.visible() and cmp.get_active_entry() then
-							cmp.confirm({ select = false })
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
+					-- ["<C-c>"] = cmp.mapping.complete(),
+					["<C-c>"] = cmp.mapping.abort(),
+					["<CR>"] = cmp.mapping.confirm({ select = false }),
+
 					["<C-n>"] = cmp.mapping(function()
 						if luasnip.expand_or_locally_jumpable() then
 							luasnip.expand_or_jump()
