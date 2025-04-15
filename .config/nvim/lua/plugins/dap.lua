@@ -39,19 +39,19 @@ return {
 			}
 
 			-- Python setup
-      local python_path = vim.fn.expand("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
+			local python_path = vim.fn.expand("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 			require("dap-python").setup(python_path, {
 				include_configs = false,
 			})
 
 			dap.configurations.python = {
-        {
-				name = "file",
-				type = "python",
-				request = "launch",
-				program = "${file}",
-				-- console = "externalTerminal",
-      }
+				{
+					name = "file",
+					type = "python",
+					request = "launch",
+					program = "${file}",
+					-- console = "externalTerminal",
+				},
 			}
 
 			-- Cpptools setup
@@ -266,13 +266,15 @@ return {
 				if not winid then
 					if session ~= nil then
 						require("dapui").eval()
-					else
-						vim.lsp.buf.hover()
+					elseif vim.diagnostic.open_float() == nil then
+						vim.lsp.buf.hover({ border = "single" })
 					end
 				end
 			end)
 			-- Additional mapping for LSP hover
-			vim.keymap.set("n", "<M-K>", vim.lsp.buf.hover)
+			vim.keymap.set("n", "<M-K>", function()
+				vim.lsp.buf.hover({ border = "single" })
+			end)
 		end,
 	},
 }

@@ -1,11 +1,19 @@
 return {
 	{
-		"neovim/nvim-lspconfig",
-		lazy = false,
+		"williamboman/mason-lspconfig",
 		dependencies = {
 			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig",
 		},
+		config = function()
+			require("mason-lspconfig").setup({
+				-- automatic_installation = true, -- currently not working in 0.11
+				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "matlab_ls" },
+			})
+		end,
+	},
+	{
+		"neovim/nvim-lspconfig",
+		lazy = false,
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -14,13 +22,8 @@ return {
 				lineFoldingOnly = true,
 			}
 
-			local lspconfig = require("lspconfig")
-
-			require("mason-lspconfig").setup({
-				automatic_installation = true,
-			})
-
-			lspconfig.clangd.setup({
+			-- LSP configurations
+			vim.lsp.config("clangd", {
 				capabilities = capabilities,
 				cmd = {
 					"clangd",
@@ -29,21 +32,21 @@ return {
 				},
 				single_file_support = false,
 			})
-			lspconfig.lua_ls.setup({
+			vim.lsp.config("lua_ls", {
 				capabilities = capabilities,
 			})
-			lspconfig.vhdl_ls.setup({
+			vim.lsp.config("vhdl_ls", {
 				capabilities = capabilities,
 			})
-			lspconfig.pyright.setup({
+			vim.lsp.config("pyright", {
 				capabilities = capabilities,
 			})
-			lspconfig.bashls.setup({
+			vim.lsp.config("bashls", {
 				cmd = { "bash-language-server", "start" },
 				capabilities = capabilities,
 				single_file_support = true,
 			})
-			lspconfig.matlab_ls.setup({
+			vim.lsp.config("matlab_ls", {
 				capabilities = capabilities,
 				filetypes = { "matlab" },
 				settings = {
@@ -53,6 +56,20 @@ return {
 				},
 				single_file_support = true,
 			})
+
+			-- Enable LSP
+			vim.lsp.enable("clangd")
+			vim.lsp.enable("lua_ls")
+			vim.lsp.enable("vhdl_ls")
+			vim.lsp.enable("pyright")
+			vim.lsp.enable("bashls")
+			vim.lsp.enable("matlab_ls")
+
+			vim.diagnostic.config({
+				float = { border = "single" },
+				virtual_text = true,
+			})
+
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("custom-lsp-attach", { clear = true }),
 				callback = function(event)
@@ -80,6 +97,9 @@ return {
 					)
 					map("<leader>lr", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>lc", vim.lsp.buf.code_action, "[C]ode [A]ction")
+					vim.keymap.set("n", "<leader>lt", function()
+						vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+					end, { silent = true, noremap = true, desc = "LSP: Toggle Diagnostics" })
 					vim.keymap.set(
 						"n",
 						"<leader>lh",
@@ -104,21 +124,6 @@ return {
 							callback = vim.lsp.buf.clear_references,
 						})
 					end
-
-					-- add border to hover windows
-					local _border = "single"
-
-					vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-						border = _border,
-					})
-
-					vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-						border = _border,
-					})
-
-					vim.diagnostic.config({
-						float = { border = _border },
-					})
 				end,
 			})
 		end,
