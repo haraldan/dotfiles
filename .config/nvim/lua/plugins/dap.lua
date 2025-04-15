@@ -267,13 +267,13 @@ return {
 					if session ~= nil then
 						require("dapui").eval()
 					elseif vim.diagnostic.open_float() == nil then
-						vim.lsp.buf.hover({ border = "single" })
+						vim.lsp.buf.hover()
 					end
 				end
 			end)
 			-- Additional mapping for LSP hover
 			vim.keymap.set("n", "<M-K>", function()
-				vim.lsp.buf.hover({ border = "single" })
+				vim.lsp.buf.hover()
 			end)
 		end,
 	},

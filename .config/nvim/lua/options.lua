@@ -10,8 +10,8 @@ vim.opt.number = true -- shows absolute line number on cursor line (when relativ
 
 -- tabs & indentation
 vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2    -- spaces for indent width
-vim.opt.expandtab = true  -- expand tab to spaces
+vim.opt.shiftwidth = 2 -- spaces for indent width
+vim.opt.expandtab = true -- expand tab to spaces
 vim.opt.autoindent = true -- copy indent from current line when starting new one
 
 -- split on the right
@@ -28,11 +28,11 @@ vim.opt.colorcolumn = "+1"
 
 -- set formatoptions
 vim.api.nvim_create_autocmd("Filetype", {
-  pattern = "*",
-  callback = function()
-    vim.opt.formatoptions:remove({ "o" })
-    vim.opt.formatoptions:remove({ "t" })
-  end,
+	pattern = "*",
+	callback = function()
+		vim.opt.formatoptions:remove({ "o" })
+		vim.opt.formatoptions:remove({ "t" })
+	end,
 })
 
 -- ignore case when searching
@@ -77,8 +77,8 @@ vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
 
 -- close pop-up windows with ESC
 vim.keymap.set("n", "<ESC>", function()
-  vim.cmd.fclose()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
+	vim.cmd.fclose()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
 end)
 -- exit insert mode with <ESC> in terminal
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
@@ -86,48 +86,47 @@ vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 -- recognize .h files as C headers, not C++
 vim.g.c_syntax_for_h = 1
 
--- persistent undo
--- vim.opt.undodir = '~/.config/nvim/.undo/'
--- vim.opt.undofile = true
+-- float window borders
+vim.o.winborder = "single"
 
+-- Function to pass visual selection to vim-slime
 function Get_visual_selection_text()
-  local _, srow, scol = unpack(vim.fn.getpos('v'))
-  local _, erow, ecol = unpack(vim.fn.getpos('.'))
+	local _, srow, scol = unpack(vim.fn.getpos("v"))
+	local _, erow, ecol = unpack(vim.fn.getpos("."))
 
-  -- visual line mode
-  if vim.fn.mode() == 'V' then
-    if srow > erow then
-      return vim.api.nvim_buf_get_lines(0, erow - 1, srow, true)
-    else
-      return vim.api.nvim_buf_get_lines(0, srow - 1, erow, true)
-    end
-  end
+	-- visual line mode
+	if vim.fn.mode() == "V" then
+		if srow > erow then
+			return vim.api.nvim_buf_get_lines(0, erow - 1, srow, true)
+		else
+			return vim.api.nvim_buf_get_lines(0, srow - 1, erow, true)
+		end
+	end
 
-  -- regular visual mode
-  if vim.fn.mode() == 'v' then
-    if srow < erow or (srow == erow and scol <= ecol) then
-      return vim.api.nvim_buf_get_text(0, srow - 1, scol - 1, erow - 1, ecol, {})
-    else
-      return vim.api.nvim_buf_get_text(0, erow - 1, ecol - 1, srow - 1, scol, {})
-    end
-  end
+	-- regular visual mode
+	if vim.fn.mode() == "v" then
+		if srow < erow or (srow == erow and scol <= ecol) then
+			return vim.api.nvim_buf_get_text(0, srow - 1, scol - 1, erow - 1, ecol, {})
+		else
+			return vim.api.nvim_buf_get_text(0, erow - 1, ecol - 1, srow - 1, scol, {})
+		end
+	end
 
-  -- visual block mode
-  if vim.fn.mode() == '\22' then
-    local lines = {}
-    if srow > erow then
-      srow, erow = erow, srow
-    end
-    if scol > ecol then
-      scol, ecol = ecol, scol
-    end
-    for i = srow, erow do
-      table.insert(
-        lines,
-        vim.api.nvim_buf_get_text(0, i - 1, math.min(scol - 1, ecol), i - 1, math.max(scol - 1, ecol), {})[1]
-      )
-    end
-    return lines
-  end
-
+	-- visual block mode
+	if vim.fn.mode() == "\22" then
+		local lines = {}
+		if srow > erow then
+			srow, erow = erow, srow
+		end
+		if scol > ecol then
+			scol, ecol = ecol, scol
+		end
+		for i = srow, erow do
+			table.insert(
+				lines,
+				vim.api.nvim_buf_get_text(0, i - 1, math.min(scol - 1, ecol), i - 1, math.max(scol - 1, ecol), {})[1]
+			)
+		end
+		return lines
+	end
 end
