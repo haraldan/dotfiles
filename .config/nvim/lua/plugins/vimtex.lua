@@ -14,4 +14,5 @@ return {
 	{
 		"micangl/cmp-vimtex",
 	},
+	{ "rickhowe/wrapwidth" },
 }

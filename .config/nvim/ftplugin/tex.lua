@@ -8,3 +8,5 @@ vim.keymap.set("n", "j", "gj", { buffer = true })
 vim.keymap.set("n", "k", "gk", { buffer = true })
 vim.keymap.set("n", "0", "g0", { buffer = true })
 vim.keymap.set("n", "$", "g$", { buffer = true })
+
+vim.cmd("Wrapwidth 120")
