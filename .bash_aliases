@@ -1,4 +1,4 @@
 alias vim="nvim"
-alias nvim="nvim"
+alias vi="nvim"
 alias lg=lazygit
 alias ..="cd .."

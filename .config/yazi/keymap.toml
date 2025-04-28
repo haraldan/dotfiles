@@ -1,0 +1,23 @@
+[[manager.prepend_keymap]]
+on   = "<Enter>"
+run  = "plugin augment-command -- enter"
+desc = "Enter the child directory, or open the file"
+[[manager.prepend_keymap]]
+on   = "p"
+run  = "plugin augment-command -- paste"
+desc = "Paste into the hovered directory or CWD"
+[[manager.prepend_keymap]]
+on = "K" 
+run = "plugin augment-command -- parent_arrow -1"
+[[manager.prepend_keymap]]
+on = "J" 
+run = "plugin augment-command -- parent_arrow 1"
+[[manager.prepend_keymap]]
+on = "<C-j>" 
+run = "seek 5"
+[[manager.prepend_keymap]]
+on = "<C-k>" 
+run = "seek -5"
+[[manager.prepend_keymap]]
+on = "t" 
+run = "plugin augment-command -- tab_create"
