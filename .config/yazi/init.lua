@@ -29,3 +29,5 @@ require("augment-command"):setup({
     scroll_delay = 0.02,
     wraparound_file_navigation = false,
 })
+
+require("git"):setup()
