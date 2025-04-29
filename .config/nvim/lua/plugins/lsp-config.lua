@@ -7,7 +7,7 @@ return {
 		config = function()
 			require("mason-lspconfig").setup({
 				-- automatic_installation = true, -- currently not working in 0.11
-				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "matlab_ls" },
+				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "matlab_ls", "html" },
 			})
 		end,
 	},
@@ -41,6 +41,9 @@ return {
 			vim.lsp.config("pyright", {
 				capabilities = capabilities,
 			})
+			vim.lsp.config("html", {
+				capabilities = capabilities,
+			})
 			vim.lsp.config("bashls", {
 				cmd = { "bash-language-server", "start" },
 				capabilities = capabilities,
@@ -62,6 +65,7 @@ return {
 			vim.lsp.enable("lua_ls")
 			vim.lsp.enable("vhdl_ls")
 			vim.lsp.enable("pyright")
+			vim.lsp.enable("html")
 			vim.lsp.enable("bashls")
 			vim.lsp.enable("matlab_ls")
 
