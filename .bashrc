@@ -153,3 +153,13 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/source/python
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source $HOME/.local/bin/virtualenvwrapper.sh
+
+# Yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
