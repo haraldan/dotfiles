@@ -61,12 +61,26 @@ vim.keymap.set("n", "<C-w>-", ":sp<CR>")
 vim.keymap.set("n", "ZZ", ":wqa<CR>")
 vim.keymap.set("n", "ZQ", ":qa!<CR>")
 
+vim.keymap.set("n", "]]", "]c", { desc = "Next diff" })
+vim.keymap.set("n", "[[", "[c", { desc = "Previous diff" })
+
 -- Insert mode shortcuts
 vim.keymap.set({ "i", "n" }, "<C-h>", "<Left>")
 vim.keymap.set({ "i", "n" }, "<C-l>", "<Right>")
 vim.keymap.set("i", "<C-j>", "<Down>")
 vim.keymap.set("i", "<C-k>", "<Up>")
 vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
+
+-- diff function
+vim.keymap.set("n", "<C-w>d", function()
+	if vim.o.diff then
+		vim.cmd("windo diffoff")
+		vim.cmd("wincmd t")
+	else
+		vim.cmd('windo diffthis')
+		vim.cmd("wincmd t")
+	end
+end, { desc = "Diff mode with current split" })
 
 -- change update time for CursorHold events
 vim.opt.updatetime = 2000
