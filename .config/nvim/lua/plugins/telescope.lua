@@ -36,6 +36,11 @@ return {
 						["<C-j>"] = actions.move_selection_next, -- move to next result
 						["<C-\\>"] = actions.select_vertical,
 						["q"] = actions.close,
+						["p"] = function(prompt_bufnr)
+							local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+							local text = vim.fn.getreg("0"):gsub("\n", "\\n") -- which register depends on clipboard option
+							current_picker:set_prompt(text, false)
+						end,
 					},
 				},
 			},
