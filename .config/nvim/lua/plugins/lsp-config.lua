@@ -49,15 +49,27 @@ return {
 				capabilities = capabilities,
 				single_file_support = true,
 			})
+
 			vim.lsp.config("matlab_ls", {
 				capabilities = capabilities,
+				cmd = { "matlab-language-server", "--stdio" },
 				filetypes = { "matlab" },
+				root_dir = function(_, callback)
+					local root_dir = vim.fs.root(0, ".git")
+					if root_dir then
+						callback(root_dir)
+					else
+						callback(vim.env.PWD)
+					end
+				end,
 				settings = {
-					matlab = {
-						installPath = "/usr/local/MATLAB/R2024b/",
+					MATLAB = {
+						indexWorkspace = true,
+						installPath = "/usr/local/MATLAB/R2024b",
+						matlabConnectionTiming = "onStart",
+						telemetry = true,
 					},
 				},
-				single_file_support = true,
 			})
 
 			-- Enable LSP
