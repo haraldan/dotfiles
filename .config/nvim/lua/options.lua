@@ -82,6 +82,10 @@ vim.keymap.set("n", "<C-w>d", function()
 	end
 end, { desc = "Diff mode with current split" })
 
+-- disable q button
+vim.keymap.set("n","<leader>q","q",{desc = "Record a macro"})
+vim.keymap.set("n","q","")
+
 -- change update time for CursorHold events
 vim.opt.updatetime = 2000
 
@@ -91,8 +95,12 @@ vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
 
 -- close pop-up windows with ESC
 vim.keymap.set("n", "<ESC>", function()
-	vim.cmd.fclose()
-	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
+	if vim.bo.buftype == "nofile" then
+		vim.cmd(":q")
+	else
+		vim.cmd.fclose()
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
+	end
 end)
 -- exit insert mode with <ESC> in terminal
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
