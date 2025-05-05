@@ -1,13 +1,13 @@
 return {
-  "folke/which-key.nvim",
-  dependencies = {
-    "nvim-tree/nvim-web-devicons",
-    "echasnovski/mini.icons",
-  },
-  event = "VeryLazy",
-  init = function()
-    vim.o.timeout = true
-    vim.o.timeoutlen = 300
-  end,
-  config = true,
+	"folke/which-key.nvim",
+	dependencies = {
+		"nvim-tree/nvim-web-devicons",
+		"echasnovski/mini.icons",
+	},
+	event = "VeryLazy",
+	config = function()
+		require("which-key").add({
+			{ "<leader>w", proxy = "<c-w>", group = "windows" }, -- proxy to window mappings
+		})
+	end,
 }

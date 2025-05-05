@@ -77,14 +77,14 @@ vim.keymap.set("n", "<C-w>d", function()
 		vim.cmd("windo diffoff")
 		vim.cmd("wincmd t")
 	else
-		vim.cmd('windo diffthis')
+		vim.cmd("windo diffthis")
 		vim.cmd("wincmd t")
 	end
 end, { desc = "Diff mode with current split" })
 
 -- disable q button
-vim.keymap.set("n","<leader>q","q",{desc = "Record a macro"})
-vim.keymap.set("n","q","")
+vim.keymap.set("n", "<leader>q", "q", { desc = "Record a macro" })
+vim.keymap.set("n", "q", "")
 
 -- change update time for CursorHold events
 vim.opt.updatetime = 2000
