@@ -34,6 +34,11 @@ return {
 			})
 			vim.lsp.config("lua_ls", {
 				capabilities = capabilities,
+				settings = {
+					Lua = {
+						hint = { enable = true },
+					},
+				},
 			})
 			vim.lsp.config("vhdl_ls", {
 				capabilities = capabilities,
@@ -122,6 +127,9 @@ return {
 						":ClangdSwitchSourceHeader<CR>",
 						{ desc = "LSP: Switch header/source", silent = true }
 					)
+					vim.keymap.set("n", "<leader>li", function()
+						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
+					end, { desc = "LSP: Toggle inlay hints" })
 
 					-- The following two autocommands are used to highlight references of the
 					-- word under your cursor when your cursor rests there for a little while.
