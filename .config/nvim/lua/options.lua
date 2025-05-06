@@ -23,6 +23,9 @@ vim.opt.wrap = false
 vim.opt.textwidth = 150
 vim.opt.colorcolumn = "+1"
 
+-- reduce timeout to see which-key sooner
+vim.opt.timeoutlen = 500
+
 -- sync clipboard with system
 -- vim.opt.clipboard = "unnamedplus"
 
