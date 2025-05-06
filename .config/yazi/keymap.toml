@@ -21,6 +21,12 @@ run = "seek -5"
 [[manager.prepend_keymap]]
 on = "t" 
 run = "plugin augment-command -- tab_create"
+[[manager.prepend_keymap]]
+on = "q" 
+run = "quit --no-cwd-file"
+[[manager.prepend_keymap]]
+on = "Q" 
+run = "quit"
 [[input.prepend_keymap]]
 on   = "<Esc>"
 run  = "close"
