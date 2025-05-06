@@ -1,7 +1,4 @@
 return {
-	{
-		"tpope/vim-fugitive",
-	},
   {
     "radyz/telescope-gitsigns",
     dependencies = {
