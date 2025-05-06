@@ -74,9 +74,9 @@ vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
 -- Relative number toggle
 vim.keymap.set("n", "<leader>tn", function()
 	if vim.o.relativenumber then
-    vim.opt.relativenumber = false
+		vim.opt.relativenumber = false
 	else
-    vim.opt.relativenumber = true
+		vim.opt.relativenumber = true
 	end
 end, { desc = "Toggle relative numbers" })
 

@@ -36,13 +36,21 @@ return {
 		keys = {
 			{
 				"<CR>",
-				mode = { "n", "x", "o" },
+				mode = { "n" },
 				function()
 					if vim.bo.buftype == "nofile" or vim.bo.buftype == "quickfix" then
 						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, true, true), "n", false)
 					else
 						require("flash").jump()
 					end
+				end,
+				desc = "Flash",
+			},
+			{
+				"<CR>",
+				mode = { "x", "o" },
+				function()
+             require("flash").jump({jump={offset=-1}})
 				end,
 				desc = "Flash",
 			},
