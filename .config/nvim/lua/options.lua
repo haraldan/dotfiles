@@ -40,7 +40,6 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Normal mode shortcuts
-vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>", { desc = "Reset highlights" })
 vim.keymap.set("n", "<leader>pcd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
 vim.keymap.set("n", "<leader>pw", ":pwd<CR>", { desc = "Check cwd" })
 vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
@@ -105,7 +104,13 @@ vim.keymap.set("n", "<ESC>", function()
 	if vim.bo.buftype == "nofile" then
 		vim.cmd(":q")
 	else
-		vim.cmd.fclose()
+		for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+			if vim.api.nvim_win_get_config(winid).zindex then
+				vim.cmd.fclose()
+				return
+			end
+		end
+		vim.cmd("nohlsearch")
 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
 	end
 end)
