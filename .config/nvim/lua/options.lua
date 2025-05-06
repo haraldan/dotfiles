@@ -5,7 +5,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- line numbers
--- opt.relativenumber = true -- show relative line numbers
+vim.opt.relativenumber = true -- show relative line numbers
 vim.opt.number = true -- shows absolute line number on cursor line (when relative number is on)
 
 -- tabs & indentation
@@ -68,6 +68,15 @@ vim.keymap.set({ "i", "n" }, "<C-l>", "<Right>")
 vim.keymap.set("i", "<C-j>", "<Down>")
 vim.keymap.set("i", "<C-k>", "<Up>")
 vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
+
+-- Relative number toggle
+vim.keymap.set("n", "<leader>tn", function()
+	if vim.o.relativenumber then
+    vim.opt.relativenumber = false
+	else
+    vim.opt.relativenumber = true
+	end
+end, { desc = "Toggle relative numbers" })
 
 -- diff function
 vim.keymap.set("n", "<C-w>d", function()
