@@ -11,7 +11,7 @@ return {
 			require("various-textobjs").setup({
 				keymaps = {
 					useDefaults = true,
-          disabledDefaults = {"in","an", "iN","aN"}, -- conflicting with mini.ai "next"
+          disabledDefaults = {"in","an", "iN","aN","r"}, -- conflicting with mini.ai "next" and remote flash
 				},
 			})
 			-- Remap sentence text objects
