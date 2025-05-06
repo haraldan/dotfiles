@@ -163,3 +163,5 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
+
+bind -x '"\ee":"y"'
