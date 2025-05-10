@@ -8,7 +8,6 @@ return {
 	branch = "regexp", -- This is the regexp branch, use this for the new version
 	config = function()
 		require("venv-selector").setup({
-			settings = {
 				options = {
 					enable_default_searches = false,
 				},
@@ -17,7 +16,6 @@ return {
 						command = "$FD '/bin/python$' ~/.virtualenvs --full-path --color never ",
 					},
 				},
-			},
 		})
 	end,
 	keys = {

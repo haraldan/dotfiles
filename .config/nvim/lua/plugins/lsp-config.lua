@@ -1,13 +1,14 @@
+
 return {
 	{
-		"williamboman/mason-lspconfig",
+		"mason-org/mason-lspconfig.nvim",
 		dependencies = {
-			"williamboman/mason.nvim",
+			"mason-org/mason.nvim",
 		},
 		config = function()
 			require("mason-lspconfig").setup({
-				-- automatic_installation = true, -- currently not working in 0.11
 				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "matlab_ls", "html" },
+        automatic_enable = true,
 			})
 		end,
 	},
@@ -76,15 +77,6 @@ return {
 					},
 				},
 			})
-
-			-- Enable LSP
-			vim.lsp.enable("clangd")
-			vim.lsp.enable("lua_ls")
-			vim.lsp.enable("vhdl_ls")
-			vim.lsp.enable("pyright")
-			vim.lsp.enable("html")
-			vim.lsp.enable("bashls")
-			vim.lsp.enable("matlab_ls")
 
 			vim.diagnostic.config({
 				float = { border = "single" },

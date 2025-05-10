@@ -1,11 +1,8 @@
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",
-		dependencies = {
-			"williamboman/mason.nvim",
-		},
+		dependencies = { "mason-org/mason.nvim", config = true },
 		config = function()
-			require("mason").setup()
 			require("mason-nvim-dap").setup({
 				automatic_installation = true,
 			})
