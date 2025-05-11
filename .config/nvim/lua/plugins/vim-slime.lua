@@ -53,7 +53,7 @@ return {
 		end
 
 		local function matlab_get_filepath()
-			local filepath = vim.fn.expand("%")
+			local filepath = vim.fn.expand("%:.")
 			filepath = string.sub(filepath, 1, -3)
 			if string.sub(filepath, 1, 1) == "+" then
 				filepath = filepath:gsub("+", "")
