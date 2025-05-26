@@ -63,6 +63,8 @@ vim.keymap.set("n", "ZQ", ":qa!<CR>")
 
 vim.keymap.set("n", "]]", "]c", { desc = "Next diff" })
 vim.keymap.set("n", "[[", "[c", { desc = "Previous diff" })
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "]b", function ()
   vim.cmd(":norm ]%")
 end, { desc = "Next bracket" })
