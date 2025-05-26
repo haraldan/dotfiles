@@ -116,7 +116,7 @@ return {
 					vim.keymap.set(
 						"n",
 						"<leader>lh",
-						":ClangdSwitchSourceHeader<CR>",
+						":LspClangdSwitchSourceHeader<CR>",
 						{ desc = "LSP: Switch header/source", silent = true }
 					)
 					vim.keymap.set("n", "<leader>li", function()
