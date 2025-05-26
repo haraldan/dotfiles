@@ -4,7 +4,7 @@ return {
 		version = false,
 		config = function()
 			require("mini.bracketed").setup({
-				buffer = { suffix = "b", options = {} },
+				buffer = { suffix = "", options = {} },
 				comment = { suffix = "c", options = {} },
 				indent = { suffix = "i", options = { change_type = "diff" } },
 				quickfix = { suffix = "q", options = {} },

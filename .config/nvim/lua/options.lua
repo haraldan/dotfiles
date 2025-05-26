@@ -63,6 +63,12 @@ vim.keymap.set("n", "ZQ", ":qa!<CR>")
 
 vim.keymap.set("n", "]]", "]c", { desc = "Next diff" })
 vim.keymap.set("n", "[[", "[c", { desc = "Previous diff" })
+vim.keymap.set("n", "]b", function ()
+  vim.cmd(":norm ]%")
+end, { desc = "Next bracket" })
+vim.keymap.set("n", "[b", function ()
+  vim.cmd(":norm [%")
+end, { desc = "Previous bracket" })
 
 -- Insert mode shortcuts
 vim.keymap.set({ "i", "n" }, "<C-h>", "<Left>")
