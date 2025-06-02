@@ -89,6 +89,7 @@ return {
 		vim.keymap.set("n", "<leader>fR", builtin.registers, { desc = "[F]ind [R]egisters" })
 		vim.keymap.set("n", "<leader>fS", builtin.spell_suggest, { desc = "[F]ind [S]pelling suggestions" })
 		vim.keymap.set("n", "<leader>fq", builtin.quickfix, { desc = "[F]ind [Q]uickfix items" })
+		vim.keymap.set("n", "<leader>fl", builtin.lsp_document_symbols, { desc = "[F]ind [L]sp document symbols" })
 		vim.keymap.set(
 			"n",
 			"<leader>/",
