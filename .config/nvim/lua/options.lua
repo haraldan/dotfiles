@@ -73,8 +73,8 @@ vim.keymap.set("n", "[b", function ()
 end, { desc = "Previous bracket" })
 
 -- Insert mode shortcuts
-vim.keymap.set({ "i", "n" }, "<C-h>", "<Left>")
-vim.keymap.set({ "i", "n" }, "<C-l>", "<Right>")
+vim.keymap.set({ "i", "n","c"}, "<C-h>", "<Left>")
+vim.keymap.set({ "i", "n","c" }, "<C-l>", "<Right>")
 vim.keymap.set("i", "<C-j>", "<Down>")
 vim.keymap.set("i", "<C-k>", "<Up>")
 vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
