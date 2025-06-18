@@ -1,1 +1,1 @@
-vim.g.slime_cell_delimiter = "##"
+vim.g.slime_cell_delimiter = "# %%"
