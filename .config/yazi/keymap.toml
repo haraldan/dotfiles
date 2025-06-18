@@ -7,16 +7,16 @@ on   = "p"
 run  = "plugin augment-command -- paste"
 desc = "Paste into the hovered directory or CWD"
 [[manager.prepend_keymap]]
-on = "K" 
+on = "<C-k>" 
 run = "plugin augment-command -- parent_arrow -1"
 [[manager.prepend_keymap]]
-on = "J" 
+on = "<C-j>" 
 run = "plugin augment-command -- parent_arrow 1"
 [[manager.prepend_keymap]]
-on = "<C-j>" 
+on = "<C-d>" 
 run = "seek 5"
 [[manager.prepend_keymap]]
-on = "<C-k>" 
+on = "<C-u>" 
 run = "seek -5"
 [[manager.prepend_keymap]]
 on = "t" 

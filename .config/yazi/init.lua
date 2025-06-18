@@ -27,7 +27,7 @@ require("augment-command"):setup({
     skip_single_subdirectory_on_leave = false,
     smooth_scrolling = false,
     scroll_delay = 0.02,
-    wraparound_file_navigation = false,
+    wraparound_file_navigation = true,
 })
 
 require("git"):setup()
