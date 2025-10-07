@@ -5,7 +5,6 @@ return {
 			continue_restore_on_error = false,
 			lazy_support = true,
 			log_level = "error",
-			pre_save_cmds = { "NvimTreeClose" },
 			session_lens = {
 				buftypes_to_ignore = {}, -- list of buffer types what should not be deleted from current session
 				load_on_setup = true,
