@@ -1,26 +1,26 @@
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on   = "<Enter>"
 run  = "plugin augment-command -- enter"
 desc = "Enter the child directory, or open the file"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "<S-k>" 
 run = "plugin augment-command -- parent_arrow -1"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "<S-j>" 
 run = "plugin augment-command -- parent_arrow 1"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "<C-j>" 
 run = "seek 5"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "<C-k>" 
 run = "seek -5"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "t" 
 run = "plugin augment-command -- tab_create"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "q" 
 run = "quit --no-cwd-file"
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = "Q" 
 run = "quit"
 [[input.prepend_keymap]]
