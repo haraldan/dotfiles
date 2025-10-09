@@ -14,9 +14,8 @@ return {
 			suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
 		})
 		vim.o.sessionoptions = "buffers,curdir,help,tabpages,folds,winsize,winpos,terminal,localoptions"
-		vim.keymap.set("n", "<leader>fs", require("auto-session.session-lens").search_session, {
-			noremap = true,
-			desc = "[F]ind [S]essions",
-		})
+		vim.keymap.set("n", "<leader>fs", function()
+			vim.cmd("AutoSession search")
+		end, { noremap = true, desc = "[F]ind [S]essions" })
 	end,
 }
