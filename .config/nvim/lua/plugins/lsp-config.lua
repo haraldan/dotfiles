@@ -28,7 +28,7 @@ return {
 				capabilities = capabilities,
 				cmd = {
 					"clangd",
-					"--query-driver=/opt/**/*gcc",
+					"--query-driver=/opt/**",
 					"--clang-tidy",
 				},
 				single_file_support = false,
