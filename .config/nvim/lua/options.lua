@@ -65,16 +65,16 @@ vim.keymap.set("n", "]]", "]c", { desc = "Next diff" })
 vim.keymap.set("n", "[[", "[c", { desc = "Previous diff" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "]b", function ()
-  vim.cmd(":norm ]%")
+vim.keymap.set("n", "]b", function()
+	vim.cmd(":norm ]%")
 end, { desc = "Next bracket" })
-vim.keymap.set("n", "[b", function ()
-  vim.cmd(":norm [%")
+vim.keymap.set("n", "[b", function()
+	vim.cmd(":norm [%")
 end, { desc = "Previous bracket" })
 
 -- Insert mode shortcuts
-vim.keymap.set({ "i", "n","c"}, "<C-h>", "<Left>")
-vim.keymap.set({ "i", "n","c" }, "<C-l>", "<Right>")
+vim.keymap.set({ "i", "n", "c" }, "<C-h>", "<Left>")
+vim.keymap.set({ "i", "n", "c" }, "<C-l>", "<Right>")
 vim.keymap.set("i", "<C-j>", "<Down>")
 vim.keymap.set("i", "<C-k>", "<Up>")
 vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
@@ -112,20 +112,15 @@ vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
 
 -- close pop-up windows with ESC
 vim.keymap.set("n", "<ESC>", function()
-	if vim.bo.buftype == "nofile" then
-		vim.cmd(":q")
-	else
-		for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-			if vim.api.nvim_win_get_config(winid).zindex then
-				vim.cmd.fclose()
-				return
-			end
+	for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+		if vim.api.nvim_win_get_config(winid).zindex then
+			vim.cmd.fclose()
+			return
 		end
-		vim.cmd("nohlsearch")
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
 	end
+	vim.cmd("nohlsearch")
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<ESC>", true, true, true), "n", false)
 end)
--- exit insert mode with <ESC> in terminal
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>")
 
 -- recognize .h files as C headers, not C++
