@@ -88,19 +88,19 @@ return {
 				node_path = "node", -- path to node.js executable
 				dapui_rtt = false, -- register nvim-dap-ui RTT element
 				-- make :DapLoadLaunchJSON register cortex-debug for C/C++, set false to disable
-				dap_vscode_filetypes = { "c" },
+				dap_vscode_filetypes = false,
 			})
 
 			dap.configurations.c = {
 				{
-					name = "JLink debug",
+					name = "SEK debug session",
 					type = "cortex-debug",
 					servertype = "jlink",
 					serverpath = "JLinkGDBServerCLExe",
 					request = "launch",
 					interface = "swd",
-					toolchainPath = "/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/bin/",
-					gdbPath = "arm-none-eabi-gdb",
+					toolchainPath = os.getenv("ARMGCC_DIR") .. "/bin/",
+					gdbPath = os.getenv("ARMGCC_DIR") .. "/bin/arm-none-eabi-gdb",
 					device = "MIMXRT685S_M33?BankAddr=0x8000000&Loader=Port_A&BankAddr=0x18000000&Loader=Port_B",
 					showDevDebugOutput = "raw",
 					cwd = "${workspaceFolder}",
@@ -108,6 +108,22 @@ return {
 					postLaunchCommands = { "source utils/gdbsettings.gdbinit", "source utils/sekconfigure.gdbinit" },
 					rtos = "FreeRTOS",
 					jlinkscript = "utils/disable-flash-cache.JLinkScript",
+				},
+				{
+					name = "BS debug session",
+					type = "cortex-debug",
+					servertype = "jlink",
+					serverpath = "JLinkGDBServerCLExe",
+					request = "launch",
+					interface = "swd",
+					toolchainPath = os.getenv("ARMGCC_DIR") .. "/bin/",
+					gdbPath = os.getenv("ARMGCC_DIR") .. "/bin/arm-none-eabi-gdb",
+					device = "MIMXRT685S_M33",
+					showDevDebugOutput = "raw",
+					cwd = "${workspaceFolder}",
+					executable = "${workspaceFolder}/bs/build/arm-none-eabi/debug/bs",
+          overrideLaunchCommands = { "source utils/gdbsettings.gdbinit", "source utils/bsconfigure.gdbinit" },
+					rtos = "FreeRTOS",
 				},
 			}
 
