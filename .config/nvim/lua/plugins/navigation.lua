@@ -26,9 +26,24 @@ return {
 		config = function()
 			require("eyeliner").setup({
 				highlight_on_key = true,
-        dim = true,
+				dim = true,
 			})
 		end,
+	},
+	{
+		"chrisgrieser/nvim-spider",
+		keys = {
+      -- normal mode
+			-- { "w", "<cmd>lua require('spider').motion('w',{ skipInsignificantPunctuation = true, subwordMovement = false})<CR>", mode = { "n", "o", "x" } },
+			-- { "e", "<cmd>lua require('spider').motion('e',{ skipInsignificantPunctuation = true, subwordMovement = false})<CR>", mode = { "n", "o", "x" } },
+			-- { "b", "<cmd>lua require('spider').motion('b',{ skipInsignificantPunctuation = true, subwordMovement = false})<CR>", mode = { "n", "o", "x" } },
+			{ "\\", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x" } },
+			{ "|", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
+			{ "q", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
+      -- insert mode
+      {"<C-f>", "<Esc>l<cmd>lua require('spider').motion('w',{ skipInsignificantPunctuation = true, subwordMovement = false})<CR>i", mode = {"i"} },
+			{"<C-b>", "<Esc><cmd>lua require('spider').motion('b',{ skipInsignificantPunctuation = true, subwordMovement = false})<CR>i", mode = {"i"} },
+		},
 	},
 	{
 		"folke/flash.nvim",
@@ -50,7 +65,7 @@ return {
 				"<CR>",
 				mode = { "x", "o" },
 				function()
-             require("flash").jump({jump={offset=-1}})
+					require("flash").jump({ jump = { offset = -1 } })
 				end,
 				desc = "Flash",
 			},
