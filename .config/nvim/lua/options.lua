@@ -162,8 +162,8 @@ end)
 
 -- Function to pass visual selection to vim-slime
 function Get_visual_selection_text()
-	local _, srow, scol = unpack(vim.fn.getpos("v"))
-	local _, erow, ecol = unpack(vim.fn.getpos("."))
+	local _, srow, scol = table.unpack(vim.fn.getpos("v"))
+	local _, erow, ecol = table.unpack(vim.fn.getpos("."))
 
 	-- visual line mode
 	if vim.fn.mode() == "V" then
