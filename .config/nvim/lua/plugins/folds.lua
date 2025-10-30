@@ -11,9 +11,9 @@ return {
 		event = "VeryLazy",
 		opts = {
 			-- INFO: Uncomment to use treeitter as fold provider, otherwise nvim lsp is used
-			-- provider_selector = function(bufnr, filetype, buftype)
-			--   return { "treesitter", "indent" }
-			-- end,
+			provider_selector = function(bufnr, filetype, buftype)
+			  return { "treesitter", "indent" }
+			end,
 			preview = {
 				win_config = {
 					border = { "", "─", "", "", "", "─", "", "" },
