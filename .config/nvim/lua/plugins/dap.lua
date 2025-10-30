@@ -271,23 +271,6 @@ return {
 				dapui.elements.watches.add,
 				{ desc = "DAP UI: Add to Watch Expressions" }
 			)
-
-			-- hover functionality, depending on the environment
-			vim.keymap.set({ "n", "v" }, "K", function()
-				local winid = require("ufo").peekFoldedLinesUnderCursor()
-				local session = require("dap").session()
-				if not winid then
-					if session ~= nil then
-						require("dapui").eval()
-					elseif vim.diagnostic.open_float() == nil then
-						vim.lsp.buf.hover()
-					end
-				end
-			end)
-			-- Additional mapping for LSP hover
-			vim.keymap.set("n", "<M-K>", function()
-				vim.lsp.buf.hover()
-			end)
 		end,
 	},
 }

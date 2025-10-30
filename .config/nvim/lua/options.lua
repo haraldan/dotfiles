@@ -129,6 +129,37 @@ vim.g.c_syntax_for_h = 1
 -- float window borders
 vim.o.winborder = "single"
 
+-- Hover functionality, depending on the environment
+local has_spell_error_under_cursor = function()
+	if not vim.wo.spell then
+		return false
+	end
+	local badword = vim.fn.spellbadword(vim.fn.expand("<cword>"))
+	if badword[1] == "" then
+		return false
+	end
+	return true
+end
+
+vim.keymap.set({ "n", "v" }, "K", function()
+	local winid = require("ufo").peekFoldedLinesUnderCursor()
+	local session = require("dap").session()
+	local spell_error = has_spell_error_under_cursor()
+	if not winid then
+		if session ~= nil then
+			require("dapui").eval()
+		elseif spell_error then
+			require("telescope.builtin").spell_suggest(require("telescope.themes").get_cursor({}))
+		elseif vim.diagnostic.open_float() == nil then
+			vim.lsp.buf.hover()
+		end
+	end
+end)
+-- Additional mapping for LSP hover
+vim.keymap.set("n", "<M-K>", function()
+	vim.lsp.buf.hover()
+end)
+
 -- Function to pass visual selection to vim-slime
 function Get_visual_selection_text()
 	local _, srow, scol = unpack(vim.fn.getpos("v"))
