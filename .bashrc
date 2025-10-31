@@ -124,7 +124,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # Set up fzf 
 if [[ ! "$PATH" == "*$HOME/.fzf/bin*" ]]; then
-  PATH="${PATH:+${PATH}:}$HOME/.fzf/bin"
+  PATH="$HOME/.fzf/bin${PATH:+:}$PATH"
 fi
 [ -f ~/.fzf/shell/completion.bash ] && source ~/.fzf/shell/completion.bash
 [ -f ~/.fzf/shell/key-bindings.bash ] && source ~/.fzf/shell/key-bindings.bash
