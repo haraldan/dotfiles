@@ -1,0 +1,4 @@
+CompileFlags:
+  Remove: [-m*, -f*]
+  Add: [-D__MICROBLAZE__,-Wunused-variable]
+
