@@ -38,6 +38,7 @@ fi
 # Cross-compiler path ENV variable
 export ARMGCC_DIR=/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/
 export VIVADO_DIR=/opt/Xilinx/Vivado/2021.1
+export VITIS_DIR=/opt/Xilinx/Vitis/2021.1
 export XTENSA_TOOLCHAIN_DIR=/opt/hifi4-toolchain/2023_11/RI-2023.11-linux
 export XTENSA_LICENSE_FILE=/opt/hifi4-toolchain/iMXRT600SDK.lic
 
