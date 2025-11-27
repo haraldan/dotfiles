@@ -1,4 +1,3 @@
-
 return {
 	{
 		"mason-org/mason-lspconfig.nvim",
@@ -8,7 +7,7 @@ return {
 		config = function()
 			require("mason-lspconfig").setup({
 				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "matlab_ls", "html" },
-        automatic_enable = true,
+				automatic_enable = true,
 			})
 		end,
 	},
@@ -28,6 +27,7 @@ return {
 				capabilities = capabilities,
 				cmd = {
 					"clangd",
+					"--compile-commands-dir=" .. vim.fn.expand("~/.clangd"),
 					"--query-driver=/opt/**",
 					"--clang-tidy",
 				},

@@ -1,2 +1,4 @@
 .config/yazi/plugins/
 .config/yazi/flavors
+.clangd/compile_commands.json
+**/.cache
