@@ -1,6 +1,6 @@
 return {
 	"nvim-telescope/telescope.nvim",
-	branch = "0.1.x",
+	tag = "v0.2.0",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -9,7 +9,29 @@ return {
 	},
 	config = function()
 		local actions = require("telescope.actions")
+		local action_layout = require("telescope.actions.layout")
 		local builtin = require("telescope.builtin")
+
+		local shared_mappings = {
+			["<C-x>"] = false,
+			["<C-k>"] = actions.move_selection_previous,
+			["<C-j>"] = actions.move_selection_next,
+			["<C-s>"] = actions.select_horizontal,
+			["<C-\\>"] = actions.select_vertical,
+			["<C-p>"] = actions.cycle_previewers_prev,
+			["<C-n>"] = actions.cycle_previewers_next,
+			["<C-h>"] = action_layout.cycle_layout_prev,
+			["<C-l>"] = action_layout.cycle_layout_next,
+			["<C-y>"] = function(prompt_bufnr)
+				local selection = require("telescope.actions.state").get_selected_entry()
+				if selection then
+					local value = selection.value or selection.filename or selection.text or tostring(selection)
+					vim.fn.setreg("+", value)
+					vim.fn.setreg("0", value)
+					vim.notify("Copied: " .. value)
+				end
+			end,
+		}
 
 		require("telescope").setup({
 			extensions = {
@@ -20,28 +42,26 @@ return {
 			defaults = {
 				path_display = { "truncate " },
 				file_ignore_patterns = { ".git/" },
+				cycle_layout_list = {
+					{ layout_strategy = "horizontal", layout_config = { preview_width = 0.8 } },
+					{ layout_strategy = "vertical", layout_config = { preview_height = 0.2 } },
+					"vertical",
+					{ layout_strategy = "vertical", layout_config = { preview_height = 0.8 } },
+					{ layout_strategy = "horizontal", layout_config = { preview_width = 0.2 } },
+					"horizontal",
+				},
 				mappings = {
-					i = {
-						["<C-k>"] = actions.move_selection_previous, -- move to prev result
-						["<C-j>"] = actions.move_selection_next, -- move to next result
+					i = vim.tbl_extend("force", shared_mappings, {
 						["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-						["<C-s>"] = actions.select_horizontal,
-						["<C-\\>"] = actions.select_vertical,
-						["<C-x>"] = false,
-					},
-					n = {
-						["<C-s>"] = actions.select_horizontal,
-						["<C-x>"] = false,
-						["<C-k>"] = actions.move_selection_previous, -- move to prev result
-						["<C-j>"] = actions.move_selection_next, -- move to next result
-						["<C-\\>"] = actions.select_vertical,
+					}),
+					n = vim.tbl_extend("force", shared_mappings, {
 						["q"] = actions.close,
 						["p"] = function(prompt_bufnr)
 							local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
 							local text = vim.fn.getreg("0"):gsub("\n", "\\n") -- which register depends on clipboard option
 							current_picker:set_prompt(text, false)
 						end,
-					},
+					}),
 				},
 			},
 			pickers = {
@@ -167,9 +187,14 @@ return {
 			return string.format("%q", text):gsub("\\\n", "\\n"):gsub("'", "\\'"):gsub("%[", "\\%["):sub(2, -2)
 		end
 
-		vim.keymap.set("v", "<leader>f", function()
+		vim.keymap.set("v", "<leader>fw", function()
 			local text = escape(vim.getVisualSelection())
 			builtin.live_grep({ default_text = text })
 		end, { desc = "Find visual string" })
+
+		vim.keymap.set("n", "<leader>fc", builtin.git_bcommits, { desc = "[F]ind buffer [C]ommits" })
+		vim.keymap.set("v", "<leader>fc", function()
+			builtin.git_bcommits_range()
+		end, { desc = "[F]ind buffer [C]ommits for selection" })
 	end,
 }
