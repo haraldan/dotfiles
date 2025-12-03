@@ -6,7 +6,7 @@ return {
 		},
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "matlab_ls", "html" },
+				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "basedpyright", "bashls", "matlab_ls", "html" },
 				automatic_enable = true,
 			})
 		end,
@@ -44,8 +44,15 @@ return {
 			vim.lsp.config("vhdl_ls", {
 				capabilities = capabilities,
 			})
-			vim.lsp.config("pyright", {
+			vim.lsp.config("basedpyright", {
 				capabilities = capabilities,
+				settings = {
+					basedpyright = {
+						analysis = {
+							typeCheckingMode = "standard",
+						},
+					},
+				},
 			})
 			vim.lsp.config("html", {
 				capabilities = capabilities,
