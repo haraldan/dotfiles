@@ -5,7 +5,14 @@ edit = [
 image = [
   {run = 'nomacs "$@"'}
   ]
+kwave = [
+  { run = 'kwave "$@"', desc = "Kwave" },
+]
 
+[open]
+prepend_rules = [
+  { mime = "audio/*", use = "kwave" },
+]
 
 [mgr]
 show_hidden=true
@@ -26,3 +33,4 @@ prepend_previewers = [
 id   = "git"
 name = "*/"
 run  = "git"
+
