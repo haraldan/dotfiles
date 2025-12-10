@@ -2,6 +2,10 @@
 edit = [
 	{ run = 'nvim "$@"', block = true}
   ]
+image = [
+  {run = 'nomacs "$@"'}
+  ]
+
 
 [mgr]
 show_hidden=true
