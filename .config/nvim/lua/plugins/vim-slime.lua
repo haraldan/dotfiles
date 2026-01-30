@@ -40,6 +40,8 @@ return {
 				vim.cmd(
 					[[silent !~/.tmux/tmux_split_open.sh -n matlab -h -l 40\\% -c "matlab -nodesktop -nosplash 2> >(sed $'s,.*,\e[31m&\e[m,'>&2)"]]
 				)
+      else
+        return
 			end
 			update_tmux_pane_id()
 		end
