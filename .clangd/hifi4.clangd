@@ -1,3 +1,28 @@
 CompileFlags:
   Remove: ["--xtensa*"]
-  Add: ["-DXT_BREAK(x,y)=((void)0)" ]
+  Add: [
+    # Wait/control intrinsics
+    "-DXT_WAITI(x)=((void)0)",
+    "-DXT_NOP()=((void)0)",
+    "-DXT_BREAK(x,y)=((void)0)",
+    # Memory synchronization
+    "-DXT_MEMW()=((void)0)",
+    "-DXT_DSYNC()=((void)0)",
+    "-DXT_ISYNC()=((void)0)",
+    "-DXT_ESYNC()=((void)0)",
+    # Interrupt control
+    "-DXT_RSIL(x)=((unsigned)(x))",
+    # Data cache operations
+    "-DXT_DHWB(x)=((void)0)",
+    "-DXT_DHWBI(x)=((void)0)",
+    "-DXT_DHI(x)=((void)0)",
+    "-DXT_DII(x)=((void)0)",
+    # Instruction cache operations
+    "-DXT_IHI(x)=((void)0)",
+    "-DXT_III(x)=((void)0)",
+    # Special register access (common ones)
+    "-DXT_RSR_PS()=((unsigned)0)",
+    "-DXT_WSR_PS(x)=((void)0)",
+    "-DXT_RSR_CCOUNT()=((unsigned)0)",
+    "-DXT_WSR_CCOMPARE0(x)=((void)0)"
+  ]
