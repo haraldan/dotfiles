@@ -47,6 +47,7 @@ return {
 					type = "python",
 					request = "launch",
 					program = "${file}",
+          justMyCode = false,
 					-- console = "externalTerminal",
 				},
 			}
