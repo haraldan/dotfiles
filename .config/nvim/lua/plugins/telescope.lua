@@ -143,7 +143,7 @@ return {
 			})
 		end, { desc = "[F]ind in [W]orkspace" })
 
-		vim.keymap.set("n", "<leader>fn", function()
+		vim.keymap.set("n", "<leader>fN", function()
 			builtin.find_files({ cwd = vim.fn.stdpath("config") })
 		end, { desc = "[F]ind [N]eovim files" })
 

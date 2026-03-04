@@ -24,5 +24,8 @@ return {
 			["<Left>"] = false,
 			["<Right>"] = false,
 		},
+		disabled_filetypes = {
+      ["aerial-nav"] = true
+    },
 	},
 }
