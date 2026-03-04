@@ -71,6 +71,8 @@ return {
 
 			require("ufo").setup(opts)
 
+      vim.keymap.set("n","<leader>z","za",{desc = "Toggle fold under cursor"})
+
 		end,
 	},
 }
