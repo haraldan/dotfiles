@@ -107,8 +107,14 @@ vim.keymap.set("n", "q", "")
 vim.opt.updatetime = 2000
 
 -- stop annoying TODO highlights
--- vim.api.nvim_set_hl(0, "Todo", { link = "Comment" })
-vim.api.nvim_set_hl(0, "vhdlTodo", { link = "vhdlComment" })
+vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+	group = vim.api.nvim_create_augroup("DisableTodoHighlight", { clear = true }),
+	callback = function()
+		-- Copy Todo before overriding it
+		vim.api.nvim_set_hl(0, "Todo_copy", vim.api.nvim_get_hl(0, { name = "Todo" }))
+		vim.api.nvim_set_hl(0, "Todo", { link = "Comment" })
+	end,
+})
 
 -- close pop-up windows with ESC
 vim.keymap.set("n", "<ESC>", function()
