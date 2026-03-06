@@ -83,18 +83,21 @@ return {
 				virtual_text = true,
 			})
 
+      -- Set up mappings
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("custom-lsp-attach", { clear = true }),
 				callback = function(event)
+					local with_flash = require("config.flash_on_jump").with_flash_async
+
 					local map = function(keys, func, desc)
 						vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
-					map("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-					map("gt", require("telescope.builtin").lsp_type_definitions, "[T]ype [D]efinition")
+					map("gd", with_flash(vim.lsp.buf.definition), "[G]oto [D]efinition")
+					map("gr", with_flash(require("telescope.builtin").lsp_references), "[G]oto [R]eferences")
+					map("gI", with_flash(require("telescope.builtin").lsp_implementations), "[G]oto [I]mplementation")
+					map("gD", with_flash(vim.lsp.buf.declaration), "[G]oto [D]eclaration")
+					map("gt", with_flash(require("telescope.builtin").lsp_type_definitions), "[T]ype [D]efinition")
 					map("]e", function()
 						vim.diagnostic.goto_next({ float = false, severity = { vim.diagnostic.severity.ERROR } })
 					end, "[G]oto next [E]rror")

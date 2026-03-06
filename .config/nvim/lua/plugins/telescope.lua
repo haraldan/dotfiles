@@ -11,13 +11,15 @@ return {
 		local actions = require("telescope.actions")
 		local action_layout = require("telescope.actions.layout")
 		local builtin = require("telescope.builtin")
+		local foj = require("config.flash_on_jump")
+		local with_flash = foj.with_flash_sync
 
 		local shared_mappings = {
 			["<C-x>"] = false,
 			["<C-k>"] = actions.move_selection_previous,
 			["<C-j>"] = actions.move_selection_next,
-			["<C-s>"] = actions.select_horizontal,
-			["<C-\\>"] = actions.select_vertical,
+			["<C-s>"] = with_flash(actions.select_horizontal),
+			["<C-\\>"] = with_flash(actions.select_vertical),
 			["<C-p>"] = actions.cycle_previewers_prev,
 			["<C-n>"] = actions.cycle_previewers_next,
 			["<C-h>"] = action_layout.cycle_layout_prev,
@@ -52,9 +54,11 @@ return {
 				},
 				mappings = {
 					i = vim.tbl_extend("force", shared_mappings, {
+						["<CR>"] = with_flash(actions.select_default),
 						["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
 					}),
 					n = vim.tbl_extend("force", shared_mappings, {
+						["<CR>"] = with_flash(actions.select_default),
 						["q"] = actions.close,
 						["p"] = function(prompt_bufnr)
 							local current_picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
