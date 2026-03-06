@@ -1,5 +1,3 @@
--- vim.opt.mouse = ""
-
 -- Leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -74,11 +72,15 @@ vim.keymap.set("n", "[b", function()
 end, { desc = "Previous bracket" })
 
 -- Insert mode shortcuts
-vim.keymap.set({ "i", "n", "c" }, "<C-h>", "<Left>")
-vim.keymap.set({ "i", "n", "c" }, "<C-l>", "<Right>")
+vim.keymap.set({ "i", "c" }, "<C-h>", "<Left>")
+vim.keymap.set({ "i", "c" }, "<C-l>", "<Right>")
 vim.keymap.set("i", "<C-j>", "<Down>")
 vim.keymap.set("i", "<C-k>", "<Up>")
 vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
+
+-- Horizontal scrolling
+vim.keymap.set("n", "<C-h>", "4zh")
+vim.keymap.set("n", "<C-l>", "4zl")
 
 -- Relative number toggle
 vim.keymap.set("n", "<leader>tn", function()
