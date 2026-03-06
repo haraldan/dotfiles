@@ -155,4 +155,21 @@ return {
 			},
 		},
 	},
+	{
+		"aaronik/treewalker.nvim",
+		config = function()
+			require("treewalker").setup({})
+			-- movement
+			vim.keymap.set({ "n", "v" }, "<leader>tk", "<cmd>Treewalker Up<cr>", { silent = true })
+			vim.keymap.set({ "n", "v" }, "<leader>tj", "<cmd>Treewalker Down<cr>", { silent = true })
+			vim.keymap.set({ "n", "v" }, "<leader>th", "<cmd>Treewalker Left<cr>", { silent = true })
+			vim.keymap.set({ "n", "v" }, "<leader>tl", "<cmd>Treewalker Right<cr>", { silent = true })
+
+			-- swapping
+			vim.keymap.set("n", "<leader>tK", "<cmd>Treewalker SwapUp<cr>", { silent = true })
+			vim.keymap.set("n", "<leader>tJ", "<cmd>Treewalker SwapDown<cr>", { silent = true })
+			vim.keymap.set("n", "<leader>tH", "<cmd>Treewalker SwapLeft<cr>", { silent = true })
+			vim.keymap.set("n", "<leader>tL", "<cmd>Treewalker SwapRight<cr>", { silent = true })
+		end,
+	},
 }
