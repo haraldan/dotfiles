@@ -222,3 +222,14 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		end
 	end,
 })
+
+-- Flash line highlight for all [ ] bracket navigation (after all plugins load)
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy",
+	callback = function()
+		-- Defer to ensure all plugin configs have run
+		vim.defer_fn(function()
+			require("config.flash_on_jump").setup()
+		end, 0)
+	end,
+})
