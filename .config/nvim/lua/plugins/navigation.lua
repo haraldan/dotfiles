@@ -162,14 +162,55 @@ return {
 			-- movement
 			vim.keymap.set({ "n", "v" }, "<leader>tk", "<cmd>Treewalker Up<cr>", { silent = true })
 			vim.keymap.set({ "n", "v" }, "<leader>tj", "<cmd>Treewalker Down<cr>", { silent = true })
-			vim.keymap.set({ "n", "v" }, "<leader>th", "<cmd>Treewalker Left<cr>", { silent = true })
-			vim.keymap.set({ "n", "v" }, "<leader>tl", "<cmd>Treewalker Right<cr>", { silent = true })
+			vim.keymap.set({ "n", "v" }, "<leader>tp", "<cmd>Treewalker Left<cr>", { silent = true })
+			vim.keymap.set({ "n", "v" }, "<leader>tn", "<cmd>Treewalker Right<cr>", { silent = true })
 
 			-- swapping
 			vim.keymap.set("n", "<leader>tK", "<cmd>Treewalker SwapUp<cr>", { silent = true })
 			vim.keymap.set("n", "<leader>tJ", "<cmd>Treewalker SwapDown<cr>", { silent = true })
 			vim.keymap.set("n", "<leader>tH", "<cmd>Treewalker SwapLeft<cr>", { silent = true })
 			vim.keymap.set("n", "<leader>tL", "<cmd>Treewalker SwapRight<cr>", { silent = true })
+
+			-- Custom navigation function similar to SwapLeft/SwapRight
+			local function move_to_sibling_node(direction)
+				local node = vim.treesitter.get_node()
+
+				if not node then
+					return
+				end
+
+				-- Traverse up the tree to find a node with siblings in the requested direction
+				local current = node
+				local target_node = nil
+
+				while current do
+					if direction == "left" then
+						target_node = current:prev_named_sibling()
+					elseif direction == "right" then
+						target_node = current:next_named_sibling()
+					end
+
+					if target_node then
+						-- Save current position to jumplist
+						vim.cmd("normal! m'")
+						local start_row, start_col = target_node:start()
+						vim.api.nvim_win_set_cursor(0, { start_row + 1, start_col })
+						return
+					end
+
+					-- Move up to parent and try again
+					current = current:parent()
+				end
+			end
+
+			-- Keymaps for custom sibling navigation
+			vim.keymap.set({ "n", "v" }, "<leader>tl", function()
+				move_to_sibling_node("right")
+			end, { silent = true, desc = "Next sibling node" })
+
+			vim.keymap.set({ "n", "v" }, "<leader>th", function()
+				move_to_sibling_node("left")
+			end, { silent = true, desc = "Previous sibling node" })
 		end,
 	},
 }
