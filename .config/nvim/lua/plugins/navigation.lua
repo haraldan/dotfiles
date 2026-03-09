@@ -162,8 +162,8 @@ return {
 			-- movement
 			vim.keymap.set({ "n", "v" }, "<leader>tk", "<cmd>Treewalker Up<cr>", { silent = true })
 			vim.keymap.set({ "n", "v" }, "<leader>tj", "<cmd>Treewalker Down<cr>", { silent = true })
-			vim.keymap.set({ "n", "v" }, "<leader>tp", "<cmd>Treewalker Left<cr>", { silent = true })
-			vim.keymap.set({ "n", "v" }, "<leader>tn", "<cmd>Treewalker Right<cr>", { silent = true })
+			-- vim.keymap.set({ "n", "v" }, "<leader>tp", "<cmd>Treewalker Left<cr>", { silent = true })
+			-- vim.keymap.set({ "n", "v" }, "<leader>tn", "<cmd>Treewalker Right<cr>", { silent = true })
 
 			-- swapping
 			vim.keymap.set("n", "<leader>tK", "<cmd>Treewalker SwapUp<cr>", { silent = true })
