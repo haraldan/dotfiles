@@ -2,7 +2,7 @@ return {
   "aaron-p1/virt-notes.nvim",
   config = function()
     require("virt-notes").setup({
-      hl_group = "Todo_copy",
+      hl_group = "lualine_a_visual",
       mappings = {
         prefix = "<Leader>N",
       },
@@ -141,6 +141,6 @@ return {
     -- Keymaps
     vim.keymap.set("n", "]n", goto_next_note, { desc = "Next virt-note" })
     vim.keymap.set("n", "[n", goto_prev_note, { desc = "Previous virt-note" })
-    vim.keymap.set("n", "<Leader>Ns", find_notes_telescope, { desc = "Find virt-notes in buffer" })
+    vim.keymap.set("n", "<Leader>fn", find_notes_telescope, { desc = "Find virt-notes in buffer" })
   end,
 }
