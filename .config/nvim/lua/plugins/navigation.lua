@@ -40,6 +40,9 @@ return {
 			})
 			vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 			vim.keymap.set("n", "<leader>n", "<cmd>AerialNavToggle<CR>")
+			vim.keymap.set("n", "<leader>fa", function()
+				require("telescope").extensions.aerial.aerial({ default_selection_index = 1 })
+			end, { desc = "[F]ind in [A]erial symbols" })
 		end,
 	},
 	{
