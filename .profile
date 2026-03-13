@@ -17,28 +17,22 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ]; then
-  PATH="$HOME/bin:$PATH"
+if [ -d "$HOME/.local/bin" ]; then
+  export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ]; then
-  PATH="$HOME/.local/bin:$PATH"
-fi
 # add cargo apps to PATH
-. "$HOME/.cargo/env"
-# # add bob's neovim to PATH
-# if [ -d "$HOME/.local/share/bob/nvim-bin" ] ; then
-#   PATH="$PATH:$HOME/.local/share/bob/nvim-bin"
-# fi
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
+
 # add Mason's packages to PATH
 if [ -d "$HOME/.local/share/nvim/mason/bin/" ]; then
-  PATH="$PATH:$HOME/.local/share/nvim/mason/bin/"
+  export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 fi
+
 # Cross-compiler path ENV variable
 export ARMGCC_DIR=/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/
-export VIVADO_DIR=/opt/Xilinx/Vivado/2021.1
 export VITIS_DIR=/opt/Xilinx/Vitis/2021.1
 export XTENSA_TOOLCHAIN_DIR=/opt/hifi4-toolchain/2023_11/RI-2023.11-linux
 export XTENSA_LICENSE_FILE=/opt/hifi4-toolchain/iMXRT600SDK.lic
-
