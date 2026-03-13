@@ -24,8 +24,15 @@ vim.opt.colorcolumn = "+1"
 -- reduce timeout to see which-key sooner
 vim.opt.timeoutlen = 500
 
+-- change update time for CursorHold events
+vim.opt.updatetime = 2000
+
 -- sync clipboard with system
 -- vim.opt.clipboard = "unnamedplus"
+
+-- ignore case when searching
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 
 -- set formatoptions
 vim.api.nvim_create_autocmd("Filetype", {
@@ -36,11 +43,24 @@ vim.api.nvim_create_autocmd("Filetype", {
 	end,
 })
 
--- ignore case when searching
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
+-- Command mode mappings
+vim.api.nvim_create_user_command('Q', 'q<bang>', { bang = true })
+vim.api.nvim_create_user_command('Qa', 'qa<bang>', { bang = true })
+vim.api.nvim_create_user_command('QA', 'qa<bang>', { bang = true })
+vim.api.nvim_create_user_command('Wq', 'wq<bang>', { bang = true })
+vim.api.nvim_create_user_command('WQ', 'wq<bang>', { bang = true })
+vim.api.nvim_create_user_command('Wqa', 'wqa<bang>', { bang = true })
+vim.api.nvim_create_user_command('WQa', 'wqa<bang>', { bang = true })
+vim.api.nvim_create_user_command('WQA', 'wqa<bang>', { bang = true })
 
--- Normal mode shortcuts
+-- Insert mode mappings
+vim.keymap.set({ "i", "c" }, "<C-h>", "<Left>")
+vim.keymap.set({ "i", "c" }, "<C-l>", "<Right>")
+vim.keymap.set("i", "<C-j>", "<Down>")
+vim.keymap.set("i", "<C-k>", "<Up>")
+vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
+
+-- Normal mode mappings
 vim.keymap.set("n", "<leader>pcd", ":lcd %:h<CR>", { desc = "Change cwd to current file" })
 vim.keymap.set("n", "<leader>pw", ":pwd<CR>", { desc = "Check cwd" })
 vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save buffer" })
@@ -70,14 +90,6 @@ end, { desc = "Next bracket" })
 vim.keymap.set("n", "[b", function()
 	vim.cmd(":norm [%")
 end, { desc = "Previous bracket" })
-
--- Insert mode shortcuts
-vim.keymap.set({ "i", "c" }, "<C-h>", "<Left>")
-vim.keymap.set({ "i", "c" }, "<C-l>", "<Right>")
-vim.keymap.set("i", "<C-j>", "<Down>")
-vim.keymap.set("i", "<C-k>", "<Up>")
-vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>")
-
 -- Horizontal scrolling
 vim.keymap.set("n", "<C-h>", "4zh")
 vim.keymap.set("n", "<C-l>", "4zl")
@@ -105,9 +117,6 @@ end, { desc = "Diff mode with current split" })
 -- disable q button
 vim.keymap.set("n", "<leader>q", "q", { desc = "Record a macro" })
 vim.keymap.set("n", "q", "")
-
--- change update time for CursorHold events
-vim.opt.updatetime = 2000
 
 -- stop annoying TODO highlights
 vim.api.nvim_create_autocmd({ "ColorScheme" }, {
@@ -164,6 +173,7 @@ vim.keymap.set({ "n", "v" }, "K", function()
 		end
 	end
 end)
+
 -- Additional mapping for LSP hover
 vim.keymap.set("n", "<M-K>", function()
 	vim.lsp.buf.hover()
