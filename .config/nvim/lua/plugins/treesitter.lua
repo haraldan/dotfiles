@@ -17,7 +17,9 @@ return {
 
 					if vim.tbl_contains(ts.get_installed(), lang) then
 						vim.treesitter.start()
-						vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+						if lang ~= "c" then
+							vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+						end
 					elseif vim.tbl_contains(ts.get_available(), lang) then
 						ts.install({ lang })
 					end
