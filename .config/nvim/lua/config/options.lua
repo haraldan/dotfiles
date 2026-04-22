@@ -20,6 +20,7 @@ vim.opt.wrap = false
 -- turn on textwidth, turn off automatic wrapping
 vim.opt.textwidth = 150
 vim.opt.colorcolumn = "+1"
+vim.opt.linebreak = true
 
 -- reduce timeout to see which-key sooner
 vim.opt.timeoutlen = 500
@@ -44,14 +45,14 @@ vim.api.nvim_create_autocmd("Filetype", {
 })
 
 -- Command mode mappings
-vim.api.nvim_create_user_command('Q', 'q<bang>', { bang = true })
-vim.api.nvim_create_user_command('Qa', 'qa<bang>', { bang = true })
-vim.api.nvim_create_user_command('QA', 'qa<bang>', { bang = true })
-vim.api.nvim_create_user_command('Wq', 'wq<bang>', { bang = true })
-vim.api.nvim_create_user_command('WQ', 'wq<bang>', { bang = true })
-vim.api.nvim_create_user_command('Wqa', 'wqa<bang>', { bang = true })
-vim.api.nvim_create_user_command('WQa', 'wqa<bang>', { bang = true })
-vim.api.nvim_create_user_command('WQA', 'wqa<bang>', { bang = true })
+vim.api.nvim_create_user_command("Q", "q<bang>", { bang = true })
+vim.api.nvim_create_user_command("Qa", "qa<bang>", { bang = true })
+vim.api.nvim_create_user_command("QA", "qa<bang>", { bang = true })
+vim.api.nvim_create_user_command("Wq", "wq<bang>", { bang = true })
+vim.api.nvim_create_user_command("WQ", "wq<bang>", { bang = true })
+vim.api.nvim_create_user_command("Wqa", "wqa<bang>", { bang = true })
+vim.api.nvim_create_user_command("WQa", "wqa<bang>", { bang = true })
+vim.api.nvim_create_user_command("WQA", "wqa<bang>", { bang = true })
 
 -- Insert mode mappings
 vim.keymap.set({ "i", "c" }, "<C-h>", "<Left>")
@@ -241,5 +242,43 @@ vim.api.nvim_create_autocmd("User", {
 		vim.defer_fn(function()
 			require("config.flash_on_jump").setup()
 		end, 0)
+	end,
+})
+
+-- Toggle between normal and soft wrap mode
+local function enable_soft_wrap()
+	vim.opt_local.wrap = true
+	vim.keymap.set("n", "j", "gj", { buffer = true })
+	vim.keymap.set("n", "k", "gk", { buffer = true })
+	vim.keymap.set("n", "0", "g0", { buffer = true })
+	vim.keymap.set("n", "$", "g$", { buffer = true })
+	vim.keymap.set("n", "A", "g$a", { buffer = true })
+	vim.cmd("Wrapwidth " .. vim.o.textwidth)
+	vim.b.soft_wrap_enabled = true
+	vim.notify("Soft wrap enabled: " .. vim.fn.fnamemodify(vim.fn.bufname(), ":t"), vim.log.levels.INFO)
+end
+
+local function disable_soft_wrap()
+	vim.opt_local.wrap = false
+	for _, lhs in ipairs({ "j", "k", "0", "$", "A" }) do
+		vim.keymap.del("n", lhs, { buffer = true })
+	end
+	vim.b.soft_wrap_enabled = false
+	vim.notify("Soft wrap disabled: " .. vim.fn.fnamemodify(vim.fn.bufname(), ":t"), vim.log.levels.INFO)
+end
+
+vim.keymap.set("n", "<leader>ww", function()
+	if vim.b.soft_wrap_enabled then
+		disable_soft_wrap()
+	else
+		enable_soft_wrap()
+	end
+end, { desc = "Toggle soft wrap mode" })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "tex", "markdown", "bib" },
+	callback = function()
+		enable_soft_wrap()
+		vim.opt_local.spell = true
 	end,
 })
