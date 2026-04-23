@@ -252,7 +252,9 @@ local function enable_soft_wrap()
 	vim.keymap.set("n", "j", "gj", { buffer = true })
 	vim.keymap.set("n", "k", "gk", { buffer = true })
 	vim.keymap.set("n", "0", "g0", { buffer = true })
+	vim.keymap.set("n", "^", "g^", { buffer = true })
 	vim.keymap.set("n", "$", "g$", { buffer = true })
+	vim.keymap.set("n", "I", "g^i", { buffer = true })
 	vim.keymap.set("n", "A", "g$a", { buffer = true })
 	vim.cmd("Wrapwidth " .. vim.o.textwidth)
 	vim.b.soft_wrap_enabled = true
@@ -261,7 +263,7 @@ end
 
 local function disable_soft_wrap()
 	vim.opt_local.wrap = false
-	for _, lhs in ipairs({ "j", "k", "0", "$", "A" }) do
+	for _, lhs in ipairs({ "j", "k", "0", "^", "$", "I", "A" }) do
 		vim.keymap.del("n", lhs, { buffer = true })
 	end
 	vim.b.soft_wrap_enabled = false
