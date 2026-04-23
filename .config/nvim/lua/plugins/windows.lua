@@ -6,8 +6,8 @@ return {
       "anuvyklack/animation.nvim",
     },
     config = function()
-      vim.o.winwidth = 10
-      vim.o.winminwidth = 10
+      vim.opt.winwidth = 10
+      vim.opt.winminwidth = 10
       require("windows").setup({
         autowidth = { enable = false },
       })

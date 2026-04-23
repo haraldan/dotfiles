@@ -98,7 +98,7 @@ vim.keymap.set("n", "<C-l>", "4zl")
 
 -- Relative number toggle
 vim.keymap.set("n", "<leader>tn", function()
-	if vim.o.relativenumber then
+	if vim.opt.relativenumber:get() then
 		vim.opt.relativenumber = false
 	else
 		vim.opt.relativenumber = true
@@ -107,7 +107,7 @@ end, { desc = "Toggle relative numbers" })
 
 -- diff function
 vim.keymap.set("n", "<C-w>d", function()
-	if vim.o.diff then
+	if vim.opt.diff:get() then
 		vim.cmd("windo diffoff")
 		vim.cmd("wincmd t")
 	else
@@ -125,7 +125,6 @@ vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 	group = vim.api.nvim_create_augroup("DisableTodoHighlight", { clear = true }),
 	callback = function()
 		-- Copy Todo before overriding it
-		vim.api.nvim_set_hl(0, "Todo_copy", vim.api.nvim_get_hl(0, { name = "Todo" }))
 		vim.api.nvim_set_hl(0, "Todo", { link = "Comment" })
 	end,
 })

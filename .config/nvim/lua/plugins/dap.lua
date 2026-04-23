@@ -11,10 +11,9 @@ return {
 	{
 		"ofirgall/goto-breakpoints.nvim",
 		config = function()
-			local map = vim.keymap.set
-			map("n", "]x", require("goto-breakpoints").next, { desc = "Go to next breakpoint" })
-			map("n", "[x", require("goto-breakpoints").prev, { desc = "Go to previous breakpoint" })
-			map("n", "gs", require("goto-breakpoints").stopped, { desc = "Go to stopped position (debugger)" })
+			vim.keymap.set("n", "]x", require("goto-breakpoints").next, { desc = "Go to next breakpoint" })
+			vim.keymap.set("n", "[x", require("goto-breakpoints").prev, { desc = "Go to previous breakpoint" })
+			vim.keymap.set("n", "gs", require("goto-breakpoints").stopped, { desc = "Go to stopped position (debugger)" })
 		end,
 	},
 	{
@@ -264,7 +263,6 @@ return {
 			vim.keymap.set("n", "<F12>", dap.step_out)
 			vim.keymap.set("n", "<F5>", function()
 				if vim.fn.filereadable(".dap/launch.json") == 1 then
-					print(vim.fn.getcwd())
 					print(".dap/launch.json found")
 					dap.configurations.c = {}
 					dap.configurations.cpp = {}

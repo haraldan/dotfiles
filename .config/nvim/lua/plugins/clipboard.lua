@@ -1,5 +1,15 @@
 return {
-  "gbprod/yanky.nvim",
+  {
+    "gbprod/cutlass.nvim",
+    config = function()
+      require("cutlass").setup({
+        cut_key = "d",
+        override_del = true,
+      })
+    end,
+  },
+  {
+    "gbprod/yanky.nvim",
   config = function()
     local mapping = require("yanky.telescope.mapping")
 
@@ -59,4 +69,5 @@ return {
     vim.keymap.set("n", "<c-n>", "<Plug>(YankyNextEntry)")
     -- vim.keymap.set("i", "<c-r>", "<ESC><Plug>(YankyPutAfter)i")
   end,
+  },
 }
