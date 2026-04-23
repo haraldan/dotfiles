@@ -33,6 +33,16 @@ return {
 				},
 				single_file_support = false,
 			})
+			local compile_commands_path = vim.fn.expand("~/.clangd/compile_commands.json")
+			vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+				callback = function()
+					local source = vim.fn.getcwd() .. "/compile_commands.json"
+					if vim.fn.filereadable(source) == 1 then
+						vim.fn.system({ "ln", "-sf", source, compile_commands_path })
+					end
+				end,
+			})
+
 			vim.lsp.config("lua_ls", {
 				capabilities = capabilities,
 				settings = {
