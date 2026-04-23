@@ -48,6 +48,7 @@ vim.api.nvim_create_autocmd("Filetype", {
 vim.api.nvim_create_user_command("Q", "q<bang>", { bang = true })
 vim.api.nvim_create_user_command("Qa", "qa<bang>", { bang = true })
 vim.api.nvim_create_user_command("QA", "qa<bang>", { bang = true })
+vim.api.nvim_create_user_command("W", "w<bang>", { bang = true })
 vim.api.nvim_create_user_command("Wq", "wq<bang>", { bang = true })
 vim.api.nvim_create_user_command("WQ", "wq<bang>", { bang = true })
 vim.api.nvim_create_user_command("Wqa", "wqa<bang>", { bang = true })
