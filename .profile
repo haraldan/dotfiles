@@ -40,3 +40,6 @@ export XTENSA_LICENSE_FILE=/opt/hifi4-toolchain/iMXRT600SDK.lic
 # Start a keychain ssh agent
 eval $(keychain --quiet --eval --agents ssh --noask ~/.ssh/id_ed25519)
 ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+
+# Set up bob
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
