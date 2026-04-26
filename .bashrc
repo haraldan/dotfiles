@@ -123,14 +123,14 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 
 # Set up Yazi shortcut
-function y() {
+function yazi() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
+	command yazi "$@" --cwd-file="$tmp"
+  tmux set-option -p allow-passthrough off 2>/dev/null
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
 
-bind -x '"\ee":"y"'
+bind -x '"\ee":"yazi"'
 
