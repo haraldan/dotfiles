@@ -138,3 +138,6 @@ function yazi() {
 
 bind -x '"\ee":"yazi"'
 
+
+# opencode
+export PATH=/home/daniel/.opencode/bin:$PATH
