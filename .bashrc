@@ -112,11 +112,10 @@ export NVM_DIR="$HOME/.nvm"
 
 
 # Set up fzf 
-if [[ ! "$PATH" == "*$HOME/.fzf/bin*" ]]; then
-  export PATH="$HOME/.fzf/bin${PATH:+:}$PATH"
-fi
-[ -f ~/.fzf/shell/completion.bash ] && source ~/.fzf/shell/completion.bash
-[ -f ~/.fzf/shell/key-bindings.bash ] && source ~/.fzf/shell/key-bindings.bash
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# Rebind Alt-C to Alt-D
+bind -m emacs-standard '"\ed": " \C-b\C-k \C-u`__fzf_cd__`\e\C-e\er\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d"'
+bind -m emacs-standard '"\ec": ""'
 
 # Set up virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
@@ -134,3 +133,4 @@ function y() {
 }
 
 bind -x '"\ee":"y"'
+
