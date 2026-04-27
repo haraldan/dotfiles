@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# npm-audit-all: Audit all npm packages found under a given path,
+#                plus the global npm installation.
+# Usage: npm-audit-all [--fix] <path>
+
+BOLD='\033[1m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+RESET='\033[0m'
+
+usage() {
+    echo "Usage: $(basename "$0") [--fix] <path>"
+    echo ""
+    echo "  Scans <path> for subdirectories containing a package-lock.json and"
+    echo "  runs npm audit on each, then audits the global npm installation."
+    echo "  With --fix, runs npm audit fix first."
+    exit 1
+}
+
+FIX=false
+SEARCH_PATH=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --fix) FIX=true; shift ;;
+        -h|--help) usage ;;
+        -*) echo "Unknown option: $1"; usage ;;
+        *) SEARCH_PATH="$1"; shift ;;
+    esac
+done
+
+[[ -z "$SEARCH_PATH" ]] && usage
+[[ ! -d "$SEARCH_PATH" ]] && { echo "Error: '$SEARCH_PATH' is not a directory."; exit 1; }
+
+SEARCH_PATH="$(realpath "$SEARCH_PATH")"
+
+TOTAL=0
+CLEAN=0
+VULNERABLE=0
+
+# Python script for parsing npm audit JSON — passed via -c to avoid heredoc/pipe conflict
+read -r -d '' PARSE_AUDIT << 'PYEOF' || true
+import json, sys
+try:
+    data = json.loads(sys.stdin.read())
+except Exception as e:
+    print(f"PARSE_ERROR: {e}")
+    sys.exit(0)
+if "error" in data:
+    print(f"NPM_ERROR: {data['error'].get('summary', 'unknown error')}")
+    sys.exit(0)
+vulns = data.get("vulnerabilities", {})
+if not vulns:
+    print("CLEAN")
+    sys.exit(0)
+severity_order = ["critical", "high", "moderate", "low", "info"]
+counts = {s: 0 for s in severity_order}
+for name, v in vulns.items():
+    counts[v["severity"]] = counts.get(v["severity"], 0) + 1
+counts_str = ", ".join(f"{v} {k}" for k, v in counts.items() if v > 0)
+print(f"VULN_SUMMARY:{counts_str}")
+for name, v in vulns.items():
+    sev = v["severity"]
+    if sev in ("critical", "high", "moderate"):
+        via = v.get("via", [])
+        titles = [x.get("title", "") if isinstance(x, dict) else x for x in via if x != name]
+        titles = list(dict.fromkeys(titles))
+        title_str = "; ".join(titles) if titles else "(transitive)"
+        print(f"VULN:{sev}:{name}:{title_str}")
+PYEOF
+
+# Prints audit results for the current working directory.
+audit_dir() {
+    local label="$1"
+    local do_fix="$2"
+    TOTAL=$((TOTAL + 1))
+
+    echo -e "${BOLD}── $label${RESET}"
+
+    if [[ "$do_fix" == true ]]; then
+        fix_output=$(npm audit fix 2>&1) || true
+        fixed_line=$(echo "$fix_output" | grep -E "fixed|up to date" | tail -1 || true)
+        [[ -n "$fixed_line" ]] && echo -e "   ${CYAN}fix: $fixed_line${RESET}"
+    fi
+
+    audit_json=$(npm audit --json 2>/dev/null) || true
+
+    if [[ -z "$audit_json" ]]; then
+        echo -e "   ${YELLOW}⚠ Could not run audit (empty output)${RESET}"
+        echo ""
+        return
+    fi
+
+    # Pass JSON via here-string so pipe doesn't conflict with heredoc
+    summary=$(python3 -c "$PARSE_AUDIT" <<< "$audit_json")
+
+    while IFS= read -r line; do
+        case "$line" in
+            CLEAN)
+                echo -e "   ${GREEN}✓ No vulnerabilities${RESET}"
+                CLEAN=$((CLEAN + 1))
+                ;;
+            VULN_SUMMARY:*)
+                echo -e "   ${RED}✗ ${line#VULN_SUMMARY:}${RESET}"
+                VULNERABLE=$((VULNERABLE + 1))
+                ;;
+            VULN:critical:*)
+                rest="${line#VULN:critical:}"; pkg_name="${rest%%:*}"; title="${rest#*:}"
+                echo -e "   ${RED}  [CRITICAL] $pkg_name — $title${RESET}"
+                ;;
+            VULN:high:*)
+                rest="${line#VULN:high:}"; pkg_name="${rest%%:*}"; title="${rest#*:}"
+                echo -e "   ${RED}  [HIGH]     $pkg_name — $title${RESET}"
+                ;;
+            VULN:moderate:*)
+                rest="${line#VULN:moderate:}"; pkg_name="${rest%%:*}"; title="${rest#*:}"
+                echo -e "   ${YELLOW}  [MODERATE] $pkg_name — $title${RESET}"
+                ;;
+            NPM_ERROR:*)
+                echo -e "   ${YELLOW}⚠ ${line#NPM_ERROR:}${RESET}"
+                TOTAL=$((TOTAL - 1))  # don't count as audited
+                ;;
+            PARSE_ERROR:*)
+                echo -e "   ${YELLOW}⚠ Parse error: ${line#PARSE_ERROR:}${RESET}"
+                ;;
+        esac
+    done <<< "$summary"
+
+    echo ""
+}
+
+# ── Header ────────────────────────────────────────────────────────────────────
+
+echo ""
+echo -e "${BOLD}npm audit report${RESET}"
+[[ "$FIX" == true ]] && echo -e "${BOLD}Mode: audit + fix${RESET}"
+echo ""
+
+# ── Global npm ────────────────────────────────────────────────────────────────
+
+global_root="$(npm root -g 2>/dev/null)"
+echo -e "${BOLD}═══ Global npm (${CYAN}$global_root${RESET}${BOLD}) ═══${RESET}"
+echo ""
+
+# Collect global package dirs (handles scoped packages like @scope/pkg)
+mapfile -t GLOBAL_PKGS < <(
+    find "$global_root" -mindepth 1 -maxdepth 1 -type d -not -name "npm" |
+    while read -r d; do
+        name="$(basename "$d")"
+        if [[ "$name" == @* ]]; then
+            # scoped: enumerate one level deeper
+            find "$d" -mindepth 1 -maxdepth 1 -type d
+        else
+            echo "$d"
+        fi
+    done | sort
+)
+
+if [[ ${#GLOBAL_PKGS[@]} -eq 0 ]]; then
+    echo "  No global packages found (excluding npm itself)."
+    echo ""
+else
+    for pkg_dir in "${GLOBAL_PKGS[@]}"; do
+        pkg_label="$(basename "$(dirname "$pkg_dir")")/$(basename "$pkg_dir")"
+        # strip leading non-scoped prefix
+        [[ "$pkg_label" == node_modules/* ]] && pkg_label="$(basename "$pkg_dir")"
+        if [[ ! -f "$pkg_dir/package-lock.json" ]]; then
+            echo -e "${BOLD}── $pkg_label${RESET}"
+            echo -e "   ${YELLOW}⚠ No package-lock.json — skipping${RESET}"
+            echo ""
+            continue
+        fi
+        pushd "$pkg_dir" > /dev/null
+        audit_dir "$pkg_label" "$FIX"
+        popd > /dev/null
+    done
+fi
+
+# ── Local packages under path ─────────────────────────────────────────────────
+
+echo -e "${BOLD}═══ Local packages under: ${CYAN}$SEARCH_PATH${RESET}${BOLD} ═══${RESET}"
+echo ""
+
+mapfile -t LOCKFILES < <(find "$SEARCH_PATH" -mindepth 2 -maxdepth 2 -name "package-lock.json" | sort)
+
+if [[ ${#LOCKFILES[@]} -eq 0 ]]; then
+    echo "  No package-lock.json files found."
+    echo ""
+else
+    for lockfile in "${LOCKFILES[@]}"; do
+        dir="$(dirname "$lockfile")"
+        pkg="$(basename "$dir")"
+        pushd "$dir" > /dev/null
+        audit_dir "$pkg" "$FIX"
+        popd > /dev/null
+    done
+fi
+
+# ── Summary ───────────────────────────────────────────────────────────────────
+
+echo -e "${BOLD}────────────────────────────────────────${RESET}"
+echo -e "${BOLD}Summary: $TOTAL package(s) scanned${RESET}"
+echo -e "  ${GREEN}✓ Clean:       $CLEAN${RESET}"
+echo -e "  ${RED}✗ Vulnerable:  $VULNERABLE${RESET}"
+echo ""
+
+[[ $VULNERABLE -gt 0 ]] && exit 1 || exit 0
