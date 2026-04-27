@@ -41,6 +41,11 @@ SEARCH_PATH="$(realpath "$SEARCH_PATH")"
 TOTAL=0
 CLEAN=0
 VULNERABLE=0
+COUNT_CRITICAL=0
+COUNT_HIGH=0
+COUNT_MODERATE=0
+COUNT_LOW=0
+COUNT_INFO=0
 
 # Python script for parsing npm audit JSON — passed via -c to avoid heredoc/pipe conflict
 read -r -d '' PARSE_AUDIT << 'PYEOF' || true
@@ -63,6 +68,7 @@ for name, v in vulns.items():
     counts[v["severity"]] = counts.get(v["severity"], 0) + 1
 counts_str = ", ".join(f"{v} {k}" for k, v in counts.items() if v > 0)
 print(f"VULN_SUMMARY:{counts_str}")
+print("VULN_COUNTS:" + ",".join(f"{s}={counts[s]}" for s in severity_order))
 for name, v in vulns.items():
     sev = v["severity"]
     if sev in ("critical", "high", "moderate"):
@@ -107,6 +113,19 @@ audit_dir() {
             VULN_SUMMARY:*)
                 echo -e "   ${RED}✗ ${line#VULN_SUMMARY:}${RESET}"
                 VULNERABLE=$((VULNERABLE + 1))
+                ;;
+            VULN_COUNTS:*)
+                rest="${line#VULN_COUNTS:}"
+                for pair in ${rest//,/ }; do
+                    sev="${pair%%=*}"; n="${pair##*=}"
+                    case "$sev" in
+                        critical) COUNT_CRITICAL=$((COUNT_CRITICAL + n)) ;;
+                        high)     COUNT_HIGH=$((COUNT_HIGH + n)) ;;
+                        moderate) COUNT_MODERATE=$((COUNT_MODERATE + n)) ;;
+                        low)      COUNT_LOW=$((COUNT_LOW + n)) ;;
+                        info)     COUNT_INFO=$((COUNT_INFO + n)) ;;
+                    esac
+                done
                 ;;
             VULN:critical:*)
                 rest="${line#VULN:critical:}"; pkg_name="${rest%%:*}"; title="${rest#*:}"
@@ -185,7 +204,7 @@ fi
 echo -e "${BOLD}═══ Local packages under: ${CYAN}$SEARCH_PATH${RESET}${BOLD} ═══${RESET}"
 echo ""
 
-mapfile -t LOCKFILES < <(find "$SEARCH_PATH" -mindepth 2 -maxdepth 2 -name "package-lock.json" | sort)
+mapfile -t LOCKFILES < <(find "$SEARCH_PATH" -name "package-lock.json" -not -path "*/node_modules/*" | sort)
 
 if [[ ${#LOCKFILES[@]} -eq 0 ]]; then
     echo "  No package-lock.json files found."
@@ -193,7 +212,8 @@ if [[ ${#LOCKFILES[@]} -eq 0 ]]; then
 else
     for lockfile in "${LOCKFILES[@]}"; do
         dir="$(dirname "$lockfile")"
-        pkg="$(basename "$dir")"
+        # Use path relative to SEARCH_PATH as label
+        pkg="$(realpath --relative-to="$SEARCH_PATH" "$dir")"
         pushd "$dir" > /dev/null
         audit_dir "$pkg" "$FIX"
         popd > /dev/null
@@ -203,9 +223,32 @@ fi
 # ── Summary ───────────────────────────────────────────────────────────────────
 
 echo -e "${BOLD}────────────────────────────────────────${RESET}"
-echo -e "${BOLD}Summary: $TOTAL package(s) scanned${RESET}"
-echo -e "  ${GREEN}✓ Clean:       $CLEAN${RESET}"
-echo -e "  ${RED}✗ Vulnerable:  $VULNERABLE${RESET}"
+echo -e "${BOLD}Packages scanned: $TOTAL${RESET}"
+echo -e "  ${GREEN}✓ Clean:      $CLEAN${RESET}"
+if [[ $VULNERABLE -gt 0 ]]; then
+    echo -e "  ${RED}✗ Vulnerable: $VULNERABLE${RESET}"
+else
+    echo -e "  ✗ Vulnerable: $VULNERABLE"
+fi
+echo ""
+echo -e "${BOLD}Vulnerabilities found:${RESET}"
+if [[ $COUNT_CRITICAL -gt 0 ]]; then
+    echo -e "  ${RED}  critical: $COUNT_CRITICAL${RESET}"
+else
+    echo -e "    critical: $COUNT_CRITICAL"
+fi
+if [[ $COUNT_HIGH -gt 0 ]]; then
+    echo -e "  ${RED}  high:     $COUNT_HIGH${RESET}"
+else
+    echo -e "    high:     $COUNT_HIGH"
+fi
+if [[ $COUNT_MODERATE -gt 0 ]]; then
+    echo -e "  ${YELLOW}  moderate: $COUNT_MODERATE${RESET}"
+else
+    echo -e "    moderate: $COUNT_MODERATE"
+fi
+echo -e "    low:      $COUNT_LOW"
+echo -e "    info:     $COUNT_INFO"
 echo ""
 
 [[ $VULNERABLE -gt 0 ]] && exit 1 || exit 0
