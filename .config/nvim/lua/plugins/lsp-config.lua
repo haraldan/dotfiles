@@ -6,7 +6,7 @@ return {
 		},
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "matlab_ls", "html" },
+				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "html" },
 				automatic_enable = true,
 			})
 		end,
@@ -64,28 +64,6 @@ return {
 				cmd = { "bash-language-server", "start" },
 				capabilities = capabilities,
 				single_file_support = true,
-			})
-
-			vim.lsp.config("matlab_ls", {
-				capabilities = capabilities,
-				cmd = { "matlab-language-server", "--stdio" },
-				filetypes = { "matlab" },
-				root_dir = function(_, callback)
-					local root_dir = vim.fs.root(0, ".git")
-					if root_dir then
-						callback(root_dir)
-					else
-						callback(vim.env.PWD)
-					end
-				end,
-				settings = {
-					MATLAB = {
-						indexWorkspace = true,
-						installPath = "/usr/local/MATLAB/R2024b",
-						matlabConnectionTiming = "onStart",
-						telemetry = true,
-					},
-				},
 			})
 
 			vim.diagnostic.config({
