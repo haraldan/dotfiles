@@ -112,9 +112,13 @@ export NVM_DIR="$HOME/.nvm"
 
 
 # Set up fzf 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if [[ ! "$PATH" == */home/ds/.fzf/bin* ]]; then
+  PATH="/home/ds/.fzf/bin${PATH:+:${PATH}}"
+fi
+eval "$(fzf --bash)"
 # Rebind Alt-C to Alt-D
-bind -m emacs-standard '"\ed": " \C-b\C-k \C-u`__fzf_cd__`\e\C-e\er\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d"'
+# Rebind Alt-C to Alt-D
+bind -m emacs-standard '"\ed": " \C-b\C-k \C-u`__fzf_cd__`\e\C-e\C-\e(\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d\C-y\ey\C-_"'
 bind -m emacs-standard '"\ec": ""'
 
 # Set up virtualenvwrapper
