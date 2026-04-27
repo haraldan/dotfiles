@@ -31,15 +31,15 @@ if [ -d "$HOME/.local/share/nvim/mason/bin/" ]; then
   export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 fi
 
-# Cross-compiler path ENV variable
-export ARMGCC_DIR=/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/
-export VITIS_DIR=/opt/Xilinx/Vitis/2021.1
-export XTENSA_TOOLCHAIN_DIR=/opt/hifi4-toolchain/2023_11/RI-2023.11-linux
-export XTENSA_LICENSE_FILE=/opt/hifi4-toolchain/iMXRT600SDK.lic
-
 # Start a keychain ssh agent
 eval $(keychain --quiet --eval --agents ssh --noask ~/.ssh/id_ed25519)
 ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
 
 # Set up bob
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+
+# Cross-compiler path ENV variable
+export ARMGCC_DIR=/opt/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi
+export VITIS_DIR=/opt/Xilinx/Vitis/2021.1
+export XTENSA_TOOLCHAIN_DIR=/opt/hifi4-toolchain/2023_11/RI-2023.11-linux
+export XTENSA_LICENSE_FILE=/opt/hifi4-toolchain/iMXRT600SDK.lic
