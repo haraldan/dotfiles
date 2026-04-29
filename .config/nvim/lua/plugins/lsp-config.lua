@@ -6,7 +6,7 @@ return {
 		},
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "html" },
+				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "html", "autohotkey_lsp" },
 				automatic_enable = true,
 			})
 		end,
@@ -65,13 +65,26 @@ return {
 				capabilities = capabilities,
 				single_file_support = true,
 			})
+			vim.lsp.config("autohotkey_lsp", {
+				capabilities = capabilities,
+				single_file_support = true,
+				-- Suppress the interpreter not found request
+				handlers = {
+					["window/showMessageRequest"] = function(err, result, ctx, config)
+						if result and result.message and result.message:find("[Ii]nterpreter") then
+							return vim.NIL
+						end
+						return vim.lsp.handlers["window/showMessageRequest"](err, result, ctx, config)
+					end,
+				},
+			})
 
 			vim.diagnostic.config({
 				float = { border = "single" },
 				virtual_text = true,
 			})
 
-      -- Set up mappings
+			-- Set up mappings
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("custom-lsp-attach", { clear = true }),
 				callback = function(event)
