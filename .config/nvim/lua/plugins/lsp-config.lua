@@ -22,6 +22,9 @@ return {
 				lineFoldingOnly = true,
 			}
 
+			local vhdl_capabilities = capabilities
+			vhdl_capabilities.textDocument.completion.completionItem.snippetSupport = false
+
 			-- LSP configurations
 			vim.lsp.config("clangd", {
 				capabilities = capabilities,
@@ -52,7 +55,7 @@ return {
 				},
 			})
 			vim.lsp.config("vhdl_ls", {
-				capabilities = capabilities,
+				capabilities = vhdl_capabilities,
 			})
 			vim.lsp.config("pyright", {
 				capabilities = capabilities,
