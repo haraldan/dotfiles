@@ -3,6 +3,7 @@
 	name = Daniel Sinev
 [core]
 	editor = nvim
+	excludesfile = /home/ds/.gitignore_global
 [credential]
 	helper = store --file ~/.git-credentials
 [init]
