@@ -6,7 +6,7 @@ return {
 		},
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "pyright", "bashls", "html", "autohotkey_lsp" },
+				ensure_installed = { "clangd", "lua_ls", "vhdl_ls", "basedpyright", "bashls", "html", "autohotkey_lsp" },
 				automatic_enable = true,
 			})
 		end,
@@ -57,8 +57,20 @@ return {
 			vim.lsp.config("vhdl_ls", {
 				capabilities = vhdl_capabilities,
 			})
-			vim.lsp.config("pyright", {
+			vim.lsp.config("basedpyright", {
 				capabilities = capabilities,
+				settings = {
+					basedpyright = {
+						analysis = {
+							typeCheckingMode = "standard",
+							inlayHints = {
+								variableTypes = false,
+								callArgumentNames = true,
+								functionReturnTypes = true,
+							},
+						},
+					},
+				},
 			})
 			vim.lsp.config("html", {
 				capabilities = capabilities,
