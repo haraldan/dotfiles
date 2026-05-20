@@ -63,6 +63,7 @@ return {
 					basedpyright = {
 						analysis = {
 							typeCheckingMode = "standard",
+							autoFormatStrings = true,
 							inlayHints = {
 								variableTypes = false,
 								callArgumentNames = true,
@@ -142,12 +143,11 @@ return {
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
 					end, { desc = "LSP: Toggle inlay hints" })
 
-					-- The following two autocommands are used to highlight references of the
-					-- word under your cursor when your cursor rests there for a little while.
-					--    See `:help CursorHold` for information about when this is executed
-					--
-					-- When you move your cursor, the highlights will be cleared (the second autocommand).
+					-- Client-dependent functions
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					if client and client.name == "basedpyright" then
+						vim.lsp.on_type_formatting.enable(true, { client_id = client.id })
+					end
 					if client and client.server_capabilities.documentHighlightProvider then
 						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 							buffer = event.buf,
