@@ -12,7 +12,7 @@ winget install Notepad++.Notepad++
 winget install Microsoft.PowerToys
 winget install AutoHotkey.AutoHotkey
 winget install psmux
-git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" "$env:USERPROFILE\.psmux\plugins\ppm" -Recurse ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
+git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" "$env:USERPROFILE\.psmux\plugins\ppm" -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
 
 pwsh -Command "Install-Module -Name PSFzf -Scope CurrentUser -Force"
 
