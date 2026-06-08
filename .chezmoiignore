@@ -1,3 +1,6 @@
+ubuntu_install_software.sh
+windows_install_software.ps1
+
 {{ if eq .chezmoi.os "windows" -}}
 .bash_aliases
 .bashrc
@@ -10,10 +13,10 @@
 .profile
 .pyrightconfig.json
 .vhdl_ls.toml
-{{- else if eq .configType "work" -}}
+{{- else if eq .chezmoi.os "linux" -}}
+Documents
+{{ if eq .configType "work" -}}
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
 {{- end }}
-
-ubuntu_install_software.sh
-windows_install_software.ps1
+{{- end }}
