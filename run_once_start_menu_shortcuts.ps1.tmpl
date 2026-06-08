@@ -1,0 +1,11 @@
+{{- if eq .chezmoi.os "windows" -}}
+$batDir = Join-Path "{{ .chezmoi.homeDir }}" ".bat"
+$startMenuDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+$shell = New-Object -ComObject WScript.Shell
+
+foreach ($file in Get-ChildItem -Path $batDir) {
+    $shortcut = $shell.CreateShortcut((Join-Path $startMenuDir ($file.BaseName + ".lnk")))
+    $shortcut.TargetPath = $file.FullName
+    $shortcut.Save()
+}
+{{- end -}}

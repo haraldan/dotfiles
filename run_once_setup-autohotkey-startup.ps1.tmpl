@@ -1,9 +1,11 @@
 {{- if eq .chezmoi.os "windows" -}}
 $ahkDir = Join-Path "{{ .chezmoi.homeDir }}" ".autohotkey"
 $startupDir = [System.Environment]::GetFolderPath("Startup")
+$shell = New-Object -ComObject WScript.Shell
 
 foreach ($file in Get-ChildItem -Path $ahkDir -Filter "*.ahk") {
-    $target = Join-Path $startupDir $file.Name
-    gsudo { New-Item -ItemType SymbolicLink -Path $args[0] -Target $args[1] -Force } -args $target, $file.FullName
+    $shortcut = $shell.CreateShortcut((Join-Path $startupDir ($file.BaseName + ".lnk")))
+    $shortcut.TargetPath = $file.FullName
+    $shortcut.Save()
 }
 {{- end -}}

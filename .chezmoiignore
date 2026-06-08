@@ -16,6 +16,7 @@ windows_install_software.ps1
 .tmux
 {{- else if eq .chezmoi.os "linux" -}}
 .autohotkey
+.bat
 .startpage
 .config/sioyek
 {{ if eq .configType "work" -}}
