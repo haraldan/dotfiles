@@ -1,0 +1,11 @@
+{{- $configType := promptStringOnce . "configType" "Config type (home/work)" -}}
+sourceDir = {{ joinPath .chezmoi.homeDir ".dotfiles" | quote }}
+
+[data]
+  configType = {{ $configType | quote }}
+  {{- if eq $configType "work" }}
+  email = "daniel.sinev@sennheiser.com"
+  {{- else }}
+  email = "daniel.sinev@gmail.com"
+  {{- end }}
+
