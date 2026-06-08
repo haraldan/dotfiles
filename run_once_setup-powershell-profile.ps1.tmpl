@@ -1,0 +1,6 @@
+{{- if eq .chezmoi.os "windows" -}}
+$src = Join-Path "{{ .chezmoi.homeDir }}" ".config" "powershell" "Microsoft.PowerShell_profile.ps1"
+$dest = Split-Path $PROFILE
+if (-not (Test-Path $dest)) { New-Item -ItemType Directory -Path $dest -Force }
+gsudo { New-Item -ItemType SymbolicLink -Path $args[0] -Target $args[1] -Force } -args $PROFILE, $src
+{{- end -}}

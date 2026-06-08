@@ -15,6 +15,12 @@ function y {
 # Ctrl-D to exit (like bash)
 Set-PSReadLineKeyHandler -Key Ctrl+d -Function DeleteCharOrExit
 
+# fzf via PSFzf
+Import-Module PSFzf
+Set-PsFzfOption -PSReadLineChordReverseHistory 'Ctrl+r' `
+                -PSReadLineChordProvider 'Ctrl+t' `
+                -PSReadLineChordSetLocation 'Alt+d'
+
 # Alt-E to open Yazi
 Set-PSReadLineKeyHandler -Key Alt+e -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
