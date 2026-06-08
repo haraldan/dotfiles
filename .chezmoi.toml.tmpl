@@ -1,10 +1,15 @@
 {{- $configType := promptStringOnce . "configType" "Config type (home/work)" -}}
+{{- $azureToken := "" -}}
+{{- if eq $configType "work" -}}
+{{-   $azureToken = promptStringOnce . "azureToken" "Azure DevOps PAT (for BAT-PyPi)" -}}
+{{- end -}}
 sourceDir = {{ joinPath .chezmoi.homeDir ".dotfiles" | quote }}
 
 [data]
   configType = {{ $configType | quote }}
   {{- if eq $configType "work" }}
   email = "daniel.sinev@sennheiser.com"
+  azureToken = {{ $azureToken | quote }}
   {{- else }}
   email = "daniel.sinev@gmail.com"
   {{- end }}
