@@ -22,7 +22,9 @@ return {
 			"nvim-neotest/nvim-nio",
 			"rcarriga/nvim-dap-ui",
 			"mfussenegger/nvim-dap-python",
+			{{- if eq .configType "work" }}
 			"jedrzejboczar/nvim-dap-cortex-debug",
+			{{- end }}
 		},
 		config = function()
 			local dap, dapui = require("dap"), require("dapui")
@@ -79,6 +81,7 @@ return {
 			-- dap.configurations.c = dap.configurations.cpp
 
 			-- Cortex-debug setup
+			{{ if eq .configType "work" -}}
 			require("dap-cortex-debug").setup({
 				debug = false, -- log debug messages
 				-- path to cortex-debug extension, supports vim.fn.glob
@@ -90,6 +93,7 @@ return {
 				-- make :DapLoadLaunchJSON register cortex-debug for C/C++, set false to disable
 				dap_vscode_filetypes = false,
 			})
+			{{- end }}
 
 			local armgcc_dir = os.getenv("ARMGCC_DIR")
 			if armgcc_dir then
