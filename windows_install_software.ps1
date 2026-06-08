@@ -22,19 +22,28 @@ winget install VcXsrv.VcXsrv
 winget install Microsoft.OpenSSH.Preview
 ssh-import-id-gh haraldan
 winget install psmux
-git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" "$env:USERPROFILE\.psmux\plugins\ppm" -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
+$psmuxPluginsDir = "$env:USERPROFILE\.psmux\plugins\ppm"
+if (-not (Test-Path $psmuxPluginsDir) -or (Get-ChildItem $psmuxPluginsDir -Force | Measure-Object).Count -eq 0) {
+    git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" $psmuxPluginsDir -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
+}
+
+# Refresh PATH so winget-installed binaries are available in this session
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
 pwsh -Command "Install-Module -Name PSFzf -Scope CurrentUser -Force"
 
 # Install CaskaydiaMono Nerd Font
-$fontZip = "$env:TEMP\CaskaydiaMono.zip"
-$fontDir = "$env:TEMP\CaskaydiaMono"
-Invoke-WebRequest -Uri "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaMono.zip" -OutFile $fontZip
-Expand-Archive -Path $fontZip -DestinationPath $fontDir -Force
-gsudo {
-    foreach ($font in Get-ChildItem -Path $args[0] -Filter "*.ttf") {
-        $shell = New-Object -ComObject Shell.Application
-        $shell.Namespace(0x14).CopyHere($font.FullName)
-    }
-} -args $fontDir
-Remove-Item $fontZip, $fontDir -Recurse -Force
+$installedFonts = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
+if (-not ($installedFonts -like "Cascadia Mono*")) {
+    $fontZip = "$env:TEMP\CaskaydiaMono.zip"
+    $fontDir = "$env:TEMP\CaskaydiaMono"
+    Invoke-WebRequest -Uri "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaMono.zip" -OutFile $fontZip
+    Expand-Archive -Path $fontZip -DestinationPath $fontDir -Force
+    gsudo {
+        foreach ($font in Get-ChildItem -Path $args[0] -Filter "*.ttf") {
+            $shell = New-Object -ComObject Shell.Application
+            $shell.Namespace(0x14).CopyHere($font.FullName)
+        }
+    } -args $fontDir
+    Remove-Item $fontZip, $fontDir -Recurse -Force
+}
