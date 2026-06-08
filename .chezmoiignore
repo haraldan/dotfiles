@@ -2,3 +2,6 @@
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
 {{- end }}
+
+ubuntu_install_software.sh
+windows_install_software.ps1
