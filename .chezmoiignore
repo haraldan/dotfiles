@@ -14,6 +14,7 @@ windows_install_software.ps1
 .pyrightconfig.json
 .vhdl_ls.toml
 {{- else if eq .chezmoi.os "linux" -}}
+.config/sioyek
 {{ if eq .configType "work" -}}
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
