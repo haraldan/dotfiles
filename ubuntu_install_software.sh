@@ -9,6 +9,8 @@ sudo snap install chezmoi --classic
 # Install apt packages
 sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find openssh-server build-essential make gcc
 ssh-import-id-gh haraldan
+sudo systemctl enable ssh
+sudo systemctl start ssh
 
 # Install lazygit
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
@@ -30,7 +32,9 @@ bob use stable
 # Install yazi
 cargo install --force yazi-build
 
-# Install ouch (archive tool used by yazi)
+# Yazi optional dependencies
+sudo apt install -y ffmpeg jq poppler-utils imagemagick zoxide xclip file
+cargo install resvg
 cargo install ouch
 
 # TPM (Tmux Plugin Manager)
