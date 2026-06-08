@@ -20,7 +20,6 @@ winget install Brave.Brave
 winget install Inkscape.Inkscape
 winget install VcXsrv.VcXsrv
 winget install Microsoft.OpenSSH.Preview
-ssh-import-id-gh haraldan
 winget install psmux
 $psmuxPluginsDir = "$env:USERPROFILE\.psmux\plugins\ppm"
 if (-not (Test-Path $psmuxPluginsDir) -or (Get-ChildItem $psmuxPluginsDir -Force | Measure-Object).Count -eq 0) {
@@ -37,9 +36,16 @@ if ($machinePath -notlike "*$sshPath*") {
 # Refresh PATH so winget-installed binaries are available in this session
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
+# Ensure sshd and ssh-agent start automatically and are running
+gsudo {
+    Set-Service -Name sshd -StartupType Automatic; Restart-Service sshd
+    Set-Service -Name ssh-agent -StartupType Automatic; Start-Service ssh-agent
+}
+
 pwsh -Command "Install-Module -Name PSFzf -Scope CurrentUser -Force"
 
 # Install CaskaydiaMono Nerd Font
+Add-Type -AssemblyName System.Drawing
 $installedFonts = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
 if (-not ($installedFonts -like "Cascadia Mono*")) {
     $fontZip = "$env:TEMP\CaskaydiaMono.zip"
