@@ -1,5 +1,6 @@
 # Aliases
 function ll { Get-ChildItem -Force $args }
+Set-Alias lg lazygit
 
 # Yazi shell integration: changes directory on exit
 function y {
