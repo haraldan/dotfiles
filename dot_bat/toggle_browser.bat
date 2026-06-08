@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set "SFTA=C:\code\SetUserFTA.exe"
+set "SFTA=%~dp0SetUserFTA.exe"
 set "CHROME=ChromeHTML"
 set "BRAVE=BraveHTML"
 
