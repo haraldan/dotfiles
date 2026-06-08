@@ -2,22 +2,27 @@
 edit = [
 	{ run = 'nvim "$@"', block = true}
   ]
+{{ if eq .chezmoi.os "linux" -}}
 image = [
   {run = 'nomacs "$@"'}
   ]
 kwave = [
   { run = 'kwave "$@"', desc = "Kwave" },
 ]
+{{- end }}
 
 [open]
+{{ if eq .chezmoi.os "linux" -}}
 prepend_rules = [
   { mime = "audio/*", use = "kwave" },
 ]
+{{- end }}
 
 [mgr]
 show_hidden=true
 
 [plugin]
+{{ if eq .chezmoi.os "linux" -}}
 prepend_previewers = [
 	# Archive previewer
 	{ mime = "application/*zip",            run = "ouch" },
@@ -28,6 +33,7 @@ prepend_previewers = [
   { mime = "application/x-xz",            run = "ouch" },
 	{ mime = "application/xz",              run = "ouch" },
 ]
+{{- end }}
 
 [[plugin.prepend_fetchers]]
 id   = "git"

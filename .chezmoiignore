@@ -1,4 +1,16 @@
-{{ if eq .configType "work" -}}
+{{ if eq .chezmoi.os "windows" -}}
+.bash_aliases
+.bashrc
+.clangd
+.config/matplotlib
+.config/nvim
+.ipython
+.local
+.matlab
+.profile
+.pyrightconfig.json
+.vhdl_ls.toml
+{{- else if eq .configType "work" -}}
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
 {{- end }}

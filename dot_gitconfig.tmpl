@@ -2,10 +2,10 @@
 	email = {{ .email }}
 	name = Daniel Sinev
 [core]
-	editor = nvim
-	excludesfile = /home/ds/.gitignore_global
+	editor = {{ if eq .chezmoi.os "windows" }}'C:/Program Files/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin{{ else }}nvim{{ end }}
+	excludesfile = {{ joinPath .chezmoi.homeDir ".gitignore_global" }}
 [credential]
-	helper = store --file ~/.git-credentials
+	helper = {{ if eq .chezmoi.os "windows" }}manager{{ else }}store --file ~/.git-credentials{{ end }}
 [init]
 	defaultBranch = main
 [fetch]
