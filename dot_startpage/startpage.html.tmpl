@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start Page</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      background: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #000;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1400px;
+    }
+
+    .row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .tile {
+      background: #ffffff;
+      border-radius: 10px;
+      flex: 1;
+      aspect-ratio: 3 / 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.2s ease, background 0.3s, box-shadow 0.3s;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      text-align: center;
+      padding: 30px 20px;
+      min-width: 120px;
+      max-width: 400px;
+      overflow: hidden;
+    }
+
+    .tile:hover {
+      transform: translateY(-5px);
+      background: #f9f9f9;
+    }
+
+    .tile img {
+      flex-grow: 1;
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .tile span {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    a {
+      text-decoration: none;
+      flex: 1;
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #121212;
+        color: #f5f5f5;
+      }
+
+      .tile {
+        background: #1e1e1e;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+      }
+
+      .tile:hover {
+        background: #2a2a2a;
+      }
+
+      .tile span {
+        color: #ddd;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Row 1: shared -->
+    <div class="row">
+      <a href="https://mail.google.com" target="_self" data-key="1">
+        <div class="tile">
+          <img src="images/gmail.png" alt="Gmail">
+          <span>Gmail</span>
+        </div>
+      </a>
+
+      <a href="https://calendar.google.com" target="_self" data-key="2">
+        <div class="tile">
+          <img src="images/calendar.png" alt="Calendar">
+          <span>Calendar</span>
+        </div>
+      </a>
+
+      <a href="https://www.deepl.com/translator" target="_self" data-key="3">
+        <div class="tile">
+          <img src="images/deepl.png" alt="DeepL">
+          <span>DeepL</span>
+        </div>
+      </a>
+
+      <a href="https://web.telegram.org" target="_self" data-key="4">
+        <div class="tile">
+          <img src="images/telegram.png" alt="Telegram">
+          <span>Telegram</span>
+        </div>
+      </a>
+    </div>
+
+{{ if eq .configType "home" }}
+    <!-- Row 2: home media -->
+    <div class="row">
+      <a href="http://192.168.178.11:7878" target="_self" data-key="5">
+        <div class="tile">
+          <img src="images/radarr.png" alt="Radarr">
+          <span>Radarr</span>
+        </div>
+      </a>
+      <a href="http://192.168.178.11:8989" target="_self" data-key="6">
+        <div class="tile">
+          <img src="images/sonarr.svg" alt="Sonarr">
+          <span>Sonarr</span>
+        </div>
+      </a>
+      <a href="http://192.168.178.11:6767/" target="_self" data-key="7">
+        <div class="tile">
+          <img src="images/bazarr.png" alt="Bazarr">
+          <span>Bazarr</span>
+        </div>
+      </a>
+      <a href="http://192.168.178.11:8080" target="_self" data-key="8">
+        <div class="tile">
+          <img src="images/qbittorrent.svg" alt="qBittorrent">
+          <span>qBittorrent</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Row 3: home servers -->
+    <div class="row">
+      <a href="http://192.168.178.11" target="_self" data-key="9">
+        <div class="tile">
+          <img src="images/celsius.png" alt="Celsius">
+          <span>Celsius</span>
+        </div>
+      </a>
+      <a href="http://192.168.178.11:5001">
+        <div class="tile">
+          <img src="images/dockge.png" alt="Dockge">
+          <span>Dockge</span>
+        </div>
+      </a>
+      <a href="http://192.168.178.11:2342">
+        <div class="tile">
+          <img src="images/photoprism.png" alt="Photoprism">
+          <span>Photoprism</span>
+        </div>
+      </a>
+      <a href="http://192.168.178.11:9988/scenes">
+        <div class="tile">
+          <img src="images/wcs.png" alt="WCS Stash">
+          <span>WCS Stash</span>
+        </div>
+      </a>
+    </div>
+{{ else if eq .configType "work" }}
+    <!-- Row 2: work links -->
+    <div class="row">
+      <a href="https://dev.azure.com/sennheiser-development/BAT" target="_self" data-key="5">
+        <div class="tile">
+          <img src="images/azure.png" alt="Azure">
+          <span>Azure DevOps</span>
+        </div>
+      </a>
+
+      <a href="https://10.149.108.69/specterawebui/index.html" target="_self" data-key="6">
+        <div class="tile">
+          <img src="images/sennheiser.svg" alt="Snow White">
+          <span>Snow White</span>
+        </div>
+      </a>
+
+      <a href="https://10.149.108.52/specterawebui/index.html" target="_self" data-key="7">
+        <div class="tile">
+          <img src="images/sennheiser.svg" alt="Backstage">
+          <span>DSP_spare</span>
+        </div>
+      </a>
+
+      <a href="https://editor-next.swagger.io/" target="_self" data-key="8">
+        <div class="tile">
+          <img src="images/swagger.png" alt="Swagger">
+          <span>SwaggerEditor</span>
+        </div>
+      </a>
+    </div>
+{{ end }}
+  </div>
+
+  <script>
+    document.addEventListener('keydown', (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      const key = event.key;
+      const link = document.querySelector(`a[data-key="${key}"]`);
+      if (link) window.location.href = link.href;
+    });
+  </script>
+</body>
+</html>
