@@ -11,6 +11,16 @@ winget install Gyan.FFmpeg 7zip.7zip jqlang.jq oschwartz10612.Poppler sharkdp.fd
 winget install Notepad++.Notepad++
 winget install Microsoft.PowerToys
 winget install AutoHotkey.AutoHotkey
+winget install Cockos.REAPER
+winget install PeterPawlowski.foobar2000
+winget install Obsidian.Obsidian
+winget install Audacity.Audacity
+winget install JGraph.Draw
+winget install Brave.Brave
+winget install Inkscape.Inkscape
+winget install VcXsrv.VcXsrv
+winget install Microsoft.OpenSSH.Preview
+ssh-import-id-gh haraldan
 winget install psmux
 git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" "$env:USERPROFILE\.psmux\plugins\ppm" -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
 

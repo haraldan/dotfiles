@@ -7,7 +7,8 @@ sudo snap set system experimental.hidden-snap-folder=true
 sudo snap install chezmoi --classic
 
 # Install apt packages
-sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find
+sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find openssh-server
+ssh-import-id-gh haraldan
 
 # TPM (Tmux Plugin Manager)
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
