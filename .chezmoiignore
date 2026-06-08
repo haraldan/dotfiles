@@ -13,6 +13,7 @@ windows_install_software.ps1
 .profile
 .pyrightconfig.json
 .vhdl_ls.toml
+.tmux
 {{- else if eq .chezmoi.os "linux" -}}
 .config/sioyek
 {{ if eq .configType "work" -}}

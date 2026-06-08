@@ -2,10 +2,12 @@
 	email = {{ .email }}
 	name = Daniel Sinev
 [core]
-	editor = {{ if eq .chezmoi.os "windows" }}'C:/Program Files/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin{{ else }}nvim{{ end }}
-	excludesfile = {{ joinPath .chezmoi.homeDir ".gitignore_global" }}
+	editor = {{ if eq .chezmoi.os "windows" }}"notepad++.exe" -multiInst -notabbar -nosession -noPlugin{{ else }}nvim{{ end }}
+	excludesfile = {{ if eq .chezmoi.os "windows" }}%USERPROFILE%\\.gitignore_global{{ else }}{{ joinPath .chezmoi.homeDir ".gitignore_global" }}{{ end }}
+{{ if ne .chezmoi.os "windows" -}}
 [credential]
-	helper = {{ if eq .chezmoi.os "windows" }}manager{{ else }}store --file ~/.git-credentials{{ end }}
+	helper = store --file ~/.git-credentials
+{{ end -}}
 [init]
 	defaultBranch = main
 [fetch]
