@@ -14,7 +14,6 @@ windows_install_software.ps1
 .pyrightconfig.json
 .vhdl_ls.toml
 .tmux
-.ssh
 {{- else if eq .chezmoi.os "linux" -}}
 .autohotkey
 .bat
