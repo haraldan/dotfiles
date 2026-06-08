@@ -1,0 +1,4 @@
+{{ if eq .configType "work" -}}
+.config/nvim/lua/plugins/vimtex.lua
+.matlab
+{{- end }}
