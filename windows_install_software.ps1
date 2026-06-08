@@ -27,6 +27,13 @@ if (-not (Test-Path $psmuxPluginsDir) -or (Get-ChildItem $psmuxPluginsDir -Force
     git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" $psmuxPluginsDir -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
 }
 
+# Add OpenSSH Preview to the front of machine PATH so it takes precedence over the built-in
+$sshPath = "$env:ProgramFiles\OpenSSH"
+$machinePath = [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+if ($machinePath -notlike "*$sshPath*") {
+    gsudo { [System.Environment]::SetEnvironmentVariable("Path", "$($args[0]);$([System.Environment]::GetEnvironmentVariable('Path','Machine'))", "Machine") } -args $sshPath
+}
+
 # Refresh PATH so winget-installed binaries are available in this session
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
