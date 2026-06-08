@@ -1,6 +1,6 @@
 {{- $configType := promptStringOnce . "configType" "Config type (home/work)" -}}
 {{- $azureToken := "" -}}
-{{- if eq $configType "work" -}}
+{{- if and (eq $configType "work") (eq .chezmoi.os "linux") -}}
 {{-   $azureToken = promptStringOnce . "azureToken" "Azure DevOps PAT (for BAT-PyPi)" -}}
 {{- end -}}
 sourceDir = {{ joinPath .chezmoi.homeDir ".dotfiles" | quote }}
