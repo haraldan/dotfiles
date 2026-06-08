@@ -21,7 +21,7 @@ TraySetIcon "icons/terminal_white.ico", 1, true
 ^<!s::
 {
 	if !ProcessExist("vcxsrv.exe")
-		Run A_ScriptDir "\..\config.xlaunch"
+		Run EnvGet("USERPROFILE") "\config.xlaunch"
 {{ if eq .configType "work" -}}
 	Run "wezterm-gui.exe -e powershell.exe ssh -Y ds@dsinev649-p520 -t 'tmux new -A -s Firmware'", , , &PID
 {{- else -}}
