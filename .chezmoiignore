@@ -15,6 +15,7 @@ windows_install_software.ps1
 .vhdl_ls.toml
 .tmux
 {{- else if eq .chezmoi.os "linux" -}}
+.autohotkey
 .config/sioyek
 {{ if eq .configType "work" -}}
 .config/nvim/lua/plugins/vimtex.lua
