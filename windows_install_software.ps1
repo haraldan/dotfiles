@@ -18,7 +18,7 @@ winget install Audacity.Audacity
 winget install JGraph.Draw
 winget install Brave.Brave
 winget install Inkscape.Inkscape
-winget install VcXsrv.VcXsrv
+winget install marha.VcXsrv
 winget install Microsoft.OpenSSH.Preview
 winget install psmux
 $psmuxPluginsDir = "$env:USERPROFILE\.psmux\plugins\ppm"
