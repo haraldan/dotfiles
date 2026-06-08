@@ -46,8 +46,13 @@ unbind o
 bind o kill-pane -a
 
 # lazygit popup
+{{ if eq .chezmoi.os "linux" -}}
 bind g display-popup -d "#{pane_current_path}" -xC -yC -w90% -h90% -E "lazygit"
 bind -n M-g display-popup -d "#{pane_current_path}" -xC -yC -w90% -h90% -E "lazygit"
+{{ else if eq .chezmoi.os "windows" -}}
+bind g popup -E -w 95% -h 95% -d "#{pane_current_path}" lazygit
+bind -n M-g popup -E -w 95% -h 95% -d "#{pane_current_path}" lazygit
+{{ end -}}
 
 # Start windows and panes at 1, not 0
 set -g base-index 1
