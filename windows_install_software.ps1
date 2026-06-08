@@ -15,3 +15,16 @@ winget install psmux
 git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" "$env:USERPROFILE\.psmux\plugins\ppm" -Recurse ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
 
 pwsh -Command "Install-Module -Name PSFzf -Scope CurrentUser -Force"
+
+# Install CaskaydiaMono Nerd Font
+$fontZip = "$env:TEMP\CaskaydiaMono.zip"
+$fontDir = "$env:TEMP\CaskaydiaMono"
+Invoke-WebRequest -Uri "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaMono.zip" -OutFile $fontZip
+Expand-Archive -Path $fontZip -DestinationPath $fontDir -Force
+gsudo {
+    foreach ($font in Get-ChildItem -Path $args[0] -Filter "*.ttf") {
+        $shell = New-Object -ComObject Shell.Application
+        $shell.Namespace(0x14).CopyHere($font.FullName)
+    }
+} -args $fontDir
+Remove-Item $fontZip, $fontDir -Recurse -Force
