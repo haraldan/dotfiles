@@ -1,27 +1,27 @@
-winget install twpayne.chezmoi
-winget install gerardog.gsudo
-winget install Microsoft.PowerShell
-winget install junegunn.fzf
-winget install sxyazi.yazi
-winget install Python.Python.3
-winget install JesseDuffield.lazygit
-winget install wez.wezterm
+winget install twpayne.chezmoi --source winget
+winget install gerardog.gsudo --source winget
+winget install Microsoft.PowerShell --source winget
+winget install junegunn.fzf --source winget
+winget install sxyazi.yazi --source winget
+winget install Python.Python.3 --source winget
+winget install JesseDuffield.lazygit --source winget
+winget install wez.wezterm --source winget
 # Yazi optional dependencies (recommended)
-winget install Gyan.FFmpeg 7zip.7zip jqlang.jq oschwartz10612.Poppler sharkdp.fd BurntSushi.ripgrep.MSVC ImageMagick.ImageMagick
-winget install Notepad++.Notepad++
-winget install Microsoft.PowerToys
-winget install AutoHotkey.AutoHotkey
-winget install Cockos.REAPER
-winget install PeterPawlowski.foobar2000
-winget install Obsidian.Obsidian
-winget install Audacity.Audacity
-winget install JGraph.Draw
-winget install Brave.Brave
-winget install Inkscape.Inkscape
-winget install marha.VcXsrv
-winget install Microsoft.OpenSSH.Preview
-winget install psmux
-winget install xanderfrangos.twinkletray
+winget install Gyan.FFmpeg 7zip.7zip jqlang.jq oschwartz10612.Poppler sharkdp.fd BurntSushi.ripgrep.MSVC ImageMagick.ImageMagick --source winget
+winget install Notepad++.Notepad++ --source winget
+winget install Microsoft.PowerToys --source winget
+winget install AutoHotkey.AutoHotkey --source winget
+winget install Cockos.REAPER --source winget
+winget install PeterPawlowski.foobar2000 --source winget
+winget install Obsidian.Obsidian --source winget
+winget install Audacity.Audacity --source winget
+winget install JGraph.Draw --source winget
+winget install Brave.Brave --source winget
+winget install Inkscape.Inkscape --source winget
+winget install marha.VcXsrv --source winget
+winget install Microsoft.OpenSSH.Preview --source winget
+winget install psmux --source winget
+winget install xanderfrangos.twinkletray --source winget
 $psmuxPluginsDir = "$env:USERPROFILE\.psmux\plugins\ppm"
 if (-not (Test-Path $psmuxPluginsDir) -or (Get-ChildItem $psmuxPluginsDir -Force | Measure-Object).Count -eq 0) {
     git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" $psmuxPluginsDir -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
