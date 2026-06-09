@@ -36,18 +36,12 @@ if ($machinePath -notlike "*$sshPath*") {
 # Refresh PATH so winget-installed binaries are available in this session
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
-# Ensure sshd and ssh-agent start automatically and are running
-gsudo {
-    Set-Service -Name sshd -StartupType Automatic; Restart-Service sshd
-    Set-Service -Name ssh-agent -StartupType Automatic; Start-Service ssh-agent
-}
-
 pwsh -Command "Install-Module -Name PSFzf -Scope CurrentUser -Force"
 
 # Install CaskaydiaMono Nerd Font
 Add-Type -AssemblyName System.Drawing
 $installedFonts = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
-if (-not ($installedFonts -like "Cascadia Mono*")) {
+if (-not ($installedFonts -like "CaskaydiaMono*")) {
     $fontZip = "$env:TEMP\CaskaydiaMono.zip"
     $fontDir = "$env:TEMP\CaskaydiaMono"
     Invoke-WebRequest -Uri "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaMono.zip" -OutFile $fontZip
@@ -59,4 +53,12 @@ if (-not ($installedFonts -like "Cascadia Mono*")) {
         }
     } -args $fontDir
     Remove-Item $fontZip, $fontDir -Recurse -Force
+}
+
+gsudo {
+    Set-Service -Name sshd -StartupType Automatic; Restart-Service sshd
+    Set-Service -Name ssh-agent -StartupType Automatic; Start-Service ssh-agent
+	# Restore old context menu
+	reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+	Stop-Process -Name explorer -Force; Start-Process explorer
 }
