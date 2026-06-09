@@ -21,6 +21,7 @@ winget install Inkscape.Inkscape
 winget install marha.VcXsrv
 winget install Microsoft.OpenSSH.Preview
 winget install psmux
+winget install xanderfrangos.twinkletray
 $psmuxPluginsDir = "$env:USERPROFILE\.psmux\plugins\ppm"
 if (-not (Test-Path $psmuxPluginsDir) -or (Get-ChildItem $psmuxPluginsDir -Force | Measure-Object).Count -eq 0) {
     git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" $psmuxPluginsDir -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
