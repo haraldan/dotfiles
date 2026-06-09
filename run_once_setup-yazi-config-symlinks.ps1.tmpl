@@ -1,0 +1,18 @@
+{{- if eq .chezmoi.os "windows" -}}
+$sourceDir = Join-Path "{{ .chezmoi.homeDir }}" ".config\yazi"
+$targetDir = Join-Path $env:APPDATA "yazi\config"
+
+if (-not (Test-Path $targetDir)) {
+    New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+}
+
+$links = Get-ChildItem -Path $sourceDir -File | ForEach-Object {
+    [PSCustomObject]@{ Link = Join-Path $targetDir $_.Name; Target = $_.FullName }
+}
+
+gsudo {
+    foreach ($item in $args[0]) {
+        New-Item -ItemType SymbolicLink -Path $item.Link -Target $item.Target -Force | Out-Null
+    }
+} -args @(,$links)
+{{- end -}}
