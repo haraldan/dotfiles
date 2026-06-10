@@ -23,9 +23,9 @@ TraySetIcon "icons/terminal_white.ico", 1, true
 	if !ProcessExist("vcxsrv.exe")
 		Run EnvGet("USERPROFILE") "\config.xlaunch"
 {{ if eq .configType "work" -}}
-	Run "wezterm-gui.exe -e powershell.exe ssh -Y ds@dsinev649-p520 -t 'tmux new -A -s Firmware'", , , &PID
+	Run "wezterm-gui.exe -e pwsh.exe -c ssh -Y ds@dsinev649-p520 -t 'tmux new -A -s Firmware'", , , &PID
 {{- else -}}
-	Run "wezterm-gui.exe -e powershell.exe ssh -Y daniel@192.168.178.16 -t 'tmux new -A -s default'", , , &PID
+	Run "wezterm-gui.exe -e pwsh.exe -c ssh -Y daniel@192.168.178.16 -t 'tmux new -A -s default'", , , &PID
 {{- end }}
 	WinWait 'ahk_pid ' PID
 	Sleep 200
@@ -34,8 +34,9 @@ TraySetIcon "icons/terminal_white.ico", 1, true
 
 ^<!n::
 {
-	Run "wezterm-gui.exe -e powershell.exe ssh ds@daniel-nuc -t 'psmux new -A -s default'", , , &PID
+	Run "wezterm-gui.exe -e pwsh.exe -c ssh ds@daniel-nuc -t 'wsl tmux new -A -s default'", , , &PID
 	WinWait 'ahk_pid ' PID
+	Sleep 200
 	Sleep 200
 	WinActivate 'ahk_pid ' PID
 }
