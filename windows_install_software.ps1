@@ -1,6 +1,6 @@
 winget install twpayne.chezmoi --source winget
 winget install gerardog.gsudo --source winget
-winget install Microsoft.PowerShell --source winget
+winget install Microsoft.PowerShell --source winget --installer-type wix
 winget install junegunn.fzf --source winget
 winget install sxyazi.yazi --source winget
 winget install Python.Python.3 --source winget
@@ -17,14 +17,9 @@ winget install Obsidian.Obsidian --source winget
 winget install Audacity.Audacity --source winget
 winget install JGraph.Draw --source winget
 winget install Brave.Brave --source winget
-winget install Inkscape.Inkscape --source winget
 winget install marha.VcXsrv --source winget
 winget install Microsoft.OpenSSH.Preview --source winget
 winget install xanderfrangos.twinkletray --source winget
-$psmuxPluginsDir = "$env:USERPROFILE\.psmux\plugins\ppm"
-if (-not (Test-Path $psmuxPluginsDir) -or (Get-ChildItem $psmuxPluginsDir -Force | Measure-Object).Count -eq 0) {
-    git clone https://github.com/psmux/psmux-plugins.git "$env:TEMP\psmux-plugins" ; Copy-Item "$env:TEMP\psmux-plugins\ppm" $psmuxPluginsDir -Recurse -Force ; Remove-Item "$env:TEMP\psmux-plugins" -Recurse -Force
-}
 
 # Add OpenSSH Preview to the front of machine PATH so it takes precedence over the built-in
 $sshPath = "$env:ProgramFiles\OpenSSH"
