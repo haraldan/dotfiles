@@ -28,3 +28,10 @@ Set-PSReadLineKeyHandler -Key Alt+e -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert('y')
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
+
+# Alt-G to open Lazygit
+Set-PSReadLineKeyHandler -Key Alt+g -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert('lazygit')
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+}
