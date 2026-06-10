@@ -7,7 +7,9 @@ sudo snap set system experimental.hidden-snap-folder=true
 sudo snap install chezmoi --classic
 
 # Install apt packages
-sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find openssh-server build-essential make gcc
+sudo apt update
+sudo apt upgrade
+sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find openssh-server build-essential make gcc libclang-dev
 ssh-import-id-gh haraldan
 sudo systemctl enable ssh
 sudo systemctl start ssh
