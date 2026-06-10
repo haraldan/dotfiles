@@ -31,3 +31,11 @@ TraySetIcon "icons/terminal_white.ico", 1, true
 	Sleep 200
 	WinActivate 'ahk_pid ' PID
 }
+
+^<!n::
+{
+	Run "wezterm-gui.exe -e powershell.exe ssh ds@daniel-nuc -t 'psmux new -A -s default'", , , &PID
+	WinWait 'ahk_pid ' PID
+	Sleep 200
+	WinActivate 'ahk_pid ' PID
+}
