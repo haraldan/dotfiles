@@ -1,4 +1,4 @@
-{{- if eq .chezmoi.os "windows" -}}
+{{- if and (eq .chezmoi.os "windows") (eq .configType "work") -}}
 $batDir = Join-Path "{{ .chezmoi.homeDir }}" ".bat"
 $startMenuDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $shell = New-Object -ComObject WScript.Shell

@@ -15,6 +15,9 @@ windows_install_software.ps1
 .vhdl_ls.toml
 .tmux
 .tmux.conf
+{{ if ne .configType "work" -}}
+.bat
+{{- end }}
 {{- else if eq .chezmoi.os "linux" -}}
 .autohotkey
 .bat
