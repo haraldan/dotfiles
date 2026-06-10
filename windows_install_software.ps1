@@ -20,7 +20,6 @@ winget install Brave.Brave --source winget
 winget install Inkscape.Inkscape --source winget
 winget install marha.VcXsrv --source winget
 winget install Microsoft.OpenSSH.Preview --source winget
-winget install psmux --source winget
 winget install xanderfrangos.twinkletray --source winget
 $psmuxPluginsDir = "$env:USERPROFILE\.psmux\plugins\ppm"
 if (-not (Test-Path $psmuxPluginsDir) -or (Get-ChildItem $psmuxPluginsDir -Force | Measure-Object).Count -eq 0) {
