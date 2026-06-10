@@ -30,10 +30,10 @@ rustup update
 cargo install bob-nvim
 bob install stable
 bob use stable
+cargo install --locked tree-sitter-cli
 
 # Install yazi
 which yazi &>/dev/null || cargo install yazi-build
-
 # Yazi optional dependencies
 sudo apt install -y ffmpeg jq poppler-utils imagemagick zoxide xclip file
 cargo install resvg
