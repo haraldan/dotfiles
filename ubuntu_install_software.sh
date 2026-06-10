@@ -9,7 +9,7 @@ sudo snap install chezmoi --classic
 # Install apt packages
 sudo apt update
 sudo apt upgrade
-sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find openssh-server build-essential make gcc libclang-dev
+sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find openssh-server build-essential libclang-dev sshpass unzip
 ssh-import-id-gh haraldan
 sudo systemctl enable ssh
 sudo systemctl start ssh
@@ -32,7 +32,7 @@ bob install stable
 bob use stable
 
 # Install yazi
-cargo install --force yazi-build
+which yazi &>/dev/null || cargo install yazi-build
 
 # Yazi optional dependencies
 sudo apt install -y ffmpeg jq poppler-utils imagemagick zoxide xclip file
@@ -49,3 +49,13 @@ if [ ! -d ~/.fzf ] || [ -z "$(ls -A ~/.fzf)" ]; then
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install --all
 fi
+
+# Install nvm and Node.js LTS
+if [ ! -d ~/.nvm ]; then
+  NVM_VERSION=$(curl -s "https://api.github.com/repos/nvm-sh/nvm/releases/latest" | grep '"tag_name"' | sed 's/.*"\(v[^"]*\)".*/\1/')
+  curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
+fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+nvm use --lts
