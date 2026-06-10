@@ -9,7 +9,7 @@ sudo snap install chezmoi --classic
 # Install apt packages
 sudo apt update
 sudo apt upgrade
-sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper ripgrep fd-find openssh-server build-essential libclang-dev sshpass unzip
+sudo apt install -y tmux keychain python3-full python3-virtualenvwrapper python-is-python3 ripgrep fd-find openssh-server build-essential libclang-dev sshpass unzip
 ssh-import-id-gh haraldan
 sudo systemctl enable ssh
 sudo systemctl start ssh
