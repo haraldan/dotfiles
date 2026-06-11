@@ -1,0 +1,5 @@
+Host *
+    AddKeysToAgent yes
+{{- if eq .chezmoi.os "windows" }}
+    IdentityAgent \\.\pipe\openssh-ssh-agent
+{{- end }}
