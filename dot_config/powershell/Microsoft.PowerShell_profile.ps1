@@ -6,6 +6,12 @@ function workon {
     & "$HOME\.venv_$env\Scripts\Activate.ps1"
 }
 
+# Show hostname in prompt
+function prompt {
+    $user = "$([char]27)[92m$($env:USERNAME)@$(hostname)$([char]27)[0m"
+    $path = "$([char]27)[94m$($PWD.Path)$([char]27)[0m"
+    "$user $path> "
+}
 
 # Yazi shell integration: changes directory on exit
 function y {
