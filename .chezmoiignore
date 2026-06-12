@@ -23,6 +23,7 @@ windows_install_software.ps1
 .bat
 .startpage
 .config/sioyek
+config.xlaunch
 {{ if eq .configType "work" -}}
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
