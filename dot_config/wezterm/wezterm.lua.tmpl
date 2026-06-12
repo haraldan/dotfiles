@@ -15,6 +15,15 @@ wezterm.on("format-tab-title", function(tab)
 	return tab.active_pane.domain_name
 end)
 
+-- Show domain name and foreground process in window title (same as tab)
+wezterm.on("format-window-title", function(tab)
+	local process = tab.active_pane.foreground_process_name:match("([^/\\]+)$")
+	if process and process ~= "" then
+		return tab.active_pane.domain_name .. " | " .. process
+	end
+	return tab.active_pane.domain_name
+end)
+
 -- start maximized
 wezterm.on("gui-startup", function(cmd)
 	local tab, pane, window = mux.spawn_window(cmd or {})
