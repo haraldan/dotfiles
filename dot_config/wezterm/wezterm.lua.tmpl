@@ -120,6 +120,7 @@ config.ssh_domains = {
 
 config.ssh_backend = "Ssh2"
 config.mux_enable_ssh_agent = false
+config.default_ssh_auth_sock = '\\\\.\\pipe\\openssh-ssh-agent'
 {{- end }}
 
 return config
