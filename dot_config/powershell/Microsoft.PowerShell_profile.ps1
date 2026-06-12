@@ -1,6 +1,11 @@
 # Aliases
 function ll { Get-ChildItem -Force $args }
 Set-Alias lg lazygit
+function workon {
+    param([string]$env)
+    & "$HOME\.venv_$env\Scripts\Activate.ps1"
+}
+
 
 # Yazi shell integration: changes directory on exit
 function y {
