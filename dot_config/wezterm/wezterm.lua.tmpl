@@ -6,22 +6,27 @@ local config = wezterm.config_builder()
 
 local mux = wezterm.mux
 
+-- Format: if SSH_HOST set: process | SSH_HOST; otherwise domain_name [| process]
+local function tab_title(tab)
+	local process = tab.active_pane.foreground_process_name:match("([^/\\]+)$")
+	local ssh_host = tab.active_pane.user_vars["SSH_HOST"]
+	if ssh_host and ssh_host ~= "" then
+		return process .. " | " .. ssh_host
+	end
+	if not process or process == "" then
+		return tab.active_pane.domain_name
+	end
+	return tab.active_pane.domain_name .. " | " .. process
+end
+
 -- Show domain name and foreground process in tab title
 wezterm.on("format-tab-title", function(tab)
-	local process = tab.active_pane.foreground_process_name:match("([^/\\]+)$")
-	if process and process ~= "" then
-		return tab.active_pane.domain_name .. " | " .. process
-	end
-	return tab.active_pane.domain_name
+	return tab_title(tab)
 end)
 
 -- Show domain name and foreground process in window title (same as tab)
 wezterm.on("format-window-title", function(tab)
-	local process = tab.active_pane.foreground_process_name:match("([^/\\]+)$")
-	if process and process ~= "" then
-		return tab.active_pane.domain_name .. " | " .. process
-	end
-	return tab.active_pane.domain_name
+	return tab_title(tab)
 end)
 
 -- start maximized
