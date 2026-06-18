@@ -1,3 +1,5 @@
 require("config.options")
 require("config.lazy")
 require("config.flash_on_jump").setup()
+require("telegram_delete").setup()
+require("word_search").setup()
