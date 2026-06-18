@@ -9,6 +9,7 @@ return {
 					c = { "clang-format" },
 					cpp = { "clang-format" },
 					sh = { "shfmt" },
+					json = { "jq" },
 				},
 			})
 			require("conform").formatters.shfmt = {
