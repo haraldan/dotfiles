@@ -59,3 +59,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install --lts
 nvm use --lts
+
+# Make dummy interface creation paswordless
+echo "%sudo ALL=(ALL) NOPASSWD: /sbin/ip link add dummy0 *, /sbin/ip link set dev dummy0 *" | sudo EDITOR='tee' visudo -f /etc/sudoers.d/wsl-dummy-mac
+

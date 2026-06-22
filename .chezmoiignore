@@ -1,6 +1,10 @@
 ubuntu_install_software.sh
 windows_install_software.ps1
 
+{{ if not (and (eq .chezmoi.os "linux") (contains "microsoft" .chezmoi.kernel.osrelease)) -}}
+.wsl_mac_fix.sh
+{{- end }}
+
 {{ if eq .chezmoi.os "windows" -}}
 .bash_aliases
 .bashrc
