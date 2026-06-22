@@ -24,6 +24,7 @@ windows_install_software.ps1
 .startpage
 .config/sioyek
 config.xlaunch
+.wslconfig
 {{ if eq .configType "work" -}}
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
