@@ -1,5 +1,6 @@
 # Aliases
 function ll { Get-ChildItem -Force $args }
+function .. { cd ..}
 Set-Alias lg lazygit
 function workon {
     param([string]$env)
