@@ -1,22 +1,22 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:full-border"
-rev = "598cdb6"
-hash = "7b625412411be411153886894d9acaf"
+rev = "c591a36"
+hash = "7e69f85c11b856d75c899bba5c32fe2c"
 
 [[plugin.deps]]
 use = "hankertrix/augment-command"
-rev = "18ad50f"
-hash = "cba2bae0c4ad211f4219de550b3838a5"
+rev = "352dc37"
+hash = "ceb04cad6bd268b664c0c7fa1e8e9928"
 
 [[plugin.deps]]
 use = "ndtoan96/ouch"
-rev = "406ce6c"
-hash = "f5afc904d5106ee368c8aa2ded43bd74"
+rev = "cfe4f50"
+hash = "eff5702573b6cfba61e4ac8b1969629a"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:git"
-rev = "598cdb6"
-hash = "88e56a64b7ce7c4314427452343fef17"
+rev = "c591a36"
+hash = "d52f26f271ec4f77b0da0aa749330ca"
 
 [[flavor.deps]]
 use = "BennyOe/tokyo-night"
