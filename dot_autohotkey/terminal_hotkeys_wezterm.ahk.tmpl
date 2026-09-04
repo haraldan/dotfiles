@@ -18,7 +18,7 @@ Wezterm_run_with_SSH_HOST(host, cmd) {
 
 ^<!w::
 {
-	Run "wezterm-gui.exe -e wsl ~ tmux new -A -s default", , , &PID
+	Run 'wezterm-gui.exe -e wsl.exe --cd ~ bash --login -c "exec tmux new -A -s default"', , , &PID
 	WinWait 'ahk_pid ' PID
 	Sleep 200
 	WinActivate 'ahk_pid ' PID
