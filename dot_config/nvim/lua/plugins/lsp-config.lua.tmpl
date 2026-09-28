@@ -34,6 +34,11 @@ return {
 					"--query-driver=/opt/**",
 					"--clang-tidy",
 				},
+				-- Allow toolchains whose libraries need an executable stack (e.g. xt-clang) on glibc >= 2.41
+				cmd_env = {
+					GLIBC_TUNABLES = (vim.env.GLIBC_TUNABLES and vim.env.GLIBC_TUNABLES .. ":" or "")
+						.. "glibc.rtld.execstack=2",
+				},
 				single_file_support = false,
 			})
 			local compile_commands_path = vim.fn.expand("~/.clangd/compile_commands.json")
