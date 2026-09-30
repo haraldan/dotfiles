@@ -1,5 +1,24 @@
 return {
 	{
+		"tpope/vim-fugitive",
+		cmd = "Git",
+		keys = {
+			{ "<leader>gb", "<cmd>Git blame<cr>", desc = "Fugitive: File blame" },
+		},
+		config = function()
+			vim.api.nvim_create_autocmd("BufEnter", {
+				callback = function(event)
+					if vim.api.nvim_buf_get_name(event.buf):match("^fugitive://") then
+						vim.keymap.set("n", "gq", "<cmd>Gedit<cr>", {
+							buffer = event.buf,
+							desc = "Fugitive: Return to working tree file",
+						})
+					end
+				end,
+			})
+		end,
+	},
+	{
 		"radyz/telescope-gitsigns",
 		dependencies = {
 			"lewis6991/gitsigns.nvim",
@@ -46,9 +65,6 @@ return {
 			vim.keymap.set("n", "<leader>gu", gitsigns.undo_stage_hunk, { desc = "Gitsigns: Undo stage hunk" })
 			vim.keymap.set("n", "<leader>gR", gitsigns.reset_buffer, { desc = "Gitsigns: Reset buffer" })
 			vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk, { desc = "Gitsigns: Preview hunk" })
-			vim.keymap.set("n", "<leader>gb", function()
-				gitsigns.blame_line({ full = true })
-			end, { desc = "Gitsigns: Line blame" })
 			vim.keymap.set("n", "<leader>gtb", gitsigns.toggle_current_line_blame, { desc = "Gitsigns: Toggle current line blame" })
 			vim.keymap.set("n", "<leader>gd", gitsigns.diffthis, { desc = "Gitsigns: Diff buffer against the index" })
 			vim.keymap.set("n", "<leader>gD", function()

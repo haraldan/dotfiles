@@ -28,6 +28,11 @@ return {
 			-- LSP configurations
 			vim.lsp.config("clangd", {
 				capabilities = capabilities,
+				root_dir = function(bufnr, on_dir)
+					if vim.uri_from_bufnr(bufnr):match("^file://") then
+						on_dir(vim.fs.root(bufnr, vim.lsp.config.clangd.root_markers))
+					end
+				end,
 				cmd = {
 					"clangd",
 					"--compile-commands-dir=" .. vim.fn.expand("~/.clangd"),
