@@ -14,3 +14,6 @@ sourceDir = {{ joinPath .chezmoi.homeDir ".dotfiles" | quote }}
   email = "daniel.sinev@gmail.com"
   {{- end }}
 
+[merge]
+  command = "nvim"
+  args = ["-d", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Source {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
