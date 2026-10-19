@@ -35,8 +35,13 @@ wezterm.on("gui-startup", function(cmd)
 	window:gui_window():maximize()
 end)
 
+{{ if eq .chezmoi.os "windows" -}}
 -- Powershell by default
 config.default_prog = { "pwsh.exe" }
+{{- else -}}
+-- Bash as a login shell by default
+config.default_prog = { "bash", "-l" }
+{{- end }}
 
 -- Font
 config.font = wezterm.font("CaskaydiaMono Nerd Font")
