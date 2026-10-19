@@ -42,8 +42,7 @@ zoom = ["prefix+z", "alt+z"]
 split_horizontal = ["prefix+minus", "alt+="]
 split_vertical = ['prefix+\', "alt+/"]
 
-# Both new-tab shortcuts inherit the current directory.
-new_tab = ["prefix+c", "alt+c", "alt+shift+c"]
+new_tab = "alt+shift+c"
 next_tab = "alt+n"
 previous_tab = "alt+p"
 move_tab_previous = "prefix+p"
@@ -64,8 +63,10 @@ navigate_pane_down = "alt+j"
 navigate_pane_up = "alt+k"
 navigate_pane_right = "alt+l"
 {{- $pane := "$HERDR_ACTIVE_PANE_ID" }}
+{{- $home := "$HOME" }}
 {{- if eq .chezmoi.os "windows" }}
 {{-   $pane = "%HERDR_ACTIVE_PANE_ID%" }}
+{{-   $home = "%USERPROFILE%" }}
 {{- else }}
 {{-   range $nav := list (list "h" "left") (list "j" "down") (list "k" "up") (list "l" "right") }}
 
@@ -75,6 +76,15 @@ type = "shell"
 command = '~/.config/herdr/navigate.sh {{ index $nav 1 }} alt+{{ index $nav 0 }}'
 description = "Navigate {{ index $nav 1 }} (Vim-aware)"
 {{-   end }}
+{{- end }}
+
+{{- range $key := list "prefix+c" "alt+c" }}
+
+[[keys.command]]
+key = "{{ $key }}"
+type = "shell"
+command = "herdr tab create --cwd {{ $home }} --focus"
+description = "New tab in home"
 {{- end }}
 
 [[keys.command]]
@@ -98,3 +108,7 @@ command = "lazygit"
 description = "lazygit"
 width = "90%"
 height = "90%"
+
+[theme]
+name = "nord"
+auto_switch = false
