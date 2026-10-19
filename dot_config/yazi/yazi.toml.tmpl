@@ -1,13 +1,13 @@
 [opener]
 edit = [
-	{ run = 'nvim "$@"', block = true}
+	{ run = 'nvim %s', block = true}
   ]
 {{ if eq .chezmoi.os "linux" -}}
 image = [
-  {run = 'nomacs "$@"'}
+  {run = 'nomacs %s'}
   ]
 kwave = [
-  { run = 'kwave "$@"', desc = "Kwave" },
+  { run = 'kwave %s', desc = "Kwave" },
 ]
 {{- end }}
 
