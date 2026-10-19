@@ -24,3 +24,7 @@ alias vi="nvim"
 alias v="nvim"
 alias lg=lazygit
 alias ..="cd .."
+
+# Activate a venv from ~/.virtualenvs
+workon() { source ~/.virtualenvs/"$1"/bin/activate; }
+complete -W '$(ls ~/.virtualenvs 2>/dev/null)' workon
