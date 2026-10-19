@@ -1,0 +1,4 @@
+{{- if and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
+os:
+  copyToClipboardCmd: printf '%s' {{ "{{text}}" }} | /mnt/c/Windows/System32/clip.exe
+{{- end }}
