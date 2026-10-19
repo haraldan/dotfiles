@@ -34,7 +34,10 @@ return {
 
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = { "tex", "markdown", "bib" },
-				callback = function()
+				callback = function(event)
+					if vim.bo[event.buf].buftype ~= "" then
+						return
+					end
 					enable_soft_wrap()
 					vim.opt_local.spell = true
 				end,
