@@ -30,10 +30,16 @@
 
 -- Switch keyboard layout with Left Ctrl + Left Shift, pressed in either order.
 -- Done here rather than with xkb's grp:lctrl_lshift_toggle, which clashes with
--- shift:both_capslock over Left Shift. non_consuming keeps Ctrl+Shift+<key>
--- shortcuts working in apps.
-o.bind("CTRL + Shift_L", "Switch keyboard layout", "hyprctl switchxkblayout all next", { non_consuming = true })
-o.bind("SHIFT + Control_L", "Switch keyboard layout", "hyprctl switchxkblayout all next", { non_consuming = true })
+-- shift:both_capslock over Left Shift. release fires on key-up, and only if no
+-- other key was pressed in between, so Ctrl+Shift+<key> shortcuts in apps keep
+-- the current layout. non_consuming passes the modifiers through to apps.
+-- On release the released key's own modifier may still be in the mask, so
+-- each key is bound both with and without it.
+local opts = { release = true, non_consuming = true }
+o.bind("CTRL + Shift_L", "Switch keyboard layout", "hyprctl switchxkblayout all next", opts)
+o.bind("SHIFT + Control_L", "Switch keyboard layout", "hyprctl switchxkblayout all next", opts)
+o.bind("CTRL + SHIFT + Shift_L", "Switch keyboard layout", "hyprctl switchxkblayout all next", opts)
+o.bind("CTRL + SHIFT + Control_L", "Switch keyboard layout", "hyprctl switchxkblayout all next", opts)
 
 -- Vim-style window navigation: Super+hjkl focuses, Super+Shift+hjkl swaps.
 -- The arrow-key versions stay bound. Omarchy's Super+J/K/L move to Super+Alt,
@@ -57,3 +63,37 @@ o.bind("SUPER + ALT + J", "Toggle window split", hl.dsp.layout("togglesplit"))
 o.bind("SUPER + ALT + K", "Keybindings", "omarchy-menu-keybindings")
 o.bind("SUPER + ALT + L", "Toggle workspace layout", "omarchy-hyprland-workspace-layout-toggle")
 o.bind("SUPER + ALT + T", "Tmux keybindings", "omarchy-menu-tmux-keybindings")
+
+-- Alt+F4 opens the system menu (lock, suspend, restart, shutdown), same as Super+Escape.
+o.bind("ALT + F4", "System menu", "omarchy-menu toggle system")
+
+-- Ctrl+H/J/K/L in the Omarchy menu act as Left/Down/Up/Right (back, down, up,
+-- open), leaving plain letters for search. Bound only while the menu's layer
+-- is on screen, same pattern Omarchy uses for the screenshot region picker.
+local menu_binds = {}
+
+local function send_menu_key(key)
+  return function()
+    hl.dispatch(hl.dsp.send_key_state({ mods = "", key = key, state = "down" }))
+    hl.timer(function()
+      hl.dispatch(hl.dsp.send_key_state({ mods = "", key = key, state = "up" }))
+    end, { timeout = 50, type = "oneshot" })
+  end
+end
+
+hl.on("layer.opened", function(layer)
+  if layer.namespace == "omarchy-menu" and #menu_binds == 0 then
+    for vim_key, key in pairs({ H = "Left", J = "Down", K = "Up", L = "Right" }) do
+      table.insert(menu_binds, hl.bind("CTRL + " .. vim_key, send_menu_key(key), { repeating = true, description = "Menu " .. key:lower() }))
+    end
+  end
+end)
+
+hl.on("layer.closed", function(layer)
+  if layer.namespace == "omarchy-menu" then
+    for _, keybind in ipairs(menu_binds) do
+      keybind:unbind()
+    end
+    menu_binds = {}
+  end
+end)
