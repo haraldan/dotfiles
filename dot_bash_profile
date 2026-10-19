@@ -1,0 +1,4 @@
+# ~/.bash_profile: executed by bash(1) for login shells.
+# bash skips ~/.profile when this file exists, so load it from here
+# (~/.profile in turn sources ~/.bashrc).
+[ -f ~/.profile ] && . ~/.profile

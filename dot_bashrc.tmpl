@@ -1,3 +1,46 @@
+{{- $omarchy := and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "omarchy") -}}
+{{- if $omarchy -}}
+# Omarchy environment (OMARCHY_PATH + PATH), needed even for non-interactive shells
+[[ -r /usr/share/omarchy/default/bash/env-bootstrap ]] && source /usr/share/omarchy/default/bash/env-bootstrap
+
+# If not running interactively, don't do anything else
+[[ $- != *i* ]] && return
+
+# All the default Omarchy aliases and functions (completion, mise, zoxide, fzf).
+# starship is uninstalled, so this leaves the prompt alone
+source "$OMARCHY_PATH/default/bash/rc"
+
+# Plain colored prompt, with user@host: dir as the terminal title
+PS1='\[\e]0;\u@\h: \w\a\]\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+# Save history for each directory
+# avoid duplicates..
+export HISTCONTROL=ignoredups:erasedups
+
+# Create history directory if it doesn't exist
+HISTS_DIR=$HOME/.bash_history.d
+mkdir -p "${HISTS_DIR}"
+
+# cd is already aliased to Omarchy's zoxide-aware zd here, so ch builds on it
+function ch () {
+    cd "$@"
+    export HISTFILE="${HISTS_DIR}/${PWD////$'_'}"
+}
+
+export HISTFILE="${HISTS_DIR}/${PWD////$'_'}"
+alias cd=ch
+# # After each command, save and reload history
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+# Alias definitions.
+if [ -f "$HOME/.bash_aliases" ]; then
+    . "$HOME/.bash_aliases"
+fi
+
+# Rebind fzf Alt-C to Alt-D (key bindings are loaded by Omarchy)
+bind -m emacs-standard '"\ed": " \C-b\C-k \C-u`__fzf_cd__`\e\C-e\C-\e(\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d\C-y\ey\C-_"'
+bind -m emacs-standard '"\ec": ""'
+{{- else -}}
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -111,7 +154,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-# Set up fzf 
+# Set up fzf
 if [[ ! "$PATH" == */home/ds/.fzf/bin* ]]; then
   PATH="/home/ds/.fzf/bin${PATH:+:${PATH}}"
 fi
@@ -120,11 +163,7 @@ eval "$(fzf --bash)"
 # Rebind Alt-C to Alt-D
 bind -m emacs-standard '"\ed": " \C-b\C-k \C-u`__fzf_cd__`\e\C-e\C-\e(\C-m\C-y\C-h\e \C-y\ey\C-x\C-x\C-d\C-y\ey\C-_"'
 bind -m emacs-standard '"\ec": ""'
-
-# Set up virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+{{- end }}
 
 # Set up Yazi shortcut
 function yazi() {
@@ -137,6 +176,16 @@ function yazi() {
 }
 
 bind -x '"\ee":"yazi"'
+# bind -x runs with readline's terminal settings (no line mode, no echo), which
+# breaks lazygit's "create a new git repository?" prompt; restore a normal tty.
+__lazygit_key() {
+  local tty_state
+  tty_state=$(stty -g)
+  stty sane
+  lazygit
+  stty "$tty_state"
+}
+bind -x '"\eg":"__lazygit_key"'
 
 {{- if eq .configType "home" }}
 

@@ -1,8 +1,21 @@
 ubuntu_install_software.sh
+omarchy_install_software.sh
 windows_install_software.ps1
+
+{{ if not (stat "/usr/share/omarchy") -}}
+.config/ghostty
+.config/hypr
+.config/omarchy
+.config/keyd
+.config/systemd
+.local/state/omarchy
+.XCompose
+.XCompose.deadkeys
+{{- end }}
 
 {{ if eq .chezmoi.os "windows" -}}
 .bash_aliases
+.bash_profile
 .bashrc
 .clangd
 .config/matplotlib
@@ -21,7 +34,6 @@ windows_install_software.ps1
 {{- else if eq .chezmoi.os "linux" -}}
 .autohotkey
 .bat
-.startpage
 .config/sioyek
 config.xlaunch
 {{ if eq .configType "work" -}}
