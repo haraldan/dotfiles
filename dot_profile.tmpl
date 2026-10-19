@@ -32,7 +32,7 @@ if [ -d "$HOME/.local/share/nvim/mason/bin/" ]; then
 fi
 
 # Start a keychain ssh agent
-eval $(keychain --quiet --eval --agents ssh --noask ~/.ssh/id_ed25519)
+eval $(keychain --quiet --eval --noask ~/.ssh/id_ed25519)
 ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
 
 # Set up bob
