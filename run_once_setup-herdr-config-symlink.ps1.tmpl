@@ -1,0 +1,8 @@
+{{- if eq .chezmoi.os "windows" -}}
+$link = Join-Path $env:APPDATA "herdr\config.toml"
+$target = Join-Path "{{ .chezmoi.homeDir }}" ".config\herdr\config.toml"
+
+New-Item -ItemType Directory -Path (Split-Path $link) -Force | Out-Null
+
+gsudo { New-Item -ItemType SymbolicLink -Path $args[0] -Target $args[1] -Force | Out-Null } -args $link, $target
+{{- end -}}

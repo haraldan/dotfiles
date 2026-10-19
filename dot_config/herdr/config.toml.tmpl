@@ -1,0 +1,76 @@
+onboarding = false
+
+[terminal]
+new_cwd = "follow"
+
+[ui]
+mouse_capture = true
+copy_on_select = true
+prompt_new_tab_name = false
+tab_bar_position = "bottom"
+pane_outer_borders = false
+pane_gaps = false
+
+[keys]
+prefix = "ctrl+space"
+
+# Alt+h/j/k/l are Vim-aware custom commands below.
+last_pane = 'alt+\'
+resize_pane_up = "alt+up"
+resize_pane_down = "alt+down"
+resize_pane_left = "alt+left"
+resize_pane_right = "alt+right"
+zoom = ["prefix+z", "alt+z"]
+
+split_horizontal = ["prefix+minus", "alt+="]
+split_vertical = ['prefix+\', "alt+/"]
+
+# Both new-tab shortcuts inherit the current directory.
+new_tab = ["prefix+c", "alt+c", "alt+shift+c"]
+next_tab = "alt+n"
+previous_tab = "alt+p"
+move_tab_previous = "prefix+p"
+move_tab_next = "prefix+n"
+switch_tab = "prefix+1..9"
+
+# Keep Herdr's native vi copy mode; leave Ctrl+Q available to pane apps.
+copy_mode = ["prefix+[", "alt+m"]
+
+# Free prefix+g for lazygit; retain access to Herdr's picker.
+goto = "prefix+f"
+{{- $pane := "$HERDR_ACTIVE_PANE_ID" }}
+{{- $navigate := "~/.config/herdr/navigate.sh" }}
+{{- if eq .chezmoi.os "windows" }}
+{{-   $pane = "%HERDR_ACTIVE_PANE_ID%" }}
+{{-   $navigate = "%USERPROFILE%\\.config\\herdr\\navigate.cmd" }}
+{{- end }}
+{{- range $nav := list (list "h" "left") (list "j" "down") (list "k" "up") (list "l" "right") }}
+
+[[keys.command]]
+key = "alt+{{ index $nav 0 }}"
+type = "shell"
+command = '{{ $navigate }} {{ index $nav 1 }} alt+{{ index $nav 0 }}'
+description = "Navigate {{ index $nav 1 }} (Vim-aware)"
+{{- end }}
+
+[[keys.command]]
+key = "alt+minus"
+type = "shell"
+command = "herdr pane split --pane {{ $pane }} --direction down --ratio 0.8 --focus"
+description = "Split bottom pane at 20%"
+
+[[keys.command]]
+key = "prefix+g"
+type = "popup"
+command = "lazygit"
+description = "lazygit"
+width = "90%"
+height = "90%"
+
+[[keys.command]]
+key = "alt+g"
+type = "popup"
+command = "lazygit"
+description = "lazygit"
+width = "90%"
+height = "90%"
