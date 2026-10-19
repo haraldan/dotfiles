@@ -8,7 +8,7 @@ local function navigate(wincmd, direction, tmux_flag)
     end
     local pane = vim.env.HERDR_PANE_ID
     if pane and pane ~= "" then
-      vim.fn.system({ "herdr", "pane", "focus", "--direction", direction, "--pane", pane })
+      vim.fn.system({ vim.fn.expand("~/.config/herdr/navigate.sh"), direction })
     elseif vim.env.TMUX and vim.env.TMUX ~= "" then
       vim.fn.system({ "tmux", "select-pane", tmux_flag })
     end

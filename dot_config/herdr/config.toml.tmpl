@@ -14,7 +14,24 @@ pane_gaps = false
 [keys]
 prefix = "ctrl+space"
 
-# Alt+h/j/k/l are Vim-aware custom commands below.
+{{ if eq .chezmoi.os "windows" -}}
+# Native focus bindings: a script per keypress is too slow on Windows, so no wraparound.
+focus_pane_left = "alt+h"
+focus_pane_down = "alt+j"
+focus_pane_up = "alt+k"
+focus_pane_right = "alt+l"
+{{- else -}}
+# Alt+h/j/k/l are Vim-aware custom commands with wraparound, defined below.
+focus_pane_left = ""
+focus_pane_down = ""
+focus_pane_up = ""
+focus_pane_right = ""
+{{- end }}
+# prefix+j/k switch workspaces and prefix+h/l switch agents instead of panes.
+next_workspace = "prefix+j"
+previous_workspace = "prefix+k"
+previous_agent = "prefix+h"
+next_agent = "prefix+l"
 last_pane = 'alt+\'
 resize_pane_up = "alt+up"
 resize_pane_down = "alt+down"
@@ -38,19 +55,26 @@ copy_mode = ["prefix+[", "alt+m"]
 
 # Free prefix+g for lazygit; retain access to Herdr's picker.
 goto = "prefix+f"
+
+# Navigate mode: j/k switch workspaces; Alt+h/j/k/l move between panes as elsewhere.
+navigate_workspace_down = ["down", "j"]
+navigate_workspace_up = ["up", "k"]
+navigate_pane_left = "alt+h"
+navigate_pane_down = "alt+j"
+navigate_pane_up = "alt+k"
+navigate_pane_right = "alt+l"
 {{- $pane := "$HERDR_ACTIVE_PANE_ID" }}
-{{- $navigate := "~/.config/herdr/navigate.sh" }}
 {{- if eq .chezmoi.os "windows" }}
 {{-   $pane = "%HERDR_ACTIVE_PANE_ID%" }}
-{{-   $navigate = "%USERPROFILE%\\.config\\herdr\\navigate.cmd" }}
-{{- end }}
-{{- range $nav := list (list "h" "left") (list "j" "down") (list "k" "up") (list "l" "right") }}
+{{- else }}
+{{-   range $nav := list (list "h" "left") (list "j" "down") (list "k" "up") (list "l" "right") }}
 
 [[keys.command]]
 key = "alt+{{ index $nav 0 }}"
 type = "shell"
-command = '{{ $navigate }} {{ index $nav 1 }} alt+{{ index $nav 0 }}'
+command = '~/.config/herdr/navigate.sh {{ index $nav 1 }} alt+{{ index $nav 0 }}'
 description = "Navigate {{ index $nav 1 }} (Vim-aware)"
+{{-   end }}
 {{- end }}
 
 [[keys.command]]

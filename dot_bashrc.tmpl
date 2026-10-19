@@ -165,6 +165,17 @@ bind -m emacs-standard '"\ed": " \C-b\C-k \C-u`__fzf_cd__`\e\C-e\C-\e(\C-m\C-y\C
 bind -m emacs-standard '"\ec": ""'
 {{- end }}
 
+# Name the Herdr tab after the current directory, like tmux automatic-rename
+if [ -n "$HERDR_TAB_ID" ]; then
+    __herdr_tab_name() {
+        [ "$PWD" = "$__herdr_tab_dir" ] && return
+        __herdr_tab_dir=$PWD
+        local name=${PWD##*/}
+        (herdr tab rename "$HERDR_TAB_ID" "${name:-/}" >/dev/null 2>&1 &)
+    }
+    PROMPT_COMMAND="__herdr_tab_name; $PROMPT_COMMAND"
+fi
+
 # Set up Yazi shortcut
 function yazi() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

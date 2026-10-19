@@ -11,7 +11,25 @@ function workon {
 function prompt {
     $user = "$([char]27)[92m$($env:USERNAME)@$(hostname)$([char]27)[0m"
     $path = "$([char]27)[94m$($PWD.Path)$([char]27)[0m"
+    if ($env:HERDR_TAB_ID -and $PWD.Path -ne $script:herdrTabDir) {
+        $script:herdrTabDir = $PWD.Path
+        Set-HerdrTabName
+    }
     "$user $path> "
+}
+
+# Name the Herdr tab after the current directory, like tmux automatic-rename.
+# Runs herdr in the background so the prompt isn't delayed.
+function Set-HerdrTabName {
+    $name = Split-Path -Leaf $PWD.Path
+    if (-not $name) { $name = $PWD.Path }
+    $psi = [System.Diagnostics.ProcessStartInfo]::new('herdr')
+    foreach ($arg in 'tab', 'rename', $env:HERDR_TAB_ID, $name) { $psi.ArgumentList.Add($arg) }
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    try { [void][System.Diagnostics.Process]::Start($psi) } catch {}
 }
 
 # Yazi shell integration: changes directory on exit

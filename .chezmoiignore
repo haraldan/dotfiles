@@ -37,7 +37,6 @@ windows_install_software.ps1
 .bat
 .config/sioyek
 config.xlaunch
-.config/herdr/navigate.cmd
 {{ if eq .configType "work" -}}
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
