@@ -159,8 +159,15 @@ width = "90%"
 height = "90%"
 
 [theme]
-name = "{{ if eq .chezmoi.os "windows" }}vesper{{ else }}nord{{ end }}"
+name = "{{ if eq .chezmoi.os "windows" }}vesper{{ else }}dracula{{ end }}"
 auto_switch = false
+
+[theme.custom]
+# Muted nord-style status colors for agent indicators
+red = "#bf616a"
+yellow = "#ebcb8b"
+green = "#a3be8c"
+teal = "#8fbcbb"
 
 [ui.toast]
 delivery = "herdr"
