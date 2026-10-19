@@ -8,8 +8,19 @@ mouse_capture = true
 copy_on_select = true
 prompt_new_tab_name = false
 tab_bar_position = "bottom"
+tab_bar_right = [
+  { type = "zoom" },
+  { type = "datetime", format = "%Y-%m-%d" },
+  { type = "datetime", format = "%H:%M" },
+  { type = "hostname" },
+]
+tab_bar_right_separator = " | "
 pane_outer_borders = false
 pane_gaps = false
+status_indicators = "symbols"
+
+[ui.sidebar.spaces]
+rows = [["state_icon", "workspace"]]
 
 [keys]
 prefix = "ctrl+space"
@@ -28,21 +39,34 @@ focus_pane_up = ""
 focus_pane_right = ""
 {{- end }}
 # prefix+j/k switch workspaces and prefix+h/l switch agents instead of panes.
+workspace_picker = ["prefix+w", "alt+w"]
 next_workspace = "prefix+j"
 previous_workspace = "prefix+k"
 previous_agent = "prefix+h"
 next_agent = "prefix+l"
-last_pane = 'alt+\'
+{{ if eq .chezmoi.os "windows" -}}
 resize_pane_up = "alt+up"
 resize_pane_down = "alt+down"
 resize_pane_left = "alt+left"
 resize_pane_right = "alt+right"
+{{- else -}}
+# Alt+arrows are Vim-aware custom commands, defined below.
+resize_pane_up = ""
+resize_pane_down = ""
+resize_pane_left = ""
+resize_pane_right = ""
+{{- end }}
 zoom = ["prefix+z", "alt+z"]
 
 split_horizontal = ["prefix+minus", "alt+="]
 split_vertical = ['prefix+\', "alt+/"]
 
+{{ if eq .chezmoi.os "windows" -}}
 new_tab = "alt+shift+c"
+{{- else -}}
+# New tabs are custom commands (below) so they open after the current tab.
+new_tab = ""
+{{- end }}
 next_tab = "alt+n"
 previous_tab = "alt+p"
 move_tab_previous = "prefix+p"
@@ -50,7 +74,7 @@ move_tab_next = "prefix+n"
 switch_tab = "prefix+1..9"
 
 # Keep Herdr's native vi copy mode; leave Ctrl+Q available to pane apps.
-copy_mode = ["prefix+[", "alt+m"]
+copy_mode = ["prefix+[", "alt+q"]
 
 # Free prefix+g for lazygit; retain access to Herdr's picker.
 goto = "prefix+f"
@@ -76,15 +100,40 @@ type = "shell"
 command = '~/.config/herdr/navigate.sh {{ index $nav 1 }} alt+{{ index $nav 0 }}'
 description = "Navigate {{ index $nav 1 }} (Vim-aware)"
 {{-   end }}
+{{-   range $dir := list "up" "down" "left" "right" }}
+
+[[keys.command]]
+key = "alt+{{ $dir }}"
+type = "shell"
+command = '~/.config/herdr/resize.sh {{ $dir }} alt+{{ $dir }}'
+description = "Resize {{ $dir }} (Vim-aware)"
+{{-   end }}
 {{- end }}
 
-{{- range $key := list "prefix+c" "alt+c" }}
+{{- if ne .chezmoi.os "windows" }}
+{{-   range $key := list "prefix+c" "alt+c" }}
+
+[[keys.command]]
+key = "{{ $key }}"
+type = "shell"
+command = '~/.config/herdr/new_tab.py home'
+description = "New tab after current, in home"
+{{-   end }}
+
+[[keys.command]]
+key = "alt+shift+c"
+type = "shell"
+command = '~/.config/herdr/new_tab.py cwd'
+description = "New tab after current, in current directory"
+{{- else }}
+{{-   range $key := list "prefix+c" "alt+c" }}
 
 [[keys.command]]
 key = "{{ $key }}"
 type = "shell"
 command = "herdr tab create --cwd {{ $home }} --focus"
 description = "New tab in home"
+{{-   end }}
 {{- end }}
 
 [[keys.command]]
@@ -112,3 +161,6 @@ height = "90%"
 [theme]
 name = "{{ if eq .chezmoi.os "windows" }}vesper{{ else }}nord{{ end }}"
 auto_switch = false
+
+[ui.toast]
+delivery = "herdr"

@@ -1,9 +1,9 @@
 #!/bin/sh
 # Vim-aware pane navigation with tmux-style wraparound.
 # Usage: navigate.sh <left|down|up|right> [key]
-# With a key, forward it to Vim/fzf when they are in the foreground; otherwise unzoom and move Herdr focus.
+# With a key, forward it to Vim when it is in the foreground; otherwise unzoom and move Herdr focus.
 pane=${HERDR_ACTIVE_PANE_ID:-$HERDR_PANE_ID}
-if [ -n "$2" ] && herdr pane process-info --pane "$pane" | grep -Eqi '"name":"(g?(view|l?n?vim?x?)(diff)?|fzf)"'; then
+if [ -n "$2" ] && herdr pane process-info --pane "$pane" | grep -Eqi '"name":"(g?(view|l?n?vim?x?)(diff)?)"'; then
   exec herdr pane send-keys "$pane" "$2"
 fi
 herdr pane zoom --pane "$pane" --off >/dev/null

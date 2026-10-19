@@ -19,7 +19,21 @@ vim.keymap.set("n", "<M-h>", navigate("h", "left", "-L"), { desc = "Navigate lef
 vim.keymap.set("n", "<M-j>", navigate("j", "down", "-D"), { desc = "Navigate down" })
 vim.keymap.set("n", "<M-k>", navigate("k", "up", "-U"), { desc = "Navigate up" })
 vim.keymap.set("n", "<M-l>", navigate("l", "right", "-R"), { desc = "Navigate right" })
-vim.keymap.set("n", "<M-\\>", "<cmd>wincmd p<cr>", { desc = "Navigate to previous window" })
+
+-- Resize the Vim split; if nothing changed, resize the surrounding Herdr pane
+-- (the plugin itself only forwards to tmux).
+local function resize(command, direction)
+  return function()
+    local width, height = vim.fn.winwidth(0), vim.fn.winheight(0)
+    vim.cmd(command)
+    local herdr_pane = vim.env.HERDR_PANE_ID
+    local in_tmux = vim.env.TMUX and vim.env.TMUX ~= ""
+    if herdr_pane and herdr_pane ~= "" and not in_tmux
+        and width == vim.fn.winwidth(0) and height == vim.fn.winheight(0) then
+      vim.fn.system({ "herdr", "pane", "resize", "--pane", herdr_pane, "--direction", direction })
+    end
+  end
+end
 
 return {
   {
@@ -32,10 +46,10 @@ return {
       "TmuxResizePrevious",
     },
     keys = {
-      { "<M-Left>",  "<cmd>TmuxResizeLeft<cr>" },
-      { "<M-Down>",  "<cmd>TmuxResizeDown<cr>" },
-      { "<M-Up>",    "<cmd>TmuxResizeUp<cr>"   },
-      { "<M-Right>", "<cmd>TmuxResizeRight<cr>"},
+      { "<M-Left>", resize("TmuxResizeLeft", "left") },
+      { "<M-Down>", resize("TmuxResizeDown", "down") },
+      { "<M-Up>", resize("TmuxResizeUp", "up") },
+      { "<M-Right>", resize("TmuxResizeRight", "right") },
     },
     init = function()
       vim.g.tmux_resizer_no_mappings = 1
