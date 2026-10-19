@@ -110,5 +110,5 @@ width = "90%"
 height = "90%"
 
 [theme]
-name = "nord"
+name = "{{ if eq .chezmoi.os "windows" }}vesper{{ else }}nord{{ end }}"
 auto_switch = false
