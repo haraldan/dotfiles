@@ -1,4 +1,4 @@
 {{- if and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
 os:
-  copyToClipboardCmd: printf '%s' {{ "{{text}}" }} | /mnt/c/Windows/System32/clip.exe
+  copyToClipboardCmd: printf '\033]52;c;%s\a' "$(printf '%s' {{ "{{text}}" }} | base64 -w0)" > /dev/tty
 {{- end }}

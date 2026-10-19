@@ -31,6 +31,31 @@ vim.opt.updatetime = 2000
 -- sync clipboard with system
 -- vim.opt.clipboard = "unnamedplus"
 
+-- WSL and SSH (without X11 forwarding) terminals, incl. herdr, forward OSC 52 copies but don't answer
+-- OSC 52 reads, so reading + or * would hang. Copy via OSC 52; reads return the
+-- last copy (paste with Shift+Insert). tmux has its own working provider.
+local copy_only = not vim.env.TMUX
+	and (vim.fn.has("wsl") == 1 or (vim.env.SSH_CONNECTION and not vim.env.DISPLAY))
+if copy_only then
+	local osc52 = require("vim.ui.clipboard.osc52")
+	local last = { {}, "v" }
+	local function copy(reg)
+		local send = osc52.copy(reg)
+		return function(lines, regtype)
+			last = { lines, regtype }
+			send(lines, regtype)
+		end
+	end
+	local function paste()
+		return last
+	end
+	vim.g.clipboard = {
+		name = "OSC 52 (copy only)",
+		copy = { ["+"] = copy("+"), ["*"] = copy("*") },
+		paste = { ["+"] = paste, ["*"] = paste },
+	}
+end
+
 -- ignore case when searching
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
