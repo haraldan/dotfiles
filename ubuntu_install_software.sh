@@ -35,7 +35,9 @@ cargo install --locked tree-sitter-cli
 # Install yazi
 which yazi &>/dev/null || cargo install yazi-build
 # Yazi optional dependencies
-sudo apt install -y ffmpeg jq poppler-utils imagemagick zoxide xclip file
+sudo apt install -y ffmpeg jq poppler-utils imagemagick zoxide file
+# Not on WSL: xclip would go through WSLg, whose copies don't reach Win+V history
+grep -qi microsoft /proc/sys/kernel/osrelease || sudo apt install -y xclip
 cargo install resvg
 cargo install ouch
 
