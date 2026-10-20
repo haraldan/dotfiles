@@ -11,6 +11,7 @@ windows_install_software.ps1
 .config/keyd
 .config/systemd
 .local/state/omarchy
+.local/bin/ddcutil
 .XCompose
 .XCompose.deadkeys
 {{- end }}

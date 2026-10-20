@@ -1,0 +1,219 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+# ddcutil wrapper: adds DDC/CI brightness for monitors behind a DP MST dock.
+#
+# ddcutil (3.0.2) reports "No monitor detected" on i915's DPMST I2C buses,
+# although raw DDC/CI over those buses works. Omarchy's brightness scripts
+# (and every panel built on them) only reach external monitors through
+# ddcutil, so this wrapper fills in the gap for the calls they make:
+#
+#   ddcutil ... detect --brief          adds DPMST buses matched to their DRM connector
+#   ddcutil --bus N ... getvcp <code>   raw DDC/CI read when bus N is a DPMST bus
+#   ddcutil --bus N ... setvcp <code> V raw DDC/CI write when bus N is a DPMST bus
+#
+# Everything else goes straight to the real ddcutil.
+# Upstream issue: https://github.com/omacom/omarchy/issues/14005
+
+REAL=/usr/bin/ddcutil
+
+is_mst_bus() {
+    [[ $1 =~ ^[0-9]+$ ]] && [[ $(cat "/sys/bus/i2c/devices/i2c-$1/name" 2>/dev/null) == DPMST ]]
+}
+
+# Normalize hex bytes ("0x00 0xff" or "00 ff") to a single lowercase string
+hex_bytes() {
+    tr -s ' \n' '  ' | sed 's/0x//g; s/^ //; s/ $//' | tr 'A-F' 'a-f'
+}
+
+# EDID reads over DPMST occasionally fail, come back garbled, or stall for
+# seconds, so retry until the block has the EDID header and cache the result
+# in a file. /dev/i2c-N is recreated on every hotplug, so its ctime keys the
+# cache to the monitor currently on that bus.
+declare -A edid_cache=()
+edid_from_bus() {
+    local attempt edid file dir="${XDG_RUNTIME_DIR:-/tmp}/ddcutil-mst-edid"
+    if [[ -z ${edid_cache[$1]:-} ]]; then
+        file="$dir/$1-$(stat -c %Z "/dev/i2c-$1" 2>/dev/null)"
+        edid=$(cat "$file" 2>/dev/null)
+        if [[ -z $edid ]]; then
+            for attempt in 1 2 3; do
+                edid=$(i2ctransfer -y "$1" w1@0x50 0x00 r128 2>/dev/null | hex_bytes)
+                [[ $edid == "00 ff ff ff ff ff ff 00 "* && ${#edid} == 383 ]] && break
+                edid=""
+                sleep 0.05
+            done
+            if [[ -n $edid ]]; then
+                mkdir -p "$dir" && rm -f "$dir/$1-"* && echo "$edid" >"$file"
+            fi
+        fi
+        edid_cache[$1]=$edid
+    fi
+    [[ -n ${edid_cache[$1]} ]] && echo "${edid_cache[$1]}"
+}
+
+edid_from_connector() {
+    od -An -v -tx1 -N128 "$1/edid" 2>/dev/null | hex_bytes
+}
+
+# Serialize DDC/CI transactions per bus: a request and its reply are separate
+# I2C transfers, so concurrent callers (panel + keys) must not interleave
+lock_bus() {
+    exec {lock_fd}>"${XDG_RUNTIME_DIR:-/tmp}/ddcutil-mst-$1.lock"
+    flock -w 5 "$lock_fd"
+}
+
+# ddc_read <bus> <code>: prints "<current> <max>"
+ddc_read() {
+    local bus=$1 code=$2 attempt reply b
+    local chk=$(( 0x6e ^ 0x51 ^ 0x82 ^ 0x01 ^ code ))
+
+    for attempt in 1 2 3; do
+        i2ctransfer -y "$bus" w5@0x37 0x51 0x82 0x01 "$code" "$chk" 2>/dev/null || { sleep 0.05; continue; }
+        sleep 0.05
+        reply=$(i2ctransfer -y "$bus" r11@0x37 2>/dev/null) || continue
+        read -ra b <<<"$reply"
+
+        # 6e 88 02 <result> <code> <type> <max hi> <max lo> <cur hi> <cur lo> <chk>
+        (( ${#b[@]} == 11 && b[0] == 0x6e && b[1] == 0x88 && b[2] == 0x02 && b[3] == 0 && b[4] == code )) || continue
+        local x=0x50 i
+        for i in {0..9}; do (( x ^= b[i] )); done
+        (( x == b[10] )) || continue
+
+        echo "$(( (b[8] << 8) | b[9] )) $(( (b[6] << 8) | b[7] ))"
+        return 0
+    done
+    return 1
+}
+
+# ddc_write <bus> <code> <value>
+ddc_write() {
+    local bus=$1 code=$2 hi=$(( ($3 >> 8) & 0xff )) lo=$(( $3 & 0xff ))
+    local chk=$(( 0x6e ^ 0x51 ^ 0x84 ^ 0x03 ^ code ^ hi ^ lo ))
+
+    i2ctransfer -y "$bus" w7@0x37 0x51 0x84 0x03 "$code" "$hi" "$lo" "$chk" 2>/dev/null || return 1
+    sleep 0.05
+}
+
+# Monitor name from the EDID's display product name (0xfc) descriptor
+monitor_name() {
+    local -a b
+    read -ra b <<<"$(edid_from_bus "$1" | sed 's/[0-9a-f][0-9a-f]/0x&/g')"
+    (( ${#b[@]} == 128 )) || return 1
+    local off i name=""
+    for off in 54 72 90 108; do
+        (( b[off] == 0 && b[off + 1] == 0 && b[off + 3] == 0xfc )) || continue
+        for (( i = off + 5; i < off + 18 && b[i] != 0x0a; i++ )); do
+            name+=$(printf "\\x$(printf %x "${b[i]}")")
+        done
+        printf '%s\n' "${name%"${name##*[! ]}"}"
+        return 0
+    done
+    return 1
+}
+
+# CVT 2590WG5: sets brightness correctly but reports round((set - 40) / 2),
+# clamped at 0 (on Windows too). brightness_reported maps a set value to what
+# the monitor will report; brightness_actual maps a report back, preferring the
+# last value written while it still agrees with the report, since every set
+# value up to 40 reports 0. The last value is kept per monitor (EDID vendor,
+# product and serial), so it survives replugging, port changes and reboots,
+# which renumber the buses.
+brightness_reported() {
+    (( $1 <= 40 )) && echo 0 || echo $(( ($1 - 40 + 1) / 2 ))
+}
+
+last_file() {
+    local id
+    id=$(edid_from_bus "$1" | cut -d' ' -f9-16 | tr -d ' ')
+    [[ -n $id ]] || return 1
+    echo "${XDG_STATE_HOME:-$HOME/.local/state}/ddcutil-mst/$id.last"
+}
+
+brightness_actual() {
+    local bus=$1 reported=$2 last="" file
+    file=$(last_file "$bus") && last=$(cat "$file" 2>/dev/null)
+    if [[ $last =~ ^[0-9]+$ ]] && (( $(brightness_reported "$last") == reported )); then
+        echo "$last"
+    elif (( reported == 0 )); then
+        echo 0
+    else
+        echo $(( 40 + 2 * reported > 100 ? 100 : 40 + 2 * reported ))
+    fi
+}
+
+has_brightness_quirk() {
+    [[ $2 == 16 && $(monitor_name "$1") == 2590WG5 ]]
+}
+
+detect_brief() {
+    local out connector name bus edid
+    out=$("$REAL" "$@")
+    local rc=$?
+    printf '%s\n' "$out"
+
+    # Connected connectors without their own DDC bus, that ddcutil didn't list
+    for connector in /sys/class/drm/card*-*; do
+        name=${connector##*/}
+        [[ $(cat "$connector/status" 2>/dev/null) == connected ]] || continue
+        [[ -e $connector/ddc ]] && continue
+        grep -q "DRM connector: *$name\$" <<<"$out" && continue
+        edid=$(edid_from_connector "$connector")
+        [[ -n $edid ]] || continue
+
+        for bus in /sys/bus/i2c/devices/i2c-*; do
+            bus=${bus##*/i2c-}
+            is_mst_bus "$bus" || continue
+            [[ $(edid_from_bus "$bus") == "$edid" ]] || continue
+            printf '\nDisplay (DP MST)\n   I2C bus:          /dev/i2c-%s\n   DRM connector:    %s\n' "$bus" "$name"
+            rc=0
+            break
+        done
+    done
+    return "$rc"
+}
+
+# Parse just enough of the command line to recognize the calls we handle
+bus="" command="" brief=0
+args=()
+argv=("$@")
+for (( i = 0; i < ${#argv[@]}; i++ )); do
+    arg=${argv[i]}
+    case $arg in
+    -b | --bus) bus=${argv[++i]:-} ;;
+    --bus=*) bus=${arg#--bus=} ;;
+    --brief | -t | --terse) brief=1 ;;
+    -*) ;;
+    *) [[ -z $command ]] && command=$arg || args+=("$arg") ;;
+    esac
+done
+
+if [[ $command == detect && -z $bus ]] && (( brief )); then
+    detect_brief "$@"
+    exit
+fi
+
+if [[ ($command == getvcp || $command == setvcp) ]] && is_mst_bus "$bus" && [[ ${args[0]:-} =~ ^(0x)?[0-9a-fA-F]{1,2}$ ]]; then
+    code=$(( 16#${args[0]#0x} ))
+    lock_bus "$bus" || exit 1
+
+    if [[ $command == getvcp ]]; then
+        read -r cur max < <(ddc_read "$bus" "$code") || { echo "VCP $(printf '%02X' "$code") ERR"; exit 1; }
+        has_brightness_quirk "$bus" "$code" && cur=$(brightness_actual "$bus" "$cur")
+        if (( brief )); then
+            printf 'VCP %02X C %d %d\n' "$code" "$cur" "$max"
+        else
+            printf 'VCP code 0x%02x: current value = %5d, max value = %5d\n' "$code" "$cur" "$max"
+        fi
+        exit 0
+    fi
+
+    [[ ${args[1]:-} =~ ^[0-9]+$ ]] || exit 1
+    ddc_write "$bus" "$code" "${args[1]}" || exit 1
+    if has_brightness_quirk "$bus" "$code" && file=$(last_file "$bus"); then
+        mkdir -p "${file%/*}" && echo "${args[1]}" >"$file"
+    fi
+    exit 0
+fi
+
+exec "$REAL" "$@"
