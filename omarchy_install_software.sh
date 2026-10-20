@@ -39,7 +39,7 @@ if [ -d ~/.config/nvim ] && [ ! -d ~/.config/nvim.omarchy ]; then
   mv ~/.config/nvim ~/.config/nvim.omarchy
 fi
 
-# Same for tmux: it loads ~/.config/tmux/tmux.conf after ~/.tmux.conf, overriding it
+# Same for tmux: chezmoi's tmux config replaces Omarchy's ~/.config/tmux/tmux.conf
 if [ -d ~/.config/tmux ] && [ ! -d ~/.config/tmux.omarchy ]; then
   mv ~/.config/tmux ~/.config/tmux.omarchy
 fi

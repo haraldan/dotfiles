@@ -27,7 +27,7 @@ windows_install_software.ps1
 .pyrightconfig.json
 .vhdl_ls.toml
 .tmux
-.tmux.conf
+.config/tmux
 .config/herdr/navigate.sh
 {{ if ne .configType "work" -}}
 .bat
