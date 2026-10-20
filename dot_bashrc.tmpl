@@ -6,22 +6,25 @@
 # If not running interactively, don't do anything else
 [[ $- != *i* ]] && return
 
-# All the default Omarchy aliases and functions (completion, mise, zoxide, fzf).
+# Omarchy's bash defaults (env, history, completion, mise, zoxide, fzf, inputrc),
+# without its aliases and functions. Mirrors $OMARCHY_PATH/default/bash/rc.
 # starship is uninstalled, so this leaves the prompt alone
-source "$OMARCHY_PATH/default/bash/rc"
+source "$OMARCHY_PATH/default/bash/envs"
+source "$OMARCHY_PATH/default/bash/shell"
+source "$OMARCHY_PATH/default/bash/init"
+bind -f "$OMARCHY_PATH/default/bash/inputrc"
 
 # Plain colored prompt, with user@host: dir as the terminal title
 PS1='\[\e]0;\u@\h: \w\a\]\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # Save history for each directory
-# avoid duplicates..
-export HISTCONTROL=ignoredups:erasedups
+# avoid duplicates, and skip commands typed with a leading space..
+export HISTCONTROL=ignoreboth:erasedups
 
 # Create history directory if it doesn't exist
 HISTS_DIR=$HOME/.bash_history.d
 mkdir -p "${HISTS_DIR}"
 
-# cd is already aliased to Omarchy's zoxide-aware zd here, so ch builds on it
 function ch () {
     cd "$@"
     export HISTFILE="${HISTS_DIR}/${PWD////$'_'}"
