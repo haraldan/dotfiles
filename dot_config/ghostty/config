@@ -32,6 +32,8 @@ keybind = alt+shift+enter=csi:13;4u
 # Scroll the scrollback by a page without needing Shift.
 keybind = page_up=scroll_page_up
 keybind = page_down=scroll_page_down
+# Drop the default Ctrl+Enter fullscreen toggle; the key goes to the app instead.
+keybind = ctrl+enter=unbind
 
 # Slowdown mouse scrolling
 mouse-scroll-multiplier = 0.95
