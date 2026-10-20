@@ -6,6 +6,7 @@ windows_install_software.ps1
 .config/ghostty
 .config/hypr
 .config/omarchy
+.config/pacman
 .config/keyd
 .config/systemd
 .local/state/omarchy
