@@ -12,6 +12,7 @@ windows_install_software.ps1
 .config/systemd
 .local/state/omarchy
 .local/bin/ddcutil
+.local/lib/omarchy-overrides
 .XCompose
 .XCompose.deadkeys
 {{- end }}

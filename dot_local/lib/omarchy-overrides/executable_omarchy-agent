@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+# omarchy-agent override: start the agent in a new, focused Herdr workspace
+# instead of its own terminal window. Without a Herdr window, a terminal with Herdr is
+# opened first (starting the server if needed). Found ahead of Omarchy's copy
+# through PATH, which hypr/hyprland.lua sets up.
+
+real="${OMARCHY_PATH:-/usr/share/omarchy}/bin/omarchy-agent"
+
+# Inline runs, the picker shown when no default agent is set, and machines
+# without Herdr keep Omarchy's behavior.
+for arg; do
+    [[ $arg == --inline ]] && exec "$real" "$@"
+done
+[[ -n $(omarchy-default-agent) ]] || exec "$real" "$@"
+command -v herdr >/dev/null || exec "$real" "$@"
+
+server_up() {
+    herdr workspace list >/dev/null 2>&1
+}
+
+# A Herdr window runs a bare `herdr` client; the server and CLI calls carry
+# arguments.
+client_attached() {
+    local pid args
+    for pid in $(pgrep -u "$USER" -x herdr); do
+        args=$(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null) || continue
+        [[ ${args% } =~ ^[^\ ]*herdr$ ]] && return 0
+    done
+    return 1
+}
+
+wait_for() {
+    local i
+    for (( i = 0; i < 50; i++ )); do
+        "$@" && return 0
+        sleep 0.2
+    done
+    return 1
+}
+
+if ! client_attached; then
+    setsid uwsm-app -- omarchy-launch-terminal herdr >/dev/null 2>&1 &
+    wait_for server_up && wait_for client_attached || exec "$real" "$@"
+fi
+
+# The pane's shell runs a throwaway script, which keeps the arguments (such as
+# a multi-line crash prompt) intact. The script clears the typed command off
+# the screen, and the leading space keeps it out of shell history.
+dir="${XDG_RUNTIME_DIR:-/tmp}/omarchy-agent-herdr"
+mkdir -p "$dir"
+script=$(mktemp "$dir/run.XXXXXX")
+{
+    printf 'rm -f -- %q\n' "$script"
+    printf 'clear\n'
+    printf 'exec %q --inline' "$real"
+    printf ' %q' "$@"
+    printf '\n'
+} >"$script"
+
+workspace=$(herdr workspace create --label agent --cwd "$PWD" --focus 2>/dev/null) || { rm -f "$script"; exec "$real" "$@"; }
+pane=$(jq -r '.result.root_pane.pane_id // empty' <<<"$workspace")
+[[ -n $pane ]] && herdr pane run "$pane" " bash $(printf %q "$script")" >/dev/null 2>&1 || { rm -f "$script"; exec "$real" "$@"; }
