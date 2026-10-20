@@ -135,3 +135,6 @@ hl.on("layer.closed", function(layer)
     menu_binds = {}
   end
 end)
+
+-- Jellyfin on Super+Ctrl+J.
+o.bind("SUPER + CTRL + J", "Jellyfin", { launch = "jellyfin-desktop" })
