@@ -93,6 +93,12 @@ o.bind("SUPER + SHIFT + S", "Move window to scratchpad", hl.dsp.window.move({ wo
 hl.unbind("SUPER + SHIFT + CTRL + A")
 o.bind("SUPER + A", "Agent", "omarchy-agent --pick")
 
+-- Super+N/P: next/previous workspace, like Super+Tab/Super+Shift+Tab (replaces
+-- the pseudo window toggle on Super+P).
+hl.unbind("SUPER + P")
+o.bind("SUPER + N", "Next workspace", hl.dsp.focus({ workspace = "e+1" }))
+o.bind("SUPER + P", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
+
 -- Disable Super+Shift+W (was: Omawrite, uninstalled).
 hl.unbind("SUPER + SHIFT + W")
 
