@@ -64,20 +64,20 @@ o.bind("SUPER + ALT + K", "Keybindings", "omarchy-menu-keybindings")
 o.bind("SUPER + ALT + L", "Toggle workspace layout", "omarchy-hyprland-workspace-layout-toggle")
 o.bind("SUPER + ALT + T", "Tmux keybindings", "omarchy-menu-tmux-keybindings")
 
--- Super+F: full width, Super+Shift+F: full screen, Super+Ctrl+F: Dolphin as the
--- file manager, Super+Alt+F: nothing. Super+Ctrl+Shift+F opens Dolphin in the
--- active terminal's directory. Omarchy's tiled full screen is dropped.
+-- Super+F: full screen, Super+Z: full width, Super+Shift+F: Dolphin as the
+-- file manager, Super+Ctrl+F and Super+Alt+F: nothing. Super+Ctrl+Shift+F opens
+-- Dolphin in the active terminal's directory. Omarchy's tiled full screen is dropped.
 hl.unbind("SUPER + F")
 hl.unbind("SUPER + SHIFT + F")
 hl.unbind("SUPER + CTRL + F")
 hl.unbind("SUPER + ALT + F")
 hl.unbind("SUPER + ALT + SHIFT + F")
-o.bind("SUPER + F", "Full width", hl.dsp.window.fullscreen({ mode = "maximized" }))
-o.bind("SUPER + SHIFT + F", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
+o.bind("SUPER + F", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
+o.bind("SUPER + Z", "Full width", hl.dsp.window.fullscreen({ mode = "maximized" }))
 o.bind("ALT + RETURN", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 -- Right Alt is AltGr (MOD5) in the us(intl) layout; AltGr+Enter types nothing.
 o.bind("MOD5 + RETURN", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
-o.bind("SUPER + CTRL + F", "File manager", { launch = "dolphin --new-window" })
+o.bind("SUPER + SHIFT + F", "File manager", { launch = "dolphin --new-window" })
 o.bind("SUPER + CTRL + SHIFT + F", "File manager (cwd)", 'uwsm-app -- dolphin --new-window "$(terminal-cwd)"')
 
 -- Close window on Super+Q instead of Super+W.
