@@ -13,7 +13,14 @@ fi
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
-alias l='ls -CF'
+
+# eza in place of ls where installed. la and l are redefined too, since they
+# build on the ls alias and eza doesn't take ls's -C
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza -l --group-directories-first --icons=auto'
+    alias ll='ls -a'
+    alias la='eza -a --group-directories-first'
+fi
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
