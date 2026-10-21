@@ -2,6 +2,10 @@ ubuntu_install_software.sh
 omarchy_install_software.sh
 windows_install_software.ps1
 
+{{ if not (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+.config/lazygit/config.yml
+{{- end }}
+
 {{ if not (stat "/usr/share/omarchy") -}}
 .config/ghostty
 .config/hypr
