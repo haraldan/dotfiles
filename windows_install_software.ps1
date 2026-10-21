@@ -46,6 +46,8 @@ else {
 # portable installer that does not land in C:\Program Files. --interactive shows the
 # vendor GUI so install paths/options can be confirmed.
 Install-App 'PowerShell'  'Microsoft.PowerShell'      '--scope machine --installer-type wix --interactive'
+# Git Bash is the shell Claude Code runs commands (and the status line) through
+Install-App 'Git'         'Git.Git'                   '--scope machine --installer-type inno --interactive'
 Install-App 'AutoHotkey'  'AutoHotkey.AutoHotkey'     '--scope machine --installer-type exe'
 Install-App 'REAPER'      'Cockos.REAPER'             '--scope machine --installer-type exe --interactive'
 Install-App 'Brave'       'Brave.Brave'               '--scope machine --installer-type exe --interactive'
