@@ -35,3 +35,18 @@ alias ..="cd .."
 # Activate a venv from ~/.virtualenvs
 workon() { source ~/.virtualenvs/"$1"/bin/activate; }
 complete -W '$(ls ~/.virtualenvs 2>/dev/null)' workon
+
+# cd falls back to zoxide when the argument isn't a directory (like Omarchy's
+# zd). Goes through ch from .bashrc so the per-directory HISTFILE still switches
+if command -v zoxide >/dev/null 2>&1 && declare -F ch >/dev/null; then
+    zd() {
+        if (( $# == 0 )) || [[ $1 == - || -d $1 ]]; then
+            ch "$@"
+        else
+            local dir
+            dir=$(zoxide query -- "$@") || { echo "Error: Directory not found"; return 1; }
+            ch "$dir" && pwd
+        fi
+    }
+    alias cd=zd
+fi

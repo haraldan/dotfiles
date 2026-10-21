@@ -9,7 +9,7 @@ sudo snap install chezmoi --classic
 # Install apt packages
 sudo apt update
 sudo apt upgrade
-sudo apt install -y tmux keychain python3-full python-is-python3 ripgrep fd-find openssh-server build-essential libclang-dev sshpass unzip
+sudo apt install -y tmux keychain python3-full python-is-python3 ripgrep fd-find openssh-server build-essential libclang-dev sshpass unzip nfs-common zoxide eza
 ssh-import-id-gh haraldan
 sudo systemctl enable ssh
 sudo systemctl start ssh
@@ -35,7 +35,7 @@ cargo install --locked tree-sitter-cli
 # Install yazi
 which yazi &>/dev/null || cargo install yazi-build
 # Yazi optional dependencies
-sudo apt install -y ffmpeg jq poppler-utils imagemagick zoxide file
+sudo apt install -y ffmpeg jq poppler-utils imagemagick file
 # Not on WSL: xclip would go through WSLg, whose copies don't reach Win+V history
 grep -qi microsoft /proc/sys/kernel/osrelease || sudo apt install -y xclip
 cargo install resvg
