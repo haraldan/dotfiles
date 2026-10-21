@@ -156,3 +156,6 @@ hl.unbind("SUPER + SHIFT + ALT + A")
 hl.unbind("SUPER + SHIFT + ALT + E")
 hl.unbind("SUPER + SHIFT + G")
 o.bind("SUPER + SHIFT + G", "Email", { webapp = "https://mail.google.com" })
+
+-- Disable middle click
+hl.bind("mouse:274", function() end, { description = "Disable middle click" })
