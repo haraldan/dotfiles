@@ -151,6 +151,28 @@ foreach ($svc in 'sshd', 'ssh-agent') {
     }
 }
 
+# "Open in herdr tab" context menu entry, next to WezTerm's "Open WezTerm here" (per-user).
+# conhost --headless keeps the helper script from flashing a console window.
+$herdrScript = Join-Path $HOME ".config\herdr\open-tab.ps1"
+$herdrCommand = "conhost.exe --headless pwsh.exe -NoProfile -ExecutionPolicy Bypass -File `"$herdrScript`" `"%V`""
+$herdrKeys = 'Directory', 'Directory\Background', 'Drive' | ForEach-Object { "HKCU:\Software\Classes\$_\shell\Open herdr tab here" }
+$current = $herdrKeys | ForEach-Object { if (Test-Path "$_\command") { (Get-Item "$_\command").GetValue('') } }
+if (@($current | Where-Object { $_ -eq $herdrCommand }).Count -eq $herdrKeys.Count) {
+    Write-Host "[configured]    herdr context menu" -ForegroundColor DarkGray
+}
+elseif ($DryRun) {
+    Write-Host "[would config]  herdr context menu  ->  $herdrCommand" -ForegroundColor Yellow
+}
+else {
+    Write-Host "[configuring]   herdr context menu" -ForegroundColor Cyan
+    foreach ($key in $herdrKeys) {
+        New-Item -Path "$key\command" -Force | Out-Null
+        Set-ItemProperty -Path $key -Name '(default)' -Value 'Open in herdr tab'
+        Set-ItemProperty -Path $key -Name 'Icon' -Value 'C:\Program Files\WezTerm\wezterm-gui.exe'
+        Set-ItemProperty -Path "$key\command" -Name '(default)' -Value $herdrCommand
+    }
+}
+
 # Restore old context menu (per-user: applies to the account running this session).
 # Only touch it when not already set, so Explorer isn't restarted on every run.
 $clsid = "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"

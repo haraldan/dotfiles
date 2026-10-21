@@ -43,6 +43,7 @@ windows_install_software.ps1
 .autohotkey
 .bat
 .config/sioyek
+.config/herdr/open-tab.ps1
 config.xlaunch
 {{ if eq .configType "work" -}}
 .config/fstab
