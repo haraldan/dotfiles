@@ -110,6 +110,15 @@ description = "Resize {{ $dir }} (Vim-aware)"
 {{-   end }}
 {{- end }}
 
+{{- range $nav := list (list "h" "left") (list "j" "down") (list "k" "up") (list "l" "right") }}
+
+[[keys.command]]
+key = "alt+shift+{{ index $nav 0 }}"
+type = "shell"
+command = "herdr pane swap --pane {{ $pane }} --direction {{ index $nav 1 }}"
+description = "Swap pane {{ index $nav 1 }}"
+{{- end }}
+
 {{- if ne .chezmoi.os "windows" }}
 {{-   range $key := list "prefix+c" "alt+c" }}
 

@@ -199,9 +199,3 @@ vim.keymap.set({ "n", "v" }, "K", function()
 		end
 	end
 end)
-
--- Additional mapping for LSP hover
-vim.keymap.set("n", "<M-K>", function()
-	vim.lsp.buf.hover()
-end)
-
