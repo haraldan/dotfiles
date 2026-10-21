@@ -25,7 +25,7 @@ windows_install_software.ps1
 .clangd
 .config/fstab
 .config/matplotlib
-.config/mpv
+.config/mpv/scripts/single-instance.lua
 .config/nvim
 .ipython
 .local

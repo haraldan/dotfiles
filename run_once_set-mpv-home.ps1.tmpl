@@ -1,0 +1,4 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Have mpv read ~/.config/mpv, as on Linux, instead of %APPDATA%\mpv
+[Environment]::SetEnvironmentVariable("MPV_HOME", (Join-Path "{{ .chezmoi.homeDir }}" ".config\mpv"), "User")
+{{- end -}}
