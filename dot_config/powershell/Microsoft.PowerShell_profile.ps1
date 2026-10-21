@@ -1,3 +1,6 @@
+# VcXsrv display for SSH X11 forwarding
+$env:DISPLAY = '127.0.0.1:0.0'
+
 # Aliases
 function ll { Get-ChildItem -Force $args }
 function .. { cd ..}
