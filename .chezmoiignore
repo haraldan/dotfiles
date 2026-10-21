@@ -22,6 +22,7 @@ windows_install_software.ps1
 .bash_profile
 .bashrc
 .clangd
+.config/fstab
 .config/matplotlib
 .config/nvim
 .ipython
@@ -42,6 +43,7 @@ windows_install_software.ps1
 .config/sioyek
 config.xlaunch
 {{ if eq .configType "work" -}}
+.config/fstab
 .config/nvim/lua/plugins/vimtex.lua
 .matlab
 {{- end }}
