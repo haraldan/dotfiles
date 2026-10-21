@@ -34,6 +34,13 @@ if [ ! -d ~/.tmux/plugins/tpm ] || [ -z "$(ls -A ~/.tmux/plugins/tpm)" ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
+# Third-party shell plugins; chezmoi's shell.json places them on the bar
+for plugin in \
+  crmne.hyprmoncfg=https://github.com/crmne/omarchy-hyprmoncfg.git \
+  io.github.thetrueferret.decent-workspaces=https://github.com/TheTrueFerret/omarchy-decent-workspaces.git; do
+  [ -d ~/.config/omarchy/plugins/"${plugin%%=*}" ] || omarchy-plugin-add "${plugin#*=}" --yes
+done
+
 # Move Omarchy's LazyVim config aside so chezmoi's nvim config starts clean
 if [ -d ~/.config/nvim ] && [ ! -d ~/.config/nvim.omarchy ]; then
   mv ~/.config/nvim ~/.config/nvim.omarchy
@@ -61,3 +68,6 @@ sudo systemctl enable --now keyd
 omarchy-pkg-add hypridle
 sudo install -Dm644 "$dotfiles_dir/dot_config/systemd/logind.conf.d/30-lid-no-sleep.conf" /etc/systemd/logind.conf.d/30-lid-no-sleep.conf
 sudo systemctl kill -s HUP systemd-logind
+
+# NFS client for the NAS shares automounted via /etc/fstab
+omarchy-pkg-add nfs-utils
