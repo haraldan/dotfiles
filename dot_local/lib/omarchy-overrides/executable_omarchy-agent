@@ -7,6 +7,10 @@
 
 real="${OMARCHY_PATH:-/usr/share/omarchy}/bin/omarchy-agent"
 
+# Launches from the keybinding or menu start in $HOME; open them in the dotfiles
+# repo rather than the ~/Work that Omarchy's copy falls back to.
+[[ $PWD == "$HOME" && -d $HOME/.dotfiles ]] && cd "$HOME/.dotfiles"
+
 # Inline runs, the picker shown when no default agent is set, and machines
 # without Herdr keep Omarchy's behavior.
 for arg; do
