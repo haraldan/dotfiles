@@ -9,6 +9,7 @@ windows_install_software.ps1
 {{ if not (stat "/usr/share/omarchy") -}}
 .config/ghostty
 .config/hypr
+.config/uwsm
 .config/omarchy
 .config/pacman
 .config/spotify-flags.conf

@@ -1,0 +1,7 @@
+# Changes require a restart to take effect.
+
+# Kaby Lake (gen9) can't scan out compressed (Y-tiled CCS) buffers on pipe C.
+# After display wake, aquamarine can move a monitor to pipe C while keeping its
+# CCS buffers, so the modeset fails and the monitor stays dark until replugged.
+# Without explicit modifiers, aquamarine never allocates CCS buffers.
+export AQ_NO_MODIFIERS=1
