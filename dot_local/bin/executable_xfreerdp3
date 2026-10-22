@@ -1,0 +1,41 @@
+#!/bin/bash
+# Wrapper around /usr/bin/xfreerdp3 for the Windows VM.
+# Works around Windows ignoring the first resize: the sign-in screen runs at
+# FreeRDP's start size, and the size sent right after logon gets dropped while
+# Windows switches to the desktop. Shortly after the display-control channel
+# opens, nudge the window 40px and back so FreeRDP resends the size.
+# Remove this file to go back to plain /usr/bin/xfreerdp3.
+
+NUDGE_DELAY=2
+
+nudge() {
+  local pid="$1" address
+  address=$(hyprctl clients -j | jq -r --argjson pid "$pid" '.[] | select(.pid == $pid and .fullscreen == 0) | .address' | head -n1)
+  [[ -n $address ]] || return
+  hyprctl dispatch "hl.dsp.window.resize({ x = 40, y = 0, relative = true, window = \"address:$address\" })" >/dev/null
+  sleep 1.2
+  hyprctl dispatch "hl.dsp.window.resize({ x = -40, y = 0, relative = true, window = \"address:$address\" })" >/dev/null
+}
+
+# Pass FreeRDP's output through, minus the debug lines enabled only to spot
+# when the display-control channel opens.
+filter() {
+  local pid="$1" line
+  while IFS= read -r line; do
+    case $line in
+    *"Channel disp opened"*) (sleep "$NUDGE_DELAY" && kill -0 "$pid" 2>/dev/null && nudge "$pid") & ;;
+    *"[DEBUG][com.freerdp.client.x11disp]"*) ;;
+    *) printf '%s\n' "$line" ;;
+    esac
+  done
+}
+
+fifo=$(mktemp -u "${XDG_RUNTIME_DIR:-/tmp}/xfreerdp3.XXXXXX")
+mkfifo -m 0600 "$fifo" || exec /usr/bin/xfreerdp3 "$@"
+
+# Line-buffer output so the channel-open line arrives as it happens.
+stdbuf -oL -eL /usr/bin/xfreerdp3 "$@" /log-filters:com.freerdp.client.x11disp:DEBUG >"$fifo" 2>&1 &
+pid=$!
+filter "$pid" <"$fifo"
+rm -f "$fifo"
+wait "$pid"

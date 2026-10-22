@@ -18,9 +18,11 @@ windows_install_software.ps1
 .local/state/omarchy
 .local/bin/ddcutil
 .local/bin/terminal-cwd
+.local/bin/xfreerdp3
 .local/lib/omarchy-overrides
 .XCompose
 .XCompose.deadkeys
+Windows
 {{- end }}
 
 {{ if eq .chezmoi.os "windows" -}}
