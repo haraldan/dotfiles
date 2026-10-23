@@ -3,6 +3,7 @@
 
 Usage: new_tab.py <home|cwd>
 home: start in $HOME; cwd: start in the active pane's directory.
+The tab is created without moving focus, so other attached windows stay put.
 """
 import json
 import os
@@ -32,5 +33,5 @@ cwd = os.path.expanduser("~") if sys.argv[1] == "home" else pane.get("foreground
 tabs = [t["tab_id"] for t in herdr("tab", "list", "--workspace", pane["workspace_id"])["tabs"]]
 position = tabs.index(pane["tab_id"]) + 1
 
-created = herdr("tab", "create", "--workspace", pane["workspace_id"], "--cwd", cwd, "--focus")
+created = herdr("tab", "create", "--workspace", pane["workspace_id"], "--cwd", cwd, "--no-focus")
 move_tab(created["tab"]["tab_id"], position)

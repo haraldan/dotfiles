@@ -120,20 +120,21 @@ description = "Swap pane {{ index $nav 1 }}"
 {{- end }}
 
 {{- if ne .chezmoi.os "windows" }}
+
 {{-   range $key := list "prefix+c" "alt+c" }}
 
 [[keys.command]]
 key = "{{ $key }}"
 type = "shell"
 command = '~/.config/herdr/new_tab.py home'
-description = "New tab after current, in home"
+description = "New tab after current, in home, without moving focus"
 {{-   end }}
 
 [[keys.command]]
 key = "alt+shift+c"
 type = "shell"
 command = '~/.config/herdr/new_tab.py cwd'
-description = "New tab after current, in current directory"
+description = "New tab after current, in current directory, without moving focus"
 {{- else }}
 {{-   range $key := list "prefix+c" "alt+c" }}
 
