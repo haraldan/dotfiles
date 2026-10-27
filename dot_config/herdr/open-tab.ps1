@@ -9,8 +9,14 @@ if ($Path -match '^[A-Za-z]:$') { $Path += '\' }
 
 herdr tab create --cwd $Path --focus | Out-Null
 if ($LASTEXITCODE -ne 0) {
-    # No server running: herdr starts one in $Path
+    # No server running: start herdr, which restores the saved session and ignores
+    # --cwd, so retry the tab once its server is up
     Start-Process wezterm-gui.exe -ArgumentList 'start', '--cwd', "`"$Path`"", '--', 'herdr'
+    for ($i = 0; $i -lt 40; $i++) {
+        Start-Sleep -Milliseconds 250
+        herdr tab create --cwd $Path --focus | Out-Null
+        if ($LASTEXITCODE -eq 0) { break }
+    }
     return
 }
 
