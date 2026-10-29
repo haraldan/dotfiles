@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# The low-battery warning is critical, so the shell never expires it. Watch for
+# a charger in the background and dismiss the warning once one is plugged in.
+
+ac=/sys/class/power_supply/AC/online
+[[ -r $ac ]] || exit 0
+
+setsid -f bash -c '
+  until [[ $(cat "$1" 2>/dev/null) == 1 ]]; do sleep 3; done
+  omarchy-notification-dismiss "Time to recharge!"
+' _ "$ac" </dev/null >/dev/null 2>&1
