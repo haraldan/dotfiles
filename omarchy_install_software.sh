@@ -29,6 +29,10 @@ omarchy-pkg-aur-add wezterm-nightly-bin
 # Font used by the WezTerm config
 omarchy-pkg-add ttf-cascadia-mono-nerd
 
+# Desktop apps (chezmoi's EasyEffects drop-in delays its autostart until the tray is up)
+omarchy-pkg-add dolphin dolphin-plugins easyeffects
+omarchy-pkg-aur-add neofetch jellyfin-desktop
+
 # TPM (Tmux Plugin Manager)
 if [ ! -d ~/.tmux/plugins/tpm ] || [ -z "$(ls -A ~/.tmux/plugins/tpm)" ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -36,6 +40,7 @@ fi
 
 # Third-party shell plugins; chezmoi's shell.json places them on the bar
 for plugin in \
+  codefriendly.nightman=https://github.com/codefriendly/omarchy-nightman.git \
   crmne.hyprmoncfg=https://github.com/crmne/omarchy-hyprmoncfg.git \
   io.github.thetrueferret.decent-workspaces=https://github.com/TheTrueFerret/omarchy-decent-workspaces.git; do
   [ -d ~/.config/omarchy/plugins/"${plugin%%=*}" ] || omarchy-plugin-add "${plugin#*=}" --yes
