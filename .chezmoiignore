@@ -21,6 +21,10 @@ windows_install_software.ps1
 Windows
 {{- end }}
 
+{{ if ne .chezmoi.hostname "Think" -}}
+.config/omarchy/plugins/daniel.bluetooth
+{{- end }}
+
 {{ if eq .chezmoi.os "windows" -}}
 .bash_aliases
 .bash_profile

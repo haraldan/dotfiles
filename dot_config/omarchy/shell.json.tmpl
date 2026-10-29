@@ -22,6 +22,9 @@
           "id": "omarchy.indicators"
         },
         {
+          "id": "codefriendly.nightman"
+        },
+        {
           "id": "omarchy.clock",
           "format": "dddd HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
@@ -56,10 +59,13 @@
           "id": "omarchy.agents"
         },
         {
-          "id": "daniel.bluetooth"
+          "id": "{{ if eq .chezmoi.hostname "Think" }}daniel.bluetooth{{ else }}omarchy.bluetooth{{ end }}"
         },
         {
           "id": "omarchy.network"
+        },
+        {
+          "id": "omarchy.microphone"
         },
         {
           "id": "omarchy.audio"
