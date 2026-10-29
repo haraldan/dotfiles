@@ -4,9 +4,71 @@
 # FreeRDP's start size, and the size sent right after logon gets dropped while
 # Windows switches to the desktop. Shortly after the display-control channel
 # opens, nudge the window 40px and back so FreeRDP resends the size.
+# Also waits for the guest's RDP server before connecting: the launcher calls
+# FreeRDP as soon as QEMU starts, long before Windows is up (especially under
+# nested KVM), and tears the VM down when FreeRDP exits.
 # Remove this file to go back to plain /usr/bin/xfreerdp3.
 
 NUDGE_DELAY=2
+RDP_WAIT_TIMEOUT=300
+
+# True once the server answers an X.224 Connection Request with a TPKT reply.
+# A plain TCP connect isn't enough: docker-proxy accepts on the published port
+# before anything listens inside the guest.
+# Runs in a subshell that ignores SIGPIPE, since a reset from a not-yet-ready
+# server would otherwise kill the whole wrapper mid-write.
+rdp_ready() (
+  trap '' PIPE
+  local host="$1" port="$2" reply
+  { exec 3<>"/dev/tcp/$host/$port"; } 2>/dev/null || return 1
+  printf '\x03\x00\x00\x13\x0e\xe0\x00\x00\x00\x00\x00\x01\x00\x08\x00\x03\x00\x00\x00' >&3 2>/dev/null || return 1
+  IFS= read -r -t 3 -N 1 reply <&3 2>/dev/null
+  [[ $reply == $'\x03' ]]
+)
+
+WAIT_SUMMARY="Waiting for Windows to boot"
+
+# Shows a notification that stays up until RDP answers (or the wait gives up).
+# The Omarchy shell leaves a popup on screen when its sender closes it over
+# D-Bus, so take it down through the shell's dismiss-by-summary IPC instead.
+wait_for_rdp() {
+  local arg target host port deadline notified=false rc=0
+  for arg in "$@"; do
+    [[ $arg == /v:* ]] && target=${arg#/v:}
+  done
+  [[ -n $target ]] || return 0
+  host=${target%:*}
+  port=3389
+  [[ $target == *:* ]] && port=${target##*:}
+
+  deadline=$((SECONDS + RDP_WAIT_TIMEOUT))
+  until rdp_ready "$host" "$port"; do
+    if ! $notified; then
+      # Only critical popups stay up: the Omarchy shell caps others at 8s.
+      notify-send -u critical "$WAIT_SUMMARY" "The Windows VM will connect once it is ready."
+      notified=true
+    fi
+    if ((SECONDS >= deadline)); then
+      echo "xfreerdp3 wrapper: RDP on $host:$port not ready after ${RDP_WAIT_TIMEOUT}s" >&2
+      rc=1
+      break
+    fi
+    sleep 2
+  done
+  $notified && omarchy-notification-dismiss "$WAIT_SUMMARY" >/dev/null 2>&1
+  return "$rc"
+}
+
+# Launchers run this without a terminal, so keep the output of the last two
+# sessions to see why one ended.
+LOG_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/xfreerdp3.log"
+mkdir -p "$(dirname "$LOG_FILE")"
+[[ -f $LOG_FILE ]] && mv -f "$LOG_FILE" "$LOG_FILE.1"
+exec > >(tee -a "$LOG_FILE") 2>&1
+echo "=== $(date '+%F %T') xfreerdp3 wrapper started"
+
+wait_for_rdp "$@" || exit 1
+echo "=== $(date '+%T') RDP ready, starting FreeRDP"
 
 nudge() {
   local pid="$1" address
@@ -39,3 +101,6 @@ pid=$!
 filter "$pid" <"$fifo"
 rm -f "$fifo"
 wait "$pid"
+rc=$?
+echo "=== $(date '+%T') FreeRDP exited with code $rc"
+exit "$rc"
