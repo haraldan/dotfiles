@@ -23,6 +23,7 @@ Windows
 
 {{ if ne .chezmoi.hostname "Think" -}}
 .config/omarchy/plugins/daniel.bluetooth
+.config/uwsm/env.d/50-aquamarine
 {{- end }}
 
 {{ if eq .chezmoi.os "windows" -}}
