@@ -1,0 +1,115 @@
+# chezmoi:template:left-delimiter="[[" right-delimiter="]]"
+[[ if .chezmoi.kernel.osrelease | lower | contains "microsoft" -]]
+os:
+  copyToClipboardCmd: printf '\033]52;c;%s\a' "$(printf '%s' {{text}} | base64 -w0)" > /dev/tty
+
+[[ end -]]
+keybinding:
+  universal:
+    newWorktree: <disabled> # replaced by the custom "w" commands below
+
+# Worktrees go to <main-repo>/wt_<name>, optionally with submodules initialized
+customCommands:
+  - key: "n"
+    context: "worktrees"
+    description: "New worktree (wt_<name> in repo root)"
+    prompts:
+      - type: "input"
+        title: "Branch to check out / base for new branch"
+        key: "Base"
+        initialValue: "{{.CheckedOutBranch.Name}}"
+        suggestions:
+          preset: "refs"
+      - type: "input"
+        title: "New branch name (empty = check out base)"
+        key: "Branch"
+      - type: "input"
+        title: "Worktree name (folder will be wt_<name>)"
+        key: "Name"
+        initialValue: "{{or .Form.Branch .Form.Base}}"
+      - type: "menu"
+        title: "Initialize submodules?"
+        key: "Submodules"
+        condition: '{{runCommand "git ls-files .gitmodules"}}'
+        options:
+          - name: "Yes"
+            value: "yes"
+            key: "y"
+          - name: "No"
+            value: "no"
+            key: "n"
+    command: "sh ~/.config/lazygit/worktree-add.sh {{.Form.Base | quote}} {{.Form.Branch | quote}} {{.Form.Name | quote}} {{.Form.Submodules | quote}}"
+    loadingText: "Creating worktree..."
+    output: "log"
+  - key: "w"
+    context: "localBranches"
+    description: "New worktree (wt_<name> in repo root)"
+    prompts:
+      - type: "menu"
+        title: "New worktree from {{.SelectedLocalBranch.Name}}"
+        key: "Mode"
+        options:
+          - name: "Check out {{.SelectedLocalBranch.Name}}"
+            value: "existing"
+          - name: "Create new branch from {{.SelectedLocalBranch.Name}}"
+            value: "new"
+      - type: "input"
+        title: "New branch name"
+        key: "Branch"
+        condition: '{{eq .Form.Mode "new"}}'
+      - type: "input"
+        title: "Worktree name (folder will be wt_<name>)"
+        key: "Name"
+        initialValue: "{{or .Form.Branch .SelectedLocalBranch.Name}}"
+      - type: "menu"
+        title: "Initialize submodules?"
+        key: "Submodules"
+        condition: '{{runCommand "git ls-files .gitmodules"}}'
+        options:
+          - name: "Yes"
+            value: "yes"
+            key: "y"
+          - name: "No"
+            value: "no"
+            key: "n"
+    command: "sh ~/.config/lazygit/worktree-add.sh {{.SelectedLocalBranch.Name | quote}} {{.Form.Branch | quote}} {{.Form.Name | quote}} {{.Form.Submodules | quote}}"
+    loadingText: "Creating worktree..."
+    output: "log"
+  - key: "w"
+    context: "remoteBranches"
+    description: "New worktree (wt_<name> in repo root)"
+    prompts:
+      - type: "menu"
+        title: "New worktree from {{.SelectedRemoteBranch.RemoteName}}/{{.SelectedRemoteBranch.Name}}"
+        key: "Mode"
+        options:
+          - name: "Check out {{.SelectedRemoteBranch.Name}} (tracking {{.SelectedRemoteBranch.RemoteName}})"
+            value: "existing"
+          - name: "Create new branch from {{.SelectedRemoteBranch.RemoteName}}/{{.SelectedRemoteBranch.Name}}"
+            value: "new"
+      - type: "input"
+        title: "New branch name"
+        key: "Branch"
+        condition: '{{eq .Form.Mode "new"}}'
+      - type: "input"
+        title: "Worktree name (folder will be wt_<name>)"
+        key: "Name"
+        initialValue: "{{or .Form.Branch .SelectedRemoteBranch.Name}}"
+      - type: "menu"
+        title: "Initialize submodules?"
+        key: "Submodules"
+        condition: '{{runCommand "git ls-files .gitmodules"}}'
+        options:
+          - name: "Yes"
+            value: "yes"
+            key: "y"
+          - name: "No"
+            value: "no"
+            key: "n"
+    # Without a new branch, git creates/uses a local branch tracking the remote one
+    command: >-
+      sh ~/.config/lazygit/worktree-add.sh
+      {{if eq .Form.Mode "new"}}{{printf "%s/%s" .SelectedRemoteBranch.RemoteName .SelectedRemoteBranch.Name | quote}}{{else}}{{.SelectedRemoteBranch.Name | quote}}{{end}}
+      {{.Form.Branch | quote}} {{.Form.Name | quote}} {{.Form.Submodules | quote}}
+    loadingText: "Creating worktree..."
+    output: "log"
