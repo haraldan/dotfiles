@@ -26,6 +26,10 @@ Windows
 .config/uwsm/env.d/50-aquamarine
 {{- end }}
 
+{{ if eq .configType "work" -}}
+.config/mpv
+{{- end }}
+
 {{ if eq .chezmoi.os "windows" -}}
 .bash_aliases
 .bash_profile
