@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Offer every stock Omarchy background in the themes below. Omarchy also lists
+# ~/.config/omarchy/backgrounds/<theme>/, so fill it with symlinks to the stock
+# themes' backgrounds, prefixed with the source theme since file names repeat.
+# Rebuilt on every theme change, so backgrounds added, renamed or removed by an
+# Omarchy update are picked up at the next switch; broken links are skipped by
+# the picker until then. Only symlinks into the stock themes are touched.
+
+themes=(tokyo-horizon)
+stock=/usr/share/omarchy/themes
+
+for theme in "${themes[@]}"; do
+  dir=$HOME/.config/omarchy/backgrounds/$theme
+  mkdir -p "$dir"
+
+  for link in "$dir"/*; do
+    [[ -L $link && $(readlink "$link") == "$stock"/* ]] && rm "$link"
+  done
+
+  for image in "$stock"/*/backgrounds/*; do
+    [[ -f $image ]] || continue
+    source_theme=${image#"$stock"/}
+    source_theme=${source_theme%%/*}
+    name=$source_theme-${image##*/}
+    # Group the Omarchy logo wallpapers at the end of the picker
+    [[ ${image##*/} == *omarchy* ]] && name=zz-omarchy-$source_theme-${image##*/}
+    ln -s "$image" "$dir/$name"
+  done
+done
