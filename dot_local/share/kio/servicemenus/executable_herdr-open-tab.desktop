@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+MimeType=inode/directory;
+Actions=openHerdrTab;
+X-KDE-Priority=TopLevel
+
+[Desktop Action openHerdrTab]
+Name=Open in herdr tab
+Icon=utilities-terminal
+Exec=herdr-open-tab %f
