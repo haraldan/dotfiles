@@ -77,13 +77,12 @@ o.bind("ALT + RETURN", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscr
 -- Right Alt is AltGr (MOD5) in the us(intl) layout; AltGr+Enter types nothing.
 o.bind("MOD5 + RETURN", "Full screen", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 
--- Super+E: Dolphin as the file manager, Super+Shift+E: Dolphin in the active
--- terminal's directory (replaces HEY). Super+Ctrl+E (was: emoji picker) is
--- left unbound.
+-- Super+E: Dolphin as the file manager, Super+Shift+E: Yazi (replaces HEY).
+-- Super+Ctrl+E (was: emoji picker) is left unbound.
 hl.unbind("SUPER + SHIFT + E")
 hl.unbind("SUPER + CTRL + E")
 o.bind("SUPER + E", "File manager", { launch = "dolphin --new-window" })
-o.bind("SUPER + SHIFT + E", "File manager (cwd)", 'uwsm-app -- dolphin --new-window "$(terminal-cwd)"')
+o.bind("SUPER + SHIFT + E", "Yazi", { tui = "yazi" })
 
 -- Close window on Super+Q instead of Super+W.
 hl.unbind("SUPER + W")

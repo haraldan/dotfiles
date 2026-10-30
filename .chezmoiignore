@@ -15,7 +15,6 @@ windows_install_software.ps1
 .local/bin/ddcutil
 .local/bin/herdr-open-tab
 .local/share/kio/servicemenus/herdr-open-tab.desktop
-.local/bin/terminal-cwd
 .local/bin/xfreerdp3
 .local/lib/omarchy-overrides
 .XCompose
