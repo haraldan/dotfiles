@@ -204,6 +204,23 @@ __lazygit_key() {
 }
 bind -x '"\eg":"__lazygit_key"'
 
+# Fuzzy-pick a git worktree of the current repo and cd into it.
+wt() {
+  local dir
+  dir=$(git worktree list --porcelain 2>/dev/null | awk '
+    /^worktree / { p = substr($0, 10); b = "" }
+    /^branch /   { b = substr($0, 8); sub("^refs/heads/", "", b) }
+    /^detached/  { b = "(detached)" }
+    /^bare/      { p = "" }
+    /^$/         { if (p != "") print b "\t" p; p = "" }
+    END          { if (p != "") print b "\t" p }' |
+    fzf --height 40% --reverse --delimiter '\t' \
+      --preview 'git -C {2} log --oneline --color -10' |
+    cut -f2) || return
+  [ -n "$dir" ] && [ -d "$dir" ] && builtin cd -- "$dir"
+}
+bind -x '"\ew":"wt"'
+
 {{- if eq .configType "home" }}
 
 # opencode
