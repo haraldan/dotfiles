@@ -204,17 +204,38 @@ __lazygit_key() {
 }
 bind -x '"\eg":"__lazygit_key"'
 
-# Fuzzy-pick a git worktree of the current repo and cd into it.
+# Fuzzy-pick a git worktree and cd into it. Lists the current repo first, then
+# the repos directly under ~/source and ~/.dotfiles, each with its worktrees.
 wt() {
   local dir
-  dir=$(git worktree list --porcelain 2>/dev/null | awk '
+  dir=$({
+      git rev-parse --show-toplevel 2>/dev/null
+      for d in ~/source/*/; do [ -e "$d.git" ] && echo "${d%/}"; done
+      echo ~/.dotfiles
+    } | {
+      declare -A seen
+      while read -r repo; do
+        common=$(git -C "$repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || continue
+        [ -n "${seen[$common]}" ] && continue
+        seen[$common]=1
+        git -C "$repo" worktree list --porcelain
+      done
+    } | awk '
     /^worktree / { p = substr($0, 10); b = "" }
     /^branch /   { b = substr($0, 8); sub("^refs/heads/", "", b) }
     /^detached/  { b = "(detached)" }
     /^bare/      { p = "" }
     /^$/         { if (p != "") print b "\t" p; p = "" }
     END          { if (p != "") print b "\t" p }' |
-    fzf --height 40% --reverse --delimiter '\t' \
+    awk -F '\t' -v home="$HOME/" '
+      {
+        B[NR] = $1; P[NR] = R[NR] = $2
+        if (index($2, home) == 1) R[NR] = substr($2, length(home) + 1)
+        if (length(R[NR]) > w) w = length(R[NR])
+      }
+      END { for (i = 1; i <= NR; i++) printf "%-" w "s  %s\t%s\n", R[i], B[i], P[i] }' |
+    fzf --height 40% --reverse --cycle --delimiter '\t' --with-nth 1 \
+      --preview-window right:40% \
       --preview 'git -C {2} log --oneline --color -10' |
     cut -f2) || return
   [ -n "$dir" ] && [ -d "$dir" ] && builtin cd -- "$dir"
