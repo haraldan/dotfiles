@@ -158,3 +158,9 @@ o.bind("SUPER + SHIFT + G", "Email", { webapp = "https://mail.google.com" })
 
 -- Disable middle click
 hl.bind("mouse:274", function() end, { description = "Disable middle click" })
+
+-- Volume keys step by 2% instead of the default 5% (ALT + key still steps by 1%).
+hl.unbind("XF86AudioRaiseVolume")
+hl.unbind("XF86AudioLowerVolume")
+o.bind("XF86AudioRaiseVolume", "Volume up", "omarchy-audio-output-volume +2", { locked = true, repeating = true })
+o.bind("XF86AudioLowerVolume", "Volume down", "omarchy-audio-output-volume -2", { locked = true, repeating = true })
