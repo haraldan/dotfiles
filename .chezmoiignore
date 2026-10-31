@@ -1,6 +1,7 @@
 ubuntu_install_software.sh
 omarchy_install_software.sh
 windows_install_software.ps1
+etc
 
 {{ if not (stat "/usr/share/omarchy") -}}
 .config/ghostty
@@ -9,7 +10,6 @@ windows_install_software.ps1
 .config/omarchy
 .config/pacman
 .config/spotify-flags.conf
-.config/keyd
 .config/systemd
 .local/state/omarchy
 .local/bin/ddcutil

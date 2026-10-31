@@ -14,6 +14,8 @@ sudo pacman -Syu
 # Install packages (Omarchy already ships tmux, ripgrep, fd, fzf, lazygit, neovim,
 # tree-sitter-cli, unzip, clang, mise and most yazi dependencies)
 omarchy-pkg-add chezmoi keychain openssh sshpass base-devel rustup
+# Lets PipeWire run its audio threads with realtime priority (avoids dropouts)
+omarchy-pkg-add rtkit
 
 # Remove starship so Omarchy's bash defaults keep the plain bash prompt
 omarchy-pkg-drop starship
@@ -60,18 +62,18 @@ fi
 omarchy-pkg-present brave-bin || omarchy-install-browser brave
 omarchy-default-browser brave
 
-# System configs live in /etc; the repo keeps reference copies under dot_config
+# System configs live in /etc; the repo keeps them under etc/ (ignored by chezmoi)
 dotfiles_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # keyd: Caps Lock is Esc on tap, Ctrl on hold
 omarchy-pkg-add keyd
-sudo install -Dm644 "$dotfiles_dir/dot_config/keyd/default.conf" /etc/keyd/default.conf
+sudo install -Dm644 "$dotfiles_dir/etc/keyd/default.conf" /etc/keyd/default.conf
 sudo systemctl enable --now keyd
 
 # Don't suspend on lid close; hypridle suspends after 10 min idle on battery instead.
 # chezmoi installs hypridle.conf and the symlink that starts it with the session.
 omarchy-pkg-add hypridle
-sudo install -Dm644 "$dotfiles_dir/dot_config/systemd/logind.conf.d/30-lid-no-sleep.conf" /etc/systemd/logind.conf.d/30-lid-no-sleep.conf
+sudo install -Dm644 "$dotfiles_dir/etc/systemd/logind.conf.d/30-lid-no-sleep.conf" /etc/systemd/logind.conf.d/30-lid-no-sleep.conf
 sudo systemctl kill -s HUP systemd-logind
 
 # NFS client for the NAS shares automounted via /etc/fstab
