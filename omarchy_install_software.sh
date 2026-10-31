@@ -76,5 +76,9 @@ omarchy-pkg-add hypridle
 sudo install -Dm644 "$dotfiles_dir/etc/systemd/logind.conf.d/30-lid-no-sleep.conf" /etc/systemd/logind.conf.d/30-lid-no-sleep.conf
 sudo systemctl kill -s HUP systemd-logind
 
+# Savitech USB S/PDIF adapter: hardware volume at 100% on plug-in (volume is software-only)
+sudo install -Dm644 "$dotfiles_dir/etc/udev/rules.d/91-savitech-spdif-full-volume.rules" /etc/udev/rules.d/91-savitech-spdif-full-volume.rules
+sudo udevadm control --reload
+
 # NFS client for the NAS shares automounted via /etc/fstab
 omarchy-pkg-add nfs-utils

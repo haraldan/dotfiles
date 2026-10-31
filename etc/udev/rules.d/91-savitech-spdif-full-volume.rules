@@ -1,0 +1,4 @@
+# Keep the Savitech USB S/PDIF adapter's hardware volume at 100%.
+# WirePlumber uses the soft mixer for it (savitech-spdif-soft-mixer.conf), so
+# nothing else raises this control; runs after 90-alsa-restore.rules on plug-in.
+ACTION=="add", SUBSYSTEM=="sound", KERNEL=="controlC*", ATTRS{idVendor}=="262a", ATTRS{idProduct}=="9123", RUN+="/usr/bin/amixer -q -c %n sset PCM 100%%"
