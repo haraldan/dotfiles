@@ -51,6 +51,7 @@ Windows
 .config/herdr/navigate.sh
 .config/lazygit/config.yml
 .config/lazygit/worktree-add.sh
+.config/wireplumber
 {{ if ne .configType "work" -}}
 .bat
 {{- end }}
