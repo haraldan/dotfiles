@@ -88,5 +88,8 @@ sudo systemctl kill -s HUP systemd-logind
 sudo install -Dm644 "$dotfiles_dir/etc/udev/rules.d/91-savitech-spdif-full-volume.rules" /etc/udev/rules.d/91-savitech-spdif-full-volume.rules
 sudo udevadm control --reload
 
+# Brother HL-L3240CDW printer driver
+omarchy-pkg-aur-add brother-hll3240cdw-bin
+
 # NFS client for the NAS shares automounted via /etc/fstab
 omarchy-pkg-add nfs-utils
