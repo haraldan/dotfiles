@@ -1,22 +1,7 @@
 {
-  "version": 1,
-  "idle": {
-    "screensaver": 150,
-    "lock": 600
-  },
   "bar": {
-    "position": "top",
-    "transparent": false,
     "centerAnchor": "omarchy.clock",
     "layout": {
-      "left": [
-        {
-          "id": "omarchy.menu"
-        },
-        {
-          "id": "io.github.thetrueferret.decent-workspaces"
-        }
-      ],
       "center": [
         {
           "id": "omarchy.indicators"
@@ -41,13 +26,21 @@
           "id": "omarchy.system-update"
         }
       ],
+      "left": [
+        {
+          "id": "omarchy.menu"
+        },
+        {
+          "id": "io.github.thetrueferret.decent-workspaces"
+        }
+      ],
       "right": [
         {
+          "hidden": [],
           "id": "omarchy.tray",
           "pinned": [
             "easyeffects"
-          ],
-          "hidden": []
+          ]
         },
         {
           "id": "omarchy.dropbox"
@@ -74,7 +67,24 @@
           "id": "omarchy.power"
         }
       ]
-    }
+    },
+    "position": "top",
+    "transparent": false
   },
-  "plugins": []
+  "idle": {
+    "lock": 600,
+    "screensaver": 150
+  },
+  "plugins": [
+    {
+      "id": "daniel.lock"
+    }
+  ],
+  "version": 1,
+  "disabledPlugins": [
+    "omarchy.lock"
+  ],
+  "cloneSourceRestores": [
+    "daniel.lock"
+  ]
 }
