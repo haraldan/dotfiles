@@ -95,6 +95,8 @@ sudo udevadm control --reload
 
 # Brother HL-L3240CDW printer driver
 omarchy-pkg-aur-add brother-hll3240cdw-bin
+# The AUR package skips Brother's postinst link; without it the driver ignores job options and prints everything as Letter
+sudo ln -sf /opt/brother/Printers/hll3240cdw/lpd/brprintconf_hll3240cdw /usr/bin/brprintconf_hll3240cdw
 
 # NFS client for the NAS shares automounted via /etc/fstab
 omarchy-pkg-add nfs-utils
