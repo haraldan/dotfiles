@@ -103,8 +103,10 @@ hl.unbind("SUPER + P")
 o.bind("SUPER + N", "Next workspace", hl.dsp.focus({ workspace = "e+1" }))
 o.bind("SUPER + P", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
 
--- Disable Super+Shift+W (was: Omawrite, uninstalled).
+-- WhatsApp on Super+Shift+W (replaces Omawrite, uninstalled) instead of Super+Shift+Alt+G.
 hl.unbind("SUPER + SHIFT + W")
+hl.unbind("SUPER + SHIFT + ALT + G")
+o.bind("SUPER + SHIFT + W", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true })
 
 -- Alt+F4 opens the system menu (lock, suspend, restart, shutdown), same as Super+Escape.
 o.bind("ALT + F4", "System menu", "omarchy-menu toggle system")
@@ -155,6 +157,20 @@ hl.unbind("SUPER + SHIFT + ALT + A")
 hl.unbind("SUPER + SHIFT + ALT + E")
 hl.unbind("SUPER + SHIFT + G")
 o.bind("SUPER + SHIFT + G", "Email", { webapp = "https://mail.google.com" })
+
+-- Telegram on Super+Shift+T.
+o.bind("SUPER + SHIFT + T", "Telegram", { webapp = "https://web.telegram.org" })
+
+-- Google Calendar on Super+Shift+C instead of HEY Calendar.
+hl.unbind("SUPER + SHIFT + C")
+o.bind("SUPER + SHIFT + C", "Calendar", { webapp = "https://calendar.google.com/" })
+
+-- Disable Super+Shift+X and Super+Shift+Alt+X (was: X, X Post).
+hl.unbind("SUPER + SHIFT + X")
+hl.unbind("SUPER + SHIFT + ALT + X")
+
+-- Disable Super+Shift+P (was: Google Photos).
+hl.unbind("SUPER + SHIFT + P")
 
 -- Disable middle click
 hl.bind("mouse:274", function() end, { description = "Disable middle click" })
