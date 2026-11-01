@@ -17,8 +17,16 @@ omarchy-pkg-add chezmoi keychain openssh sshpass base-devel rustup
 # Lets PipeWire run its audio threads with realtime priority (avoids dropouts)
 omarchy-pkg-add rtkit
 
-# Remove starship so Omarchy's bash defaults keep the plain bash prompt
-omarchy-pkg-drop starship
+# Remove unused apps
+omarchy-pkg-drop starship webp-pixbuf-loader evince xournalpp imv obs-studio nautilus nautilus-python sushi papers
+# Remove unused web apps
+omarchy-webapp-remove HEY
+omarchy-webapp-remove X
+omarchy-webapp-remove "Google Photos"
+omarchy-webapp-remove Basecamp
+# Omarchy's copy of the imv launcher isn't owned by the package, so it outlives imv
+rm -f ~/.local/share/applications/imv.desktop
+update-desktop-database ~/.local/share/applications
 
 # Install yazi
 omarchy-pkg-add yazi
@@ -32,7 +40,7 @@ omarchy-pkg-aur-add wezterm-nightly-bin
 omarchy-pkg-add ttf-cascadia-mono-nerd
 
 # Desktop apps (chezmoi's EasyEffects drop-in delays its autostart until the tray is up)
-omarchy-pkg-add dolphin dolphin-plugins easyeffects
+omarchy-pkg-add dolphin dolphin-plugins okular gwenview easyeffects
 omarchy-pkg-aur-add neofetch jellyfin-desktop
 
 # TPM (Tmux Plugin Manager)

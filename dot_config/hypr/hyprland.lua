@@ -44,5 +44,10 @@ require("default.hypr.toggles")
 -- answers on Omarchy 4.0 yet (see omacom/omarchy#13359). Remove once that lands.
 o.window("(?i).*jellyfin.*", { idle_inhibit = "focus" })
 
+-- Gwenview pops up floating with no transparency, same as Omarchy does for imv.
+o.window("^(org.kde.gwenview)$", { tag = "+floating-window" })
+o.window("^(org.kde.gwenview)$", { tag = "-default-opacity" })
+o.window("^(org.kde.gwenview)$", { opacity = "1 1" })
+
 -- Added by hyprmoncfg: its generated monitor rules load last, so nothing before this can override the applied layout.
 do local path = os.getenv("HOME") .. "/.config/hypr/hyprmoncfg-monitors.lua"; local file = io.open(path, "r"); if file then file:close(); dofile(path) end end
