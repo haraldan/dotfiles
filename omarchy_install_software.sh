@@ -73,6 +73,11 @@ omarchy-default-browser brave
 # System configs live in /etc; the repo keeps them under etc/ (ignored by chezmoi)
 dotfiles_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Irish English locale
+sudo sed -i 's/^#\(en_IE\.UTF-8 UTF-8\)/\1/' /etc/locale.gen
+sudo locale-gen
+sudo install -Dm644 "$dotfiles_dir/etc/locale.conf" /etc/locale.conf
+
 # keyd: Caps Lock is Esc on tap, Ctrl on hold
 omarchy-pkg-add keyd
 sudo install -Dm644 "$dotfiles_dir/etc/keyd/default.conf" /etc/keyd/default.conf
