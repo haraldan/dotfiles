@@ -7,6 +7,7 @@ etc
 .config/ghostty
 .config/hypr
 .config/uwsm
+.config/mimeapps.list
 .config/omarchy
 .config/pacman
 .config/spotify-flags.conf
