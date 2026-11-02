@@ -69,6 +69,8 @@ fi
 # Brave as default browser
 omarchy-pkg-present brave-bin || omarchy-install-browser brave
 omarchy-default-browser brave
+# VA-API over NVDEC, for GPU video decoding in Brave (chezmoi's brave wrapper enables it)
+omarchy-pkg-add libva-nvidia-driver
 
 # System configs live in /etc; the repo keeps them under etc/ (ignored by chezmoi)
 dotfiles_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

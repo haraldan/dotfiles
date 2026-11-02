@@ -27,6 +27,10 @@ Windows
 .config/uwsm/env.d/50-aquamarine
 {{- end }}
 
+{{ if ne .chezmoi.hostname "VM-Omarchy" -}}
+.local/bin/brave
+{{- end }}
+
 {{ if eq .configType "work" -}}
 .config/mpv
 {{- end }}
