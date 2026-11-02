@@ -1,74 +1,86 @@
-ubuntu_install_software.sh
-omarchy_install_software.sh
-windows_install_software.ps1
+# Repo files, never deployed
 etc
+omarchy_install_software.sh
+ubuntu_install_software.sh
+windows_install_software.ps1
 
+# Omarchy only
 {{ if not (stat "/usr/share/omarchy") -}}
 .config/ghostty
 .config/hypr
-.config/uwsm
 .config/mimeapps.list
 .config/omarchy
 .config/pacman
 .config/spotify-flags.conf
 .config/systemd
-.local/state/omarchy
+.config/uwsm
+.local/bin/brave
 .local/bin/ddcutil
 .local/bin/herdr-open-tab
-.local/share
+.local/bin/mpv-open
 .local/bin/xfreerdp3
 .local/lib/omarchy-overrides
+.local/share
+.local/state/omarchy
 .XCompose
 .XCompose.deadkeys
 Windows
 {{- end }}
 
+# Think only
 {{ if ne .chezmoi.hostname "Think" -}}
 .config/omarchy/plugins/daniel.bluetooth
 .config/uwsm/env.d/50-aquamarine
 {{- end }}
 
+# VM-Omarchy only
 {{ if ne .chezmoi.hostname "VM-Omarchy" -}}
 .local/bin/brave
 {{- end }}
 
-{{ if eq .configType "work" -}}
+# Home only
+{{ if ne .configType "home" -}}
 .config/mpv
 {{- end }}
 
+# Home Linux only
+{{ if or (ne .chezmoi.os "linux") (ne .configType "home") -}}
+.config/nvim/lua/plugins/vimtex.lua
+.matlab
+{{- end }}
+
+# Work Windows only
+{{ if or (ne .chezmoi.os "windows") (ne .configType "work") -}}
+.bat
+{{- end }}
+
+# Linux only
 {{ if eq .chezmoi.os "windows" -}}
 .bash_aliases
 .bash_profile
 .bashrc
 .clangd
-.config/fstab
-.config/matplotlib
-.config/mpv/scripts/single-instance.lua
-.config/nvim
-.ipython
-.local
-.matlab
-.profile
-.pyrightconfig.json
-.vhdl_ls.toml
-.tmux
-.config/tmux
 .config/herdr/navigate.sh
 .config/lazygit/config.yml
 .config/lazygit/worktree-add.sh
+.config/matplotlib
+.config/mpv/scripts/single-instance.lua
+.config/nvim
+.config/tmux
 .config/wireplumber
-{{ if ne .configType "work" -}}
-.bat
+.ipython
+.local
+.profile
+.pyrightconfig.json
+.tmux
+.vhdl_ls.toml
 {{- end }}
-{{- else if eq .chezmoi.os "linux" -}}
+
+# Windows only
+{{ if eq .chezmoi.os "linux" -}}
 .autohotkey
-.bat
-.config/sioyek
 .config/herdr/open-tab.ps1
+.config/powershell
+.config/sioyek
 config.xlaunch
-{{ if eq .configType "work" -}}
-.config/fstab
-.config/nvim/lua/plugins/vimtex.lua
-.matlab
-{{- end }}
 {{- end }}

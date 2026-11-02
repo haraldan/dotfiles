@@ -102,3 +102,9 @@ sudo ln -sf /opt/brother/Printers/hll3240cdw/lpd/brprintconf_hll3240cdw /usr/bin
 
 # NFS client for the NAS shares automounted via /etc/fstab
 omarchy-pkg-add nfs-utils
+# fstab.nas only holds the NAS mounts, so add its lines rather than install it over /etc/fstab
+while IFS= read -r line; do
+  grep -qxF "$line" /etc/fstab || echo "$line" | sudo tee -a /etc/fstab >/dev/null
+done <"$dotfiles_dir/etc/fstab.nas"
+sudo systemctl daemon-reload
+sudo systemctl restart remote-fs.target

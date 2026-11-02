@@ -61,3 +61,15 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install --lts
 nvm use --lts
+
+# NAS shares, home machines only (this runs before chezmoi, so its config type isn't available yet)
+read -rp "Is this a home machine? Add the NAS mounts to /etc/fstab [y/N] " answer
+if [[ $answer == [yY] ]]; then
+  dotfiles_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  # fstab.nas only holds the NAS mounts, so add its lines rather than install it over /etc/fstab
+  while IFS= read -r line; do
+    grep -qxF "$line" /etc/fstab || echo "$line" | sudo tee -a /etc/fstab >/dev/null
+  done <"$dotfiles_dir/etc/fstab.nas"
+  sudo systemctl daemon-reload
+  sudo systemctl restart remote-fs.target
+fi
