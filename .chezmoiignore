@@ -14,7 +14,7 @@ etc
 .local/state/omarchy
 .local/bin/ddcutil
 .local/bin/herdr-open-tab
-.local/share/kio/servicemenus/herdr-open-tab.desktop
+.local/share
 .local/bin/xfreerdp3
 .local/lib/omarchy-overrides
 .XCompose

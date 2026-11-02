@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Stash
+Comment=Stash
+Exec=omarchy-launch-webapp "http://192.168.178.11:9999/scenes"
+Terminal=false
+Type=Application
+Icon=stash
+StartupNotify=true
