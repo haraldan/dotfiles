@@ -165,6 +165,9 @@ o.bind("SUPER + SHIFT + T", "Telegram", { webapp = "https://web.telegram.org" })
 hl.unbind("SUPER + SHIFT + C")
 o.bind("SUPER + SHIFT + C", "Calendar", { webapp = "https://calendar.google.com/" })
 
+-- GitHub on Super+Shift+R (repositories).
+o.bind("SUPER + SHIFT + R", "GitHub", { webapp = "https://github.com/haraldan?tab=repositories" })
+
 -- Disable Super+Shift+X and Super+Shift+Alt+X (was: X, X Post).
 hl.unbind("SUPER + SHIFT + X")
 hl.unbind("SUPER + SHIFT + ALT + X")
