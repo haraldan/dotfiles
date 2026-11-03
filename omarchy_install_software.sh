@@ -99,6 +99,9 @@ sudo systemctl kill -s HUP systemd-logind
 sudo install -Dm644 "$dotfiles_dir/etc/udev/rules.d/91-savitech-spdif-full-volume.rules" /etc/udev/rules.d/91-savitech-spdif-full-volume.rules
 sudo udevadm control --reload
 
+# Windows VM: no password prompt on the first launch after boot
+sudo install -Dm644 "$dotfiles_dir/etc/polkit-1/rules.d/49-omarchy-windows-vm.rules" /etc/polkit-1/rules.d/49-omarchy-windows-vm.rules
+
 # Brother HL-L3240CDW printer driver
 omarchy-pkg-aur-add brother-hll3240cdw-bin
 # The AUR package skips Brother's postinst link; without it the driver ignores job options and prints everything as Letter

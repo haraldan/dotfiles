@@ -1,0 +1,12 @@
+// Skip the password prompt on the first Windows VM launch after boot, when
+// omarchy-windows-vm elevates once to recreate its bind mounts and lock dir.
+// Matches only that exact command. daniel is in the docker group, which is
+// already root-equivalent, so this grants nothing new.
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.policykit.exec" &&
+        action.lookup("program") == "/usr/bin/omarchy-windows-vm" &&
+        action.lookup("command_line") == "/usr/bin/omarchy-windows-vm __priv up_wait" &&
+        subject.user == "daniel") {
+        return polkit.Result.YES;
+    }
+});
