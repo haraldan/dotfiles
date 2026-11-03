@@ -42,6 +42,10 @@ omarchy-pkg-add ttf-cascadia-mono-nerd
 # Desktop apps (chezmoi's EasyEffects drop-in delays its autostart until the tray is up)
 omarchy-pkg-add dolphin dolphin-plugins okular gwenview easyeffects
 omarchy-pkg-aur-add neofetch jellyfin-desktop
+# The package adds its own MediaInfo entry to Dolphin's right-click menu
+omarchy-pkg-add mediainfo-gui
+# Ark adds Extract to Dolphin's right-click menu; unrar is its RAR backend
+omarchy-pkg-add ark unrar
 
 # TPM (Tmux Plugin Manager)
 if [ ! -d ~/.tmux/plugins/tpm ] || [ -z "$(ls -A ~/.tmux/plugins/tpm)" ]; then
