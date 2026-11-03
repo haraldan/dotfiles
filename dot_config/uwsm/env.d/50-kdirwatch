@@ -1,0 +1,7 @@
+# Changes require a restart to take effect.
+
+# KDirWatch polls NFS directories with stat by default. The root of an automounted
+# share changes inode when it mounts, which looks like the directory was deleted and
+# recreated, so Dolphin warns "Current location changed, ... is no longer accessible".
+# With inotify, changes made on the NAS itself only show up after a refresh.
+export KDIRWATCH_NFSMETHOD=inotify
