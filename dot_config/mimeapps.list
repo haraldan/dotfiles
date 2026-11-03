@@ -16,3 +16,6 @@ image/bmp=org.kde.gwenview.desktop
 image/tiff=org.kde.gwenview.desktop
 image/svg+xml=org.kde.gwenview.desktop
 x-scheme-handler/stashplay=stashplay.desktop
+audio/mp4=mpv.desktop
+audio/x-m4a=mpv.desktop
+audio/m4a=mpv.desktop
