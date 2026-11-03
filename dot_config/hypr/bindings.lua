@@ -178,6 +178,52 @@ hl.unbind("SUPER + SHIFT + P")
 -- Disable middle click
 hl.bind("mouse:274", function() end, { description = "Disable middle click" })
 
+-- Double-clicking the top of a tiled window toggles maximize like Super+F.
+do
+  local fullscreen_mode = 2
+  local bar_height = 36
+  local double_click_ms = 250
+  local first_click = nil
+
+  -- The Lua API has no stacking order, so assume a floating window is on top.
+  local function window_under_cursor(cursor)
+    local target = nil
+    for _, window in ipairs(hl.get_windows({ mapped = true })) do
+      local workspace = window.workspace
+      if window.visible and workspace and workspace.visible
+        and cursor.x >= window.at.x and cursor.x < window.at.x + window.size.x
+        and cursor.y >= window.at.y and cursor.y < window.at.y + window.size.y then
+        if window.floating then
+          return nil
+        end
+        if not target or workspace.special then
+          target = workspace.fullscreen_window or window
+        end
+      end
+    end
+    return target
+  end
+
+  hl.bind("mouse:272", function()
+    local cursor = hl.get_cursor_pos()
+    local window = cursor and window_under_cursor(cursor)
+    if not window or window.fullscreen == fullscreen_mode
+      or cursor.y < window.at.y or cursor.y > window.at.y + bar_height then
+      first_click = nil
+      return
+    end
+
+    if first_click == window.address then
+      first_click = nil
+      hl.dispatch(hl.dsp.window.fullscreen({ mode = "maximized", window = "address:" .. window.address }))
+      return
+    end
+
+    first_click = window.address
+    hl.timer(function() first_click = nil end, { timeout = double_click_ms, type = "oneshot" })
+  end, { non_consuming = true, description = "Toggle maximize on top bar double-click" })
+end
+
 -- Volume keys step by 2% instead of the default 5% (ALT + key still steps by 1%).
 hl.unbind("XF86AudioRaiseVolume")
 hl.unbind("XF86AudioLowerVolume")
