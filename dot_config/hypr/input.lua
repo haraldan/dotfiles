@@ -65,6 +65,8 @@ hl.config({
     kb_variant = "intl,",
     kb_options = "shift:both_capslock",
     follow_mouse = 2,
+    -- Also don't change focus when the cursor crosses between tiled and floating windows.
+    float_switch_override_focus = 0,
     -- Natural (inverse) touchpad scrolling. Only the touchpad, not the TrackPoint.
     touchpad = {
       natural_scroll = true,
