@@ -111,6 +111,10 @@ o.bind("SUPER + SHIFT + W", "WhatsApp", { webapp = "https://web.whatsapp.com/", 
 -- Alt+F4 opens the system menu (lock, suspend, restart, shutdown), same as Super+Escape.
 o.bind("ALT + F4", "System menu", "omarchy-menu toggle system")
 
+-- Super+Alt+Space opens the apps as a list in the menu instead of the dock's grid.
+hl.unbind("SUPER + ALT + SPACE")
+o.bind("SUPER + ALT + SPACE", "Apps", { menu = "apps" })
+
 -- Ctrl+H/J/K/L in the Omarchy menu act as Left/Down/Up/Right (back, down, up,
 -- open), leaving plain letters for search. Bound only while the menu's layer
 -- is on screen, same pattern Omarchy uses for the screenshot region picker.
