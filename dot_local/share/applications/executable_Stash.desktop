@@ -3,6 +3,7 @@ Version=1.0
 Name=Stash
 Comment=Stash
 Exec=omarchy-launch-webapp "http://192.168.178.11:9999/scenes"
+StartupWMClass=chrome-192.168.178.11__scenes-Default
 Terminal=false
 Type=Application
 Icon=stash

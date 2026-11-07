@@ -3,6 +3,7 @@ Version=1.0
 Name=Github
 Comment=Github
 Exec=omarchy-launch-webapp "https://github.com/haraldan?tab=repositories"
+StartupWMClass=chrome-github.com__haraldan-Default
 Terminal=false
 Type=Application
 Icon=github

@@ -17,8 +17,8 @@ omarchy-pkg-add chezmoi keychain openssh sshpass base-devel rustup
 # Lets PipeWire run its audio threads with realtime priority (avoids dropouts)
 omarchy-pkg-add rtkit
 
-# Remove unused apps
-omarchy-pkg-drop starship webp-pixbuf-loader evince xournalpp imv obs-studio nautilus nautilus-python sushi papers
+# Remove unused apps (Omarchy's Dropbox installer pulls in nautilus-dropbox, which needs nautilus)
+omarchy-pkg-drop starship webp-pixbuf-loader evince xournalpp imv obs-studio nautilus nautilus-python nautilus-dropbox sushi papers libreoffice-fresh
 # Remove unused web apps
 omarchy-webapp-remove HEY
 omarchy-webapp-remove X
@@ -74,7 +74,9 @@ fi
 omarchy-pkg-present brave-bin || omarchy-install-browser brave
 omarchy-default-browser brave
 # VA-API over NVDEC, for GPU video decoding in Brave (chezmoi's brave wrapper enables it)
-omarchy-pkg-add libva-nvidia-driver
+if lspci | grep -qi nvidia; then
+  omarchy-pkg-add libva-nvidia-driver
+fi
 
 # System configs live in /etc; the repo keeps them under etc/ (ignored by chezmoi)
 dotfiles_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
