@@ -183,6 +183,7 @@ hl.unbind("SUPER + SHIFT + P")
 hl.bind("mouse:274", function() end, { description = "Disable middle click" })
 
 -- Double-clicking the top of a tiled window toggles maximize like Super+F.
+-- RDP windows are skipped, since their top is the remote desktop's content.
 do
   local fullscreen_mode = 2
   local bar_height = 36
@@ -211,7 +212,7 @@ do
   hl.bind("mouse:272", function()
     local cursor = hl.get_cursor_pos()
     local window = cursor and window_under_cursor(cursor)
-    if not window or window.fullscreen == fullscreen_mode
+    if not window or window.class == "xfreerdp" or window.fullscreen == fullscreen_mode
       or cursor.y < window.at.y or cursor.y > window.at.y + bar_height then
       first_click = nil
       return
