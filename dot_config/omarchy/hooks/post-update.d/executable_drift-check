@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# After an Omarchy update, open the default agent (omarchy agent prompt) to
+# check and fix drift between the new Omarchy and my dotfiles: config, shell
+# plugins, command overrides, scripts and system files.
+#
+# There is no pre-update hook, so every run saves the Omarchy sources it finds
+# (zstd-compressed, ~2 MB) as the baseline for the next update. When the
+# version changes, the old baseline is kept as "previous" and unpacked to
+# $XDG_RUNTIME_DIR for the agent's three-way comparison:
+#   previous Omarchy -> my clone  = my edits
+#   previous Omarchy -> new       = upstream changes
+#
+# The first run only saves the baseline. Updates that leave the Omarchy
+# version unchanged do nothing.
+
+set -euo pipefail
+
+state="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy-drift"
+omarchy_path="${OMARCHY_PATH:-/usr/share/omarchy}"
+# /usr/share/omarchy comes from two packages that update separately: omarchy
+# (commands, shell, migrations, install, themes) and omarchy-settings (config,
+# defaults, etc-overrides, desktop entries). A change to either counts.
+current=$(pacman -Q omarchy omarchy-settings 2>/dev/null | paste -sd ' ') || true
+[[ -n $current ]] || current=$(omarchy-version)
+
+# Archive the Omarchy sources the agent compares against: commands, config,
+# defaults, migrations, the shell, /etc overrides, install steps, desktop
+# entries and the version, plus the themes' text files (their images are
+# ~170 MB and my themes only link to them). bin/ holds symlinks into /usr/bin,
+# so -h stores the scripts themselves.
+snapshot() {
+  local name=$1
+  (
+    cd "$omarchy_path"
+    printf '%s\0' applications bin config default etc-overrides install migrations shell version
+    find themes -type f ! -iregex '.*\.\(png\|jpe?g\|webp\|gif\|mp4\|webm\)' -print0
+  ) | tar -h -C "$omarchy_path" --zstd --null -T - -cf "$state/$name.tar.zst.tmp"
+  mv -- "$state/$name.tar.zst.tmp" "$state/$name.tar.zst"
+  printf '%s\n' "$current" >"$state/$name.version"
+}
+
+mkdir -p -- "$state"
+
+if [[ ! -f $state/base.version || ! -f $state/base.tar.zst ]]; then
+  snapshot base
+  echo "Omarchy drift check: saved baseline for $current"
+  exit 0
+fi
+
+previous=$(<"$state/base.version")
+[[ $previous == "$current" ]] && exit 0
+
+mv -- "$state/base.tar.zst" "$state/previous.tar.zst"
+mv -- "$state/base.version" "$state/previous.version"
+snapshot base
+
+# Unpacked to tmpfs, so it is gone after logout; the archive stays.
+previous_dir="${XDG_RUNTIME_DIR:-/tmp}/omarchy-drift-previous"
+rm -rf -- "$previous_dir"
+mkdir -p -- "$previous_dir"
+tar -C "$previous_dir" --zstd -xf "$state/previous.tar.zst"
+
+prompt=$(cat <<EOF
+Omarchy was just updated from $previous to $current. Check my dotfiles (config, custom shell plugins, command overrides, scripts and system files) for update drift, and fix it.
+
+Sources:
+- Previous Omarchy (snapshot taken after the last update): $previous_dir (applications/, bin/, config/, default/, etc-overrides/, install/, migrations/, shell/, themes/ without images, version). If that folder is gone, unpack $state/previous.tar.zst with tar --zstd -xf.
+- New Omarchy: $omarchy_path (read only, never edit it)
+- If the snapshot is unusable, the previous packages (versions above) may still be in /var/cache/pacman/pkg/: omarchy-<version>-*.pkg.tar.zst has bin (in usr/bin), shell, migrations, install and themes; omarchy-settings-<version>-*.pkg.tar.zst has config, default, etc-overrides and applications.
+- My dotfiles are managed with chezmoi; the source repo is ~/.dotfiles. Plugins live in ~/.dotfiles/dot_config/omarchy/plugins/ (some are host-specific; check .chezmoiignore) and are deployed to ~/.config/omarchy/plugins/.
+
+Tasks:
+1. Cloned plugins: every plugin in the chezmoi source whose manifest.json has omarchy.clonedFrom. Do a three-way comparison: previous upstream vs my clone gives my edits, previous upstream vs new upstream gives the upstream changes. If upstream changed, rebase: start from the new upstream files, reapply my edits, keep my manifest id, name and clonedFrom. Leave out upstream files the plugin runs from the Omarchy path rather than from its own folder.
+2. My own plugins (no clonedFrom, not git checkouts): check that the Omarchy APIs they use still exist and behave the same (qs.Ui and qs.Commons components and properties, bar and shell functions, Hyprland global shortcut names such as omarchy:menu.root). Diff previous vs new shell/Ui, shell/Commons and shell/plugins/bar for anything they rely on.
+3. Third-party plugins that are git checkouts (they have a .git folder): do not edit them. Only report problems and suggest omarchy plugin update.
+4. Migrations: list the migrations in $omarchy_path/migrations that are not in the previous snapshot. They show what the update changed in user config; check whether each touched files that chezmoi manages and whether the change needs mirroring into the repo, or conflicts with my customizations.
+5. The rest of the dotfiles repo: go through everything in ~/.dotfiles that relates to Omarchy or the desktop, not just the plugins. Compare previous vs new $omarchy_path to find what changed under it:
+   - Config I have customized: Hyprland (dot_config/hypr), the omarchy shell.json template (keys renamed or new formats), menu extension ids in omarchy-menu.jsonc (ids must still exist in default/omarchy/omarchy-menu.jsonc), hooks (hook names and arguments), uwsm env, systemd user units.
+   - My themes in dot_config/omarchy/themes/: compare with the Omarchy theme each one is based on (previous vs new themes/) for renamed, added or removed keys and files, and check that every symlink still points at a file that exists in the new Omarchy.
+   - Desktop entries in dot_local/share/applications: check for clashes with new or changed entries in applications/.
+   - Command overrides in dot_local/lib/omarchy-overrides/: each wraps the Omarchy command of the same name in bin/. Diff that command previous vs new and update my override if its flags, behavior or the commands it calls changed.
+   - My scripts (dot_local/bin, hooks, omarchy_install_software.sh, desktop files): check every omarchy-* command and option they use still exists in the new bin/ (renamed, removed or changed arguments).
+   - System files under etc/ in the repo are not deployed by chezmoi: compare them with the installed /etc copies and with Omarchy's etc-overrides/ (previous vs new), and report differences. Ask me before changing anything in /etc.
+   - install/ (previous vs new) shows what a fresh Omarchy install now sets up itself: check omarchy_install_software.sh and my systemd units for steps that are now redundant or conflict.
+   - Run chezmoi status and chezmoi diff and resolve drift so the repo and live files match. When a live file differs, decide whether it is an Omarchy migration to keep (mirror it into the repo) or a regression of my customization (restore it).
+6. After changing plugins or shell config, run omarchy restart shell and check journalctl --user for QML errors from my plugins.
+
+Rules:
+- Never commit or push. Leave all changes uncommitted.
+- Mirror every change to the chezmoi source repo.
+- Never modify $omarchy_path.
+- Ask me before running anything that needs root.
+- Finish with a short summary: what drifted, what you changed, and what I need to test by hand (for example the lock screen or hardware-specific plugins on other machines).
+EOF
+)
+
+echo "Omarchy drift check: $previous -> $current, opening the default agent"
+cd "$HOME/.dotfiles"
+setsid omarchy-agent-prompt "$prompt" >/dev/null 2>&1 </dev/null &
