@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "daniel.menu",
+  "name": "Menu Button",
+  "version": "1.0.0",
+  "author": "Daniel",
+  "description": "Omarchy menu button that also opens from the screen corner",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Menu Button",
+    "description": "Omarchy menu button that also opens from the screen corner",
+    "category": "Compositor",
+    "allowMultiple": false
+  }
+}

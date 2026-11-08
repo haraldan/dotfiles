@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "daniel.system",
+  "name": "System Menu",
+  "version": "1.0.0",
+  "author": "Daniel",
+  "description": "Power button with the entries of the Omarchy menu's System submenu",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Widget.qml"
+  },
+  "barWidget": {
+    "displayName": "System Menu",
+    "description": "Power button with the entries of the Omarchy menu's System submenu",
+    "category": "System",
+    "allowMultiple": false
+  }
+}

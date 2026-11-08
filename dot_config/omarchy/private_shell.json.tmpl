@@ -1,18 +1,38 @@
 {
   "bar": {
+    "background": "opaque",
     "layout": {
       "center": [
         {
-          "id": "omarchy.clock",
-          "format": "dddd HH:mm",
+          "format": "ddd d MMM HH:mm",
           "formatAlt": "d MMMM 'W'ww yyyy",
+          "id": "omarchy.clock",
           "verticalFormat": "HH\n—\nmm",
           "weekStartDay": "monday"
+        },
+        {
+          "id": "omarchy.keyboard-layout"
+        }
+      ],
+      "centerBegin": [
+        {
+          "id": "omarchy.indicators"
+        },
+        {
+          "id": "codefriendly.nightman"
+        }
+      ],
+      "centerEnd": [
+        {
+          "id": "omarchy.weather"
+        },
+        {
+          "id": "omarchy.system-update"
         }
       ],
       "left": [
         {
-          "id": "omarchy.menu"
+          "id": "daniel.menu"
         },
         {
           "id": "io.github.thetrueferret.decent-workspaces"
@@ -20,11 +40,11 @@
       ],
       "right": [
         {
+          "hidden": [],
           "id": "omarchy.tray",
           "pinned": [
             "easyeffects"
-          ],
-          "hidden": []
+          ]
         },
         {
           "id": "omarchy.dropbox"
@@ -49,32 +69,21 @@
         },
         {
           "id": "omarchy.power"
-        }
-      ],
-      "centerBegin": [
-        {
-          "id": "omarchy.indicators"
         },
         {
-          "id": "codefriendly.nightman"
-        }
-      ],
-      "centerEnd": [
-        {
-          "id": "omarchy.keyboard-layout"
-        },
-        {
-          "id": "omarchy.weather"
-        },
-        {
-          "id": "omarchy.system-update"
+          "id": "daniel.system"
         }
       ],
       "tray": []
     },
-    "position": "top",
-    "transparent": false
+    "position": "top"
   },
+  "cloneSourceRestores": [
+    "daniel.lock"
+  ],
+  "disabledPlugins": [
+    "omarchy.lock"
+  ],
   "idle": {
     "lock": 600,
     "screensaver": 150
@@ -84,11 +93,5 @@
       "id": "daniel.lock"
     }
   ],
-  "version": 1,
-  "disabledPlugins": [
-    "omarchy.lock"
-  ],
-  "cloneSourceRestores": [
-    "daniel.lock"
-  ]
+  "version": 1
 }
