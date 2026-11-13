@@ -1,4 +1,5 @@
 # Repo files, never deployed
+boot
 etc
 omarchy_install_software.sh
 ubuntu_install_software.sh

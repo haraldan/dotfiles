@@ -101,6 +101,23 @@ sudo systemctl kill -s HUP systemd-logind
 sudo install -Dm644 "$dotfiles_dir/etc/udev/rules.d/91-savitech-spdif-full-volume.rules" /etc/udev/rules.d/91-savitech-spdif-full-volume.rules
 sudo udevadm control --reload
 
+# Limine: draw the boot menu during its 1 s timeout. Omarchy 4.5 sets quiet: yes, which leaves the
+# firmware's Lenovo logo in the framebuffer, showing through between the boot splash and Hyprland.
+# boot/limine.conf only holds global options; the live file also has generated boot entries, so set
+# each option in it rather than install the file. Omarchy's migrations keep an existing option as it is.
+limine_esp=$(sed -n 's/^ESP_PATH=["'\'']\?\([^"'\'']*\).*/\1/p' /etc/default/limine 2>/dev/null | tail -n 1)
+limine_conf="${limine_esp:-/boot}/limine.conf"
+if sudo test -f "$limine_conf"; then
+  while IFS= read -r line; do
+    key=${line%%:*}
+    if sudo grep -Eqi "^[[:space:]]*${key}:" "$limine_conf"; then
+      sudo sed -i -E "s/^[[:space:]]*${key}:.*/${line}/I" "$limine_conf"
+    else
+      sudo sed -i "1i ${line}" "$limine_conf"
+    fi
+  done <"$dotfiles_dir/boot/limine.conf"
+fi
+
 # Windows VM: no password prompt on the first launch after boot
 sudo install -Dm644 "$dotfiles_dir/etc/polkit-1/rules.d/49-omarchy-windows-vm.rules" /etc/polkit-1/rules.d/49-omarchy-windows-vm.rules
 
