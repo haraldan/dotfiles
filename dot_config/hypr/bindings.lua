@@ -108,9 +108,6 @@ hl.unbind("SUPER + SHIFT + W")
 hl.unbind("SUPER + SHIFT + ALT + G")
 o.bind("SUPER + SHIFT + W", "WhatsApp", { webapp = "https://web.whatsapp.com/", focus = true })
 
--- Alt+F4 opens the system menu (lock, suspend, restart, shutdown), same as Super+Escape.
-o.bind("ALT + F4", "System menu", "omarchy-menu toggle system")
-
 -- Super+Alt+Space opens the apps as a list in the menu instead of the dock's grid.
 hl.unbind("SUPER + ALT + SPACE")
 o.bind("SUPER + ALT + SPACE", "Apps", { menu = "apps" })
@@ -119,6 +116,7 @@ o.bind("SUPER + ALT + SPACE", "Apps", { menu = "apps" })
 -- open), leaving plain letters for search. Bound only while the menu's layer
 -- is on screen, same pattern Omarchy uses for the screenshot region picker.
 local menu_binds = {}
+local preselect_shutdown = false
 
 local function send_menu_key(key)
   return function()
@@ -134,8 +132,23 @@ hl.on("layer.opened", function(layer)
     for vim_key, key in pairs({ H = "Left", J = "Down", K = "Up", L = "Right" }) do
       table.insert(menu_binds, hl.bind("CTRL + " .. vim_key, send_menu_key(key), { repeating = true, description = "Menu " .. key:lower() }))
     end
+    if preselect_shutdown then
+      preselect_shutdown = false
+      send_menu_key("Up")()
+    end
   end
 end)
+
+-- Alt+F4 and Super+Escape open the system menu (lock, suspend, restart,
+-- shutdown) with Shutdown already selected. The menu always opens on its first
+-- row and Shutdown is the last, so one Up (which wraps) lands on it. If the
+-- menu is already open, either key just closes it like the toggle does.
+local function system_menu_on_shutdown()
+  preselect_shutdown = #menu_binds == 0
+  hl.dispatch(hl.dsp.exec_cmd("omarchy-menu toggle system"))
+end
+o.bind("ALT + F4", "System menu", system_menu_on_shutdown)
+o.rebind("SUPER + ESCAPE", "System menu", system_menu_on_shutdown)
 
 hl.on("layer.closed", function(layer)
   if layer.namespace == "omarchy-menu" then
