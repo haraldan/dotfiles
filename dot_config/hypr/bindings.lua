@@ -175,7 +175,8 @@ hl.unbind("SUPER + SHIFT + ALT + E")
 hl.unbind("SUPER + SHIFT + G")
 o.bind("SUPER + SHIFT + G", "Email", { webapp = "https://mail.google.com" })
 
--- Telegram on Super+Shift+T.
+-- Telegram on Super+Shift+T instead of Activity (btop).
+hl.unbind("SUPER + SHIFT + T")
 o.bind("SUPER + SHIFT + T", "Telegram", { webapp = "https://web.telegram.org" })
 
 -- Google Calendar on Super+Shift+C instead of HEY Calendar.
