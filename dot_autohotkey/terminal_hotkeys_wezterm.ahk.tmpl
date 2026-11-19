@@ -45,7 +45,7 @@ Wezterm_run_with_SSH_HOST(host, cmd) {
 {
 	if !ProcessExist("vcxsrv.exe")
 		Run EnvGet("USERPROFILE") "\config.xlaunch"
-	Run Wezterm_run_with_SSH_HOST("dsinev649-p520", "ssh -Y ds@dsinev649-p520 -t 'tmux new -A -s Firmware'"), , , &PID
+	Run Wezterm_run_with_SSH_HOST("dsinev649-p520", "ssh -Y -L 127.0.0.1:8855:127.0.0.1:8855 ds@dsinev649-p520 -t 'tmux new -A -s Firmware'"), , , &PID
 	WinWait 'ahk_pid ' PID
 	Sleep 200
 	WinActivate 'ahk_pid ' PID
