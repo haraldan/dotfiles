@@ -1,6 +1,15 @@
 return {
 	{ "rickhowe/wrapwidth",
 		config = function()
+			local function notify_soft_wrap(state)
+				local message = "Soft wrap " .. state
+				vim.api.nvim_echo(
+					{ { message } },
+					true,
+					{ kind = "progress", status = "success", source = "wrapwidth", title = "" }
+				)
+			end
+
 			local function enable_soft_wrap()
 				vim.opt_local.wrap = true
 				vim.keymap.set("n", "j", "gj", { buffer = true })
@@ -12,7 +21,7 @@ return {
 				vim.keymap.set("n", "A", "g$a", { buffer = true })
 				vim.cmd("Wrapwidth " .. vim.o.textwidth)
 				vim.b.soft_wrap_enabled = true
-				vim.notify("Soft wrap enabled: " .. vim.fn.fnamemodify(vim.fn.bufname(), ":t"), vim.log.levels.INFO)
+				notify_soft_wrap("enabled")
 			end
 
 			local function disable_soft_wrap()
@@ -21,7 +30,7 @@ return {
 					vim.keymap.del("n", lhs, { buffer = true })
 				end
 				vim.b.soft_wrap_enabled = false
-				vim.notify("Soft wrap disabled: " .. vim.fn.fnamemodify(vim.fn.bufname(), ":t"), vim.log.levels.INFO)
+				notify_soft_wrap("disabled")
 			end
 
 			vim.keymap.set("n", "<leader>ww", function()
@@ -38,7 +47,9 @@ return {
 					if vim.bo[event.buf].buftype ~= "" then
 						return
 					end
-					enable_soft_wrap()
+					if not vim.b.soft_wrap_enabled then
+						enable_soft_wrap()
+					end
 					vim.opt_local.spell = true
 				end,
 			})
